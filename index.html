@@ -1,0 +1,2288 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>לביא ואני 🦁</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Assistant:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --cream:#FFF8F0; --warm:#FFF0DC;
+  --orange:#FF8C42; --orange-light:#FFB380; --orange-dark:#E06A1A;
+  --teal:#2EC4B6; --teal-light:#A8EDE8;
+  --purple:#9B5DE5; --purple-light:#DBC8FF;
+  --yellow:#FFD166; --green:#06D6A0; --green-light:#B8F3E4;
+  --pink:#EF476F; --pink-light:#FFB3C3;
+  --red:#FF4757; --red-light:#FFD0D5;
+  --blue:#4A90E2; --blue-light:#D6EAFF;
+  --text:#2D2A26; --text-soft:#6B6560;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Assistant',sans-serif;background:var(--cream);color:var(--text);min-height:100vh;overflow-x:hidden}
+body::before{content:'';position:fixed;top:-100px;right:-100px;width:400px;height:400px;background:radial-gradient(circle,var(--orange-light) 0%,transparent 70%);border-radius:50%;z-index:0;opacity:.4}
+body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height:300px;background:radial-gradient(circle,var(--teal-light) 0%,transparent 70%);border-radius:50%;z-index:0;opacity:.5}
+
+/* ── MAIN APP ── */
+.app{position:relative;z-index:1;max-width:480px;margin:0 auto;padding:0 0 100px}
+.header{background:linear-gradient(135deg,var(--orange),var(--orange-dark));padding:28px 24px 36px;position:relative;overflow:hidden;border-radius:0 0 40px 40px;box-shadow:0 8px 30px rgba(255,140,66,.35)}
+.header::before{content:'';position:absolute;top:-30px;left:-30px;width:150px;height:150px;background:rgba(255,255,255,.1);border-radius:50%}
+.header::after{content:'';position:absolute;bottom:-20px;right:20px;width:100px;height:100px;background:rgba(255,255,255,.08);border-radius:50%}
+.header-emoji{font-size:56px;display:block;text-align:center;margin-bottom:8px;animation:bounce 2s infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.header h1{font-family:'Fredoka One',cursive;font-size:36px;color:#fff;text-align:center;text-shadow:2px 3px 0 rgba(0,0,0,.15);letter-spacing:1px}
+.header p{color:rgba(255,255,255,.88);text-align:center;font-size:14px;margin-top:6px;font-weight:600}
+
+.search-wrap{padding:16px 16px 4px}
+.search-input{width:100%;padding:12px 16px;border-radius:20px;border:2px solid rgba(0,0,0,.08);background:#fff;font-family:'Assistant',sans-serif;font-size:15px;color:var(--text);box-shadow:0 3px 12px rgba(0,0,0,.07);outline:none;text-align:right;direction:rtl}
+.search-input:focus{border-color:var(--orange)}
+.search-input::placeholder{color:var(--text-soft)}
+
+.tabs{display:flex;gap:10px;padding:16px 16px 12px;overflow-x:auto;scrollbar-width:none;-ms-overflow-style:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 16px;border-radius:20px;border:2.5px solid transparent;cursor:pointer;transition:all .25s;background:#fff;box-shadow:0 3px 12px rgba(0,0,0,.08);font-family:'Assistant',sans-serif;font-weight:700;font-size:13px;color:var(--text-soft);white-space:nowrap}
+.tab .tab-icon{font-size:24px}
+.tab:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.tab.active{color:#fff;border-color:transparent;transform:translateY(-3px)}
+.tab[data-cat="art"].active{background:linear-gradient(135deg,var(--purple),#7B3FC0);box-shadow:0 6px 20px rgba(155,93,229,.4)}
+.tab[data-cat="language"].active{background:linear-gradient(135deg,var(--teal),#1A9E93);box-shadow:0 6px 20px rgba(46,196,182,.4)}
+.tab[data-cat="games"].active{background:linear-gradient(135deg,var(--yellow),#E8AC00);box-shadow:0 6px 20px rgba(255,209,102,.4);color:var(--text)}
+.tab[data-cat="wild"].active{background:linear-gradient(135deg,var(--red),#CC1A35);box-shadow:0 6px 20px rgba(255,71,87,.4)}
+.tab[data-cat="cooking"].active{background:linear-gradient(135deg,var(--pink),#C22B54);box-shadow:0 6px 20px rgba(239,71,111,.4)}
+.tab[data-cat="learn"].active{background:linear-gradient(135deg,#4A90E2,#2860B0);box-shadow:0 6px 20px rgba(74,144,226,.4)}
+.tab[data-cat="science"].active{background:linear-gradient(135deg,#06D6A0,#04A87D);box-shadow:0 6px 20px rgba(6,214,160,.4)}
+
+.section-header{padding:8px 20px 4px;display:flex;align-items:center;gap:10px}
+.section-header h2{font-family:'Fredoka One',cursive;font-size:24px}
+.section-header .count{background:var(--warm);border-radius:20px;padding:2px 10px;font-size:13px;font-weight:700;color:var(--text-soft)}
+
+.cards-list{padding:8px 16px;display:flex;flex-direction:column;gap:14px}
+.activity-card{background:#fff;border-radius:24px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,.08);cursor:pointer;transition:all .25s;border:2px solid transparent}
+.activity-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.13)}
+.activity-card.open{border-color:var(--card-color,var(--orange))}
+.card-header{display:flex;align-items:center;gap:14px;padding:16px 18px}
+.card-icon-wrap{width:56px;height:56px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;flex-shrink:0}
+.card-title-wrap{flex:1}
+.card-title{font-family:'Fredoka One',cursive;font-size:18px;color:var(--text);line-height:1.2}
+.card-subtitle{font-size:12px;color:var(--text-soft);margin-top:3px;font-weight:600}
+.prep-badge{font-size:11px;font-weight:700;padding:3px 8px;border-radius:10px;margin-top:5px;display:inline-block}
+.prep-zero{background:#E8FBF4;color:#06A060}
+.prep-low{background:#FFF3C4;color:#B07A00}
+.prep-med{background:#FFE4E9;color:#C01040}
+.card-arrow{font-size:20px;color:var(--text-soft);transition:transform .3s;flex-shrink:0}
+.activity-card.open .card-arrow{transform:rotate(180deg)}
+.card-body{display:none;padding:0 18px 18px;border-top:1.5px dashed rgba(0,0,0,.08);margin:0 14px;animation:slideDown .3s ease}
+.activity-card.open .card-body{display:block}
+@keyframes slideDown{from{opacity:0;transform:translateY(-10px)}to{opacity:1;transform:translateY(0)}}
+.section-block{margin-top:16px}
+.block-title{font-weight:700;font-size:14px;color:var(--text-soft);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.goal-tag{display:inline-block;padding:5px 14px;border-radius:20px;font-size:13px;font-weight:700;margin:3px 3px 3px 0;color:#fff}
+.steps-list{list-style:none}
+.steps-list li{display:flex;gap:12px;align-items:flex-start;margin-bottom:10px;font-size:14px;line-height:1.5}
+.step-num{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;color:#fff}
+.tips-list{list-style:none}
+.tips-list li{padding:8px 12px;border-radius:12px;font-size:13px;margin-bottom:6px;font-weight:600;display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+.materials-wrap{display:flex;flex-wrap:wrap;gap:6px}
+.material-chip{background:var(--warm);border-radius:12px;padding:4px 12px;font-size:13px;font-weight:600;color:var(--text)}
+.cat-art .card-icon-wrap{background:var(--purple-light)}.cat-art .step-num{background:var(--purple)}.cat-art .goal-tag{background:var(--purple)}.cat-art .tips-list li{background:var(--purple-light)}.cat-art.open{--card-color:var(--purple)}
+.cat-language .card-icon-wrap{background:var(--teal-light)}.cat-language .step-num{background:var(--teal)}.cat-language .goal-tag{background:var(--teal)}.cat-language .tips-list li{background:var(--teal-light)}.cat-language.open{--card-color:var(--teal)}
+.cat-games .card-icon-wrap{background:#FFF3C4}.cat-games .step-num{background:var(--yellow);color:var(--text)}.cat-games .goal-tag{background:#E8AC00}.cat-games .tips-list li{background:#FFF3C4}.cat-games.open{--card-color:var(--yellow)}
+.cat-wild .card-icon-wrap{background:var(--red-light)}.cat-wild .step-num{background:var(--red)}.cat-wild .goal-tag{background:var(--red)}.cat-wild .tips-list li{background:var(--red-light)}.cat-wild.open{--card-color:var(--red)}
+.cat-cooking .card-icon-wrap{background:var(--pink-light)}.cat-cooking .step-num{background:var(--pink)}.cat-cooking .goal-tag{background:var(--pink)}.cat-cooking .tips-list li{background:var(--pink-light)}.cat-cooking.open{--card-color:var(--pink)}
+.empty{text-align:center;padding:40px 20px;color:var(--text-soft);font-size:15px}
+.empty span{display:block;font-size:48px;margin-bottom:12px}
+
+/* ── LEARN SECTION ── */
+.learn-section{display:none;padding:8px 16px 20px}
+.learn-section.active{display:block}
+.learn-intro{text-align:center;padding:12px 0 20px;color:var(--text-soft);font-size:14px;font-weight:600}
+.game-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.game-btn{background:#fff;border:none;border-radius:20px;padding:18px 12px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.09);transition:all .2s;text-align:center;display:flex;flex-direction:column;align-items:center;gap:8px;width:100%}
+.game-btn:active{transform:scale(.95)}
+.g-icon{font-size:36px}
+.g-name{font-family:'Fredoka One',cursive;font-size:15px;color:var(--text);line-height:1.2}
+.g-desc{font-size:11px;color:var(--text-soft);font-weight:600}
+.game-btn.gpurple{border-top:4px solid var(--purple)}
+.game-btn.gteal{border-top:4px solid var(--teal)}
+.game-btn.gyellow{border-top:4px solid var(--yellow)}
+.game-btn.ggreen{border-top:4px solid var(--green)}
+.game-btn.gpink{border-top:4px solid var(--pink)}
+.game-btn.gblue{border-top:4px solid var(--blue)}
+.game-btn.gorange{border-top:4px solid var(--orange)}
+.game-btn.gred{border-top:4px solid var(--red)}
+
+/* ── GAME SCREEN ── */
+.game-screen{display:none;position:fixed;inset:0;background:var(--cream);z-index:200;overflow-y:auto;padding-bottom:80px}
+.game-screen.active{display:block;animation:fadeIn .25s ease}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.game-topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px;background:var(--cream);position:sticky;top:0;z-index:10}
+.back-btn{background:#fff;border:none;border-radius:14px;padding:8px 16px;font-family:'Assistant',sans-serif;font-weight:700;font-size:14px;color:var(--text);cursor:pointer;box-shadow:0 3px 10px rgba(0,0,0,.1)}
+.score-display{background:#fff;border-radius:14px;padding:8px 16px;font-weight:700;font-size:14px;box-shadow:0 3px 10px rgba(0,0,0,.1)}
+.score-display span{color:var(--orange)}
+.progress-bar{margin:0 16px 4px;height:8px;background:rgba(0,0,0,.08);border-radius:10px;overflow:hidden}
+.progress-fill{height:100%;border-radius:10px;transition:width .4s ease;background:linear-gradient(90deg,var(--purple),var(--teal))}
+.progress-label{text-align:center;font-size:12px;color:var(--text-soft);font-weight:700;margin-bottom:12px}
+
+.question-card{margin:0 16px 16px;background:#fff;border-radius:28px;padding:24px 20px;box-shadow:0 6px 24px rgba(0,0,0,.1);text-align:center}
+.question-emoji-area{font-size:44px;min-height:80px;display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px;margin-bottom:14px;line-height:1.2;padding:0 4px}
+.question-text{font-family:'Fredoka One',cursive;font-size:21px;color:var(--text);margin-bottom:10px;line-height:1.3}
+.speak-btn{background:none;border:2px solid #E8DCFF;border-radius:20px;padding:8px 18px;font-size:13px;font-weight:700;color:var(--purple);cursor:pointer;transition:all .2s}
+.speak-btn:active{background:#E8DCFF}
+
+.answers{display:grid;gap:12px;padding:0 16px}
+.answers.cols2{grid-template-columns:1fr 1fr}
+.answers.cols3{grid-template-columns:1fr 1fr 1fr}
+.ans-btn{background:#fff;border:3px solid transparent;border-radius:20px;padding:16px 8px;font-family:'Fredoka One',cursive;font-size:20px;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.09);transition:all .15s;display:flex;flex-direction:column;align-items:center;gap:5px;width:100%}
+.ans-label{font-size:12px;font-weight:700;color:var(--text-soft);font-family:'Assistant',sans-serif}
+.ans-btn:active{transform:scale(.94)}
+.ans-btn.correct{background:#E8FBF4;border-color:var(--green);animation:popIn .3s ease}
+.ans-btn.wrong{background:#FFE8E8;border-color:var(--red);animation:shake .4s ease}
+@keyframes popIn{0%{transform:scale(1)}50%{transform:scale(1.1)}100%{transform:scale(1)}}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+
+.feedback{text-align:center;padding:14px;font-family:'Fredoka One',cursive;font-size:22px;min-height:56px}
+.feedback.correct{color:var(--green)}
+.feedback.wrong{color:var(--red)}
+
+.next-btn{display:none;margin:0 16px;background:linear-gradient(135deg,var(--purple),#7B3FC0);border:none;border-radius:20px;padding:18px;width:calc(100% - 32px);font-family:'Fredoka One',cursive;font-size:20px;color:#fff;cursor:pointer;box-shadow:0 6px 20px rgba(155,93,229,.35)}
+.next-btn.show{display:block;animation:slideUp .3s ease}
+@keyframes slideUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+.end-screen{display:none;text-align:center;padding:40px 24px}
+.end-screen.show{display:block;animation:slideUp .4s ease}
+.end-emoji-big{font-size:80px;display:block;margin-bottom:16px}
+.end-title{font-family:'Fredoka One',cursive;font-size:30px;margin-bottom:8px}
+.end-score-txt{font-size:17px;color:var(--text-soft);font-weight:700;margin-bottom:16px}
+.end-stars{font-size:44px;margin-bottom:28px}
+.replay-btn{background:linear-gradient(135deg,var(--orange),var(--orange-dark));border:none;border-radius:20px;padding:16px 40px;font-family:'Fredoka One',cursive;font-size:20px;color:#fff;cursor:pointer;box-shadow:0 6px 20px rgba(255,140,66,.4);margin-bottom:12px;display:block;width:100%}
+.menu-btn2{background:#fff;border:2px solid rgba(0,0,0,.1);border-radius:20px;padding:14px 40px;font-family:'Fredoka One',cursive;font-size:18px;color:var(--text);cursor:pointer;width:100%}
+
+/* CONFETTI */
+.confetti-wrap{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:999;overflow:hidden}
+.cp{position:absolute;animation:fall linear forwards}
+@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+</style>
+</head>
+<body>
+
+<div class="app" id="mainApp">
+  <div class="header">
+    <span class="header-emoji">🦁</span>
+    <h1 id="mainTitle">לביא ואני</h1>
+    <p id="headerSubtitle">פעילויות מיוחדות לאבא וללביא</p>
+    <div style="text-align:center;margin-top:10px;display:flex;gap:8px;justify-content:center;flex-wrap:wrap">
+      <button onclick="_showNameSetup()" style="background:rgba(255,255,255,.2);border:none;border-radius:16px;padding:6px 14px;color:white;font-family:'Assistant',sans-serif;font-weight:700;font-size:12px;cursor:pointer">
+        👶 שם הילד
+      </button>
+      <button onclick="_showApiSetup()" style="background:rgba(255,255,255,.2);border:none;border-radius:16px;padding:6px 14px;color:white;font-family:'Assistant',sans-serif;font-weight:700;font-size:12px;cursor:pointer">
+        🔊 הגדרת קול Google
+      </button>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <input class="search-input" type="text" placeholder="🔍 חפש פעילות..." id="searchInput" oninput="onSearch(this.value)"/>
+  </div>
+
+  <div class="tabs" id="tabs">
+    <div class="tab active" data-cat="art"      onclick="switchTab('art',this)"><span class="tab-icon">🎨</span>יצירה</div>
+    <div class="tab"        data-cat="language"  onclick="switchTab('language',this)"><span class="tab-icon">💬</span>שפה</div>
+    <div class="tab"        data-cat="games"     onclick="switchTab('games',this)"><span class="tab-icon">🎮</span>משחקים</div>
+    <div class="tab"        data-cat="wild"      onclick="switchTab('wild',this)"><span class="tab-icon">🤪</span>משוגעים</div>
+    <div class="tab"        data-cat="cooking"   onclick="switchTab('cooking',this)"><span class="tab-icon">🍳</span>בישול</div>
+    <div class="tab"        data-cat="learn"     onclick="switchTab('learn',this)"><span class="tab-icon">📚</span>לומדים</div>
+    <div class="tab"        data-cat="science"   onclick="switchTab('science',this)"><span class="tab-icon">🔬</span>מדע</div>
+  </div>
+
+  <div class="section-header">
+    <h2 id="section-title">🎨 פעילויות יצירה</h2>
+    <span class="count" id="section-count"></span>
+  </div>
+
+  <!-- Activity cards -->
+  <div class="cards-list" id="cards-list"></div>
+
+  <!-- Learn game menu -->
+  <div class="learn-section" id="learnSection">
+    <div class="learn-intro" id="learnIntro">בחר משחק לשחק עם לביא 👇</div>
+    <div class="game-grid">
+      <button class="game-btn gpurple" onclick="startGame('count')"><span class="g-icon">🍎</span><span class="g-name">כמה יש?</span><span class="g-desc">ספירה וכמויות</span></button>
+      <button class="game-btn gteal"   onclick="startGame('words')"><span class="g-icon">🗣️</span><span class="g-name">איך אומרים?</span><span class="g-desc">עברית ← אנגלית</span></button>
+      <button class="game-btn gyellow" onclick="startGame('numbers')"><span class="g-icon">🔢</span><span class="g-name">מה הספרה?</span><span class="g-desc">הכרת ספרות</span></button>
+      <button class="game-btn ggreen"  onclick="startGame('missing')"><span class="g-icon">🔍</span><span class="g-name">מה נעלם?</span><span class="g-desc">זיכרון חזותי</span></button>
+      <button class="game-btn gpink"   onclick="startGame('odd')"><span class="g-icon">🎨</span><span class="g-name">מה שונה?</span><span class="g-desc">חשיבה לוגית</span></button>
+      <button class="game-btn gblue"   onclick="startGame('feelings')"><span class="g-icon">🎭</span><span class="g-name">איך מרגיש?</span><span class="g-desc">רגשות ואמפתיה</span></button>
+      <button class="game-btn gorange" onclick="startGame('sort')"><span class="g-icon">📦</span><span class="g-name">שייך לאיפה?</span><span class="g-desc">מיון וקטגוריות</span></button>
+      <button class="game-btn gred"    onclick="startGame('size')"><span class="g-icon">🐘</span><span class="g-name">גדול או קטן?</span><span class="g-desc">השוואת כמויות</span></button>
+      <button class="game-btn" onclick="startGame('hebrew_letters')" style="border-top:4px solid #2EC4B6"><span class="g-icon">א</span><span class="g-name">אותיות עברית</span><span class="g-desc">א, ב, ג...</span></button>
+      <button class="game-btn" onclick="startGame('hebrew_words')" style="border-top:4px solid #06D6A0"><span class="g-icon">📝</span><span class="g-name">מילים בעברית</span><span class="g-desc">קריאה ראשונה</span></button>
+      <button class="game-btn" onclick="startGame('english_letters')" style="border-top:4px solid #4A90E2"><span class="g-icon">A</span><span class="g-name">English Letters</span><span class="g-desc">ABC</span></button>
+      <button class="game-btn" onclick="startGame('english_words')" style="border-top:4px solid #9B5DE5"><span class="g-icon">📚</span><span class="g-name">English Words</span><span class="g-desc">First words</span></button>
+      <button class="game-btn" onclick="startGame('shapes')" style="border-top:4px solid #FF8C42"><span class="g-icon">🔺</span><span class="g-name">צורות</span><span class="g-desc">עיגול, ריבוע, משולש</span></button>
+      <button class="game-btn" onclick="startGame('animals_english')" style="border-top:4px solid #06D6A0"><span class="g-icon">🦁</span><span class="g-name">Animals 🐶</span><span class="g-desc">חיות באנגלית</span></button>
+      <button class="game-btn" onclick="startGame('math_add')" style="border-top:4px solid #EF476F"><span class="g-icon">➕</span><span class="g-name">חיבור</span><span class="g-desc">1 ועוד 1...</span></button>
+      <button class="game-btn" onclick="startGame('math_subtract')" style="border-top:4px solid #FF4757"><span class="g-icon">➖</span><span class="g-name">חיסור</span><span class="g-desc">3 פחות 1...</span></button>
+      <button class="game-btn" onclick="startGame('math_compare')" style="border-top:4px solid #FFD166"><span class="g-icon">⚖️</span><span class="g-name">איפה יש יותר?</span><span class="g-desc">השוואת כמויות</span></button>
+      <button class="game-btn" onclick="startGame('colors_missing')" style="border-top:4px solid #EF476F"><span class="g-icon">🎨</span><span class="g-name">איזה צבע חסר?</span><span class="g-desc">זיכרון צבעים</span></button>
+      <button class="game-btn" onclick="startGame('face_parts')" style="border-top:4px solid #06D6A0"><span class="g-icon">🧩</span><span class="g-name">השלם את הפרצוף</span><span class="g-desc">מה חסר?</span></button>
+      <button class="game-btn" onclick="startGame('count_visual')" style="border-top:4px solid #FF8C42"><span class="g-icon">🍎</span><span class="g-name">ספור וצבע</span><span class="g-desc">ספירה ויזואלית</span></button>
+      <button class="game-btn" onclick="startNumbers()" style="grid-column:span 2;border-top:4px solid #9B5DE5;background:linear-gradient(135deg,#F0EAFF,#E0D0FF)"><span class="g-icon">🔢</span><span class="g-name">מספרים 10-30</span><span class="g-desc">לומדים + שאלות + קול</span></button>
+      <button class="game-btn" onclick="startAnimals()" style="grid-column:span 2;border-top:4px solid #06D6A0;background:linear-gradient(135deg,#E8FBF4,#C8F5E8)"><span class="g-icon">🦁</span><span class="g-name">עולם החיות</span><span class="g-desc">יונקים, זוחלים, ציפורים ועוד</span></button>
+    </div>
+  </div>
+
+  <!-- Science section -->
+  <div class="learn-section" id="scienceSection">
+    <div class="learn-intro">בחר נושא מדעי 🔬</div>
+    <div class="game-grid">
+      <button class="game-btn" onclick="startGame('body')" style="grid-column:span 2;border-top:4px solid #EF476F;background:linear-gradient(135deg,#FFF0F3,#FFE0E8)"><span class="g-icon">🫀</span><span class="g-name">גוף האדם</span><span class="g-desc">עצמות, שרירים, איברים, חושים</span></button>
+      <button class="game-btn" onclick="startGame('shadows')" style="border-top:4px solid #4A4A8A"><span class="g-icon">🌑</span><span class="g-name">צלליות</span><span class="g-desc">מה מסתתר?</span></button>
+      <button class="game-btn" onclick="startGame('hot_cold')" style="border-top:4px solid #FF4757"><span class="g-icon">🌡️</span><span class="g-name">חם או קר?</span><span class="g-desc">מושגים מנוגדים</span></button>
+      <button class="game-btn" onclick="startGame('animal_sounds')" style="border-top:4px solid #9B5DE5"><span class="g-icon">🔊</span><span class="g-name">מה השמע הזה?</span><span class="g-desc">חיות וצלילים</span></button>
+      <button class="game-btn" onclick="startGame('animals_english')" style="border-top:4px solid #06D6A0"><span class="g-icon">🦁</span><span class="g-name">חיות בעולם</span><span class="g-desc">זיהוי חיות</span></button>
+      <button class="game-btn" onclick="startSpace()" style="grid-column:span 2;border-top:4px solid #7B61FF;background:linear-gradient(135deg,#1a1a5e,#2d2d8f);color:white"><span class="g-icon">🚀</span><span class="g-name" style="color:white">מערכת השמש</span><span class="g-desc" style="color:rgba(255,255,255,.75)">כוכבי הלכת + שאלון + קול</span></button>
+    </div>
+  </div>
+    </div>
+  </div>
+
+  <!-- FOOTER CREDIT -->
+  <div style="margin:32px 16px 0;padding:18px 20px;text-align:center;background:rgba(255,255,255,.6);backdrop-filter:blur(10px);border-radius:20px;box-shadow:0 3px 14px rgba(0,0,0,.06)">
+    <div style="font-family:'Fredoka One',cursive;font-size:14px;color:var(--orange-dark);margin-bottom:6px">Created by Kfir 🦁</div>
+    <div style="font-size:12px;color:var(--text-soft);font-weight:600;line-height:1.7">
+      <a href="mailto:kfiry650@hotmail.com" style="color:var(--text-soft);text-decoration:none">📧 kfiry650@hotmail.com</a><br>
+      <a href="tel:+972545574029" style="color:var(--text-soft);text-decoration:none;unicode-bidi:embed;direction:ltr;display:inline-block">📱 +972-54-5574029</a>
+    </div>
+  </div>
+</div>
+
+<!-- NUMBERS 10-30 SCREEN -->
+<div class="game-screen" id="numbersScreen">
+<style>
+#numbersScreen { background: linear-gradient(160deg,#1a0533,#2d1060); color:#fff; }
+.num-topbar { display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px;position:sticky;top:0;z-index:10;background:rgba(26,5,51,.9);backdrop-filter:blur(8px); }
+.num-back { background:rgba(255,255,255,.15);border:none;border-radius:14px;padding:8px 16px;font-family:'Assistant',sans-serif;font-weight:700;font-size:14px;color:#fff;cursor:pointer; }
+.num-modes { display:flex;gap:8px; }
+.num-mode-btn { background:rgba(255,255,255,.12);border:2px solid transparent;border-radius:20px;padding:6px 14px;font-family:'Fredoka One',cursive;font-size:13px;color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s; }
+.num-mode-btn.active { background:#9B5DE5;border-color:#9B5DE5;color:#fff; }
+
+/* LEARN mode */
+.num-learn { padding:16px; }
+.num-card { background:rgba(255,255,255,.08);border-radius:28px;padding:30px 20px;text-align:center;margin-bottom:16px;border:2px solid rgba(255,255,255,.1); }
+.num-big { font-family:'Fredoka One',cursive;font-size:120px;line-height:1;color:#FFD166;text-shadow:0 0 40px rgba(255,209,102,.5); animation:numPop .4s ease; }
+@keyframes numPop { 0%{transform:scale(.5);opacity:0} 70%{transform:scale(1.1)} 100%{transform:scale(1);opacity:1} }
+.num-name { font-family:'Fredoka One',cursive;font-size:30px;color:#fff;margin:10px 0; }
+.num-dots { font-size:28px;min-height:60px;display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:4px;margin:12px 0;line-height:1.3; }
+.num-hint { font-size:13px;color:rgba(255,255,255,.55);font-weight:700;margin-top:6px; }
+.num-speak { background:rgba(255,255,255,.1);border:none;border-radius:20px;padding:8px 18px;font-size:13px;font-weight:700;color:rgba(255,255,255,.8);cursor:pointer;margin-top:10px; }
+.num-progress-row { display:flex;justify-content:center;gap:5px;padding:8px 0 14px;flex-wrap:wrap; }
+.num-pip { width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.15);display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:10px;color:rgba(255,255,255,.5);transition:all .3s;cursor:pointer; }
+.num-pip.done { background:#06D6A0;color:#fff; }
+.num-pip.current { background:#FFD166;color:#2D1060;transform:scale(1.3); }
+.num-nav { display:flex;gap:12px;padding:0 16px 20px; }
+.num-nav-btn { flex:1;border:none;border-radius:20px;padding:16px;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;cursor:pointer; }
+.num-prev { background:rgba(255,255,255,.12); }
+.num-next { background:linear-gradient(135deg,#9B5DE5,#7B3FC0);box-shadow:0 6px 20px rgba(155,93,229,.4); }
+
+/* QUIZ mode */
+.num-quiz { padding:0 16px 40px; }
+.num-q-card { background:rgba(255,255,255,.08);border-radius:24px;padding:24px 20px;text-align:center;margin-bottom:16px;border:2px solid rgba(255,255,255,.12); }
+.num-q-display { font-family:'Fredoka One',cursive;font-size:32px;color:#FFD166;margin-bottom:10px;line-height:1.3; }
+.num-q-text { font-family:'Fredoka One',cursive;font-size:20px;color:#fff;margin-bottom:8px; }
+.num-answers { display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:14px; }
+.num-ans { background:rgba(255,255,255,.1);border:2px solid rgba(255,255,255,.15);border-radius:18px;padding:20px 8px;font-family:'Fredoka One',cursive;font-size:26px;color:#fff;cursor:pointer;transition:all .15s; }
+.num-ans:active { transform:scale(.94); }
+.num-ans.correct { background:rgba(6,214,160,.3);border-color:#06D6A0; animation:popIn .3s; }
+.num-ans.wrong { background:rgba(255,71,87,.3);border-color:#FF4757; animation:shake .4s; }
+.num-feedback { text-align:center;font-family:'Fredoka One',cursive;font-size:22px;min-height:50px;padding:10px; }
+.num-next-q { display:none;margin:0;background:linear-gradient(135deg,#9B5DE5,#7B3FC0);border:none;border-radius:18px;padding:16px;width:100%;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;cursor:pointer; }
+.num-next-q.show { display:block;animation:slideUp .3s; }
+.num-score { background:rgba(255,255,255,.1);border-radius:14px;padding:6px 14px;font-weight:700;font-size:14px; }
+.num-score span { color:#FFD166; }
+
+/* QUIZ end */
+.num-end { display:none;text-align:center;padding:40px 20px; }
+.num-end.show { display:block; }
+.num-end-emoji { font-size:70px;display:block;margin-bottom:12px; }
+.num-end-title { font-family:'Fredoka One',cursive;font-size:26px;margin-bottom:6px; }
+.num-end-sub { color:rgba(255,255,255,.6);font-size:15px;font-weight:700;margin-bottom:24px; }
+.num-replay { background:linear-gradient(135deg,#9B5DE5,#7B3FC0);border:none;border-radius:18px;padding:14px 32px;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;cursor:pointer;margin-bottom:10px;display:block;width:100%; }
+.num-to-learn { background:rgba(255,255,255,.12);border:none;border-radius:18px;padding:13px 32px;font-family:'Fredoka One',cursive;font-size:16px;color:#fff;cursor:pointer;width:100%;margin-bottom:10px; }
+.num-home-btn { background:rgba(255,255,255,.08);border:none;border-radius:18px;padding:12px 32px;font-family:'Fredoka One',cursive;font-size:15px;color:rgba(255,255,255,.7);cursor:pointer;width:100%; }
+</style>
+
+<div class="num-topbar">
+  <button class="num-back" onclick="closeNumbers()">← חזור</button>
+  <div class="num-modes">
+    <button class="num-mode-btn active" id="numLearnBtn" onclick="numShowMode('learn')">📖 לומדים</button>
+    <button class="num-mode-btn" id="numQuizBtn" onclick="numShowMode('quiz')">❓ שאלון</button>
+  </div>
+  <div class="num-score">⭐ <span id="numScore">0</span></div>
+</div>
+
+<!-- LEARN -->
+<div class="num-learn" id="numLearn">
+  <div class="num-progress-row" id="numPips"></div>
+  <div class="num-card">
+    <div class="num-big" id="numBig"></div>
+    <div class="num-name" id="numName"></div>
+    <div class="num-dots" id="numDots"></div>
+    <div class="num-hint" id="numHint"></div>
+    <button class="num-speak" onclick="numSpeak()">🔊 שמע שוב</button>
+  </div>
+  <div class="num-nav">
+    <button class="num-nav-btn num-prev" id="numPrev" onclick="numLearnNav(-1)">→ הקודם</button>
+    <button class="num-nav-btn num-next" id="numNext" onclick="numLearnNav(1)">הבא ←</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="num-quiz" id="numQuiz" style="display:none">
+  <div style="height:12px;background:rgba(255,255,255,.1);border-radius:10px;margin:8px 0 4px;overflow:hidden">
+    <div id="numQProgress" style="height:100%;background:linear-gradient(90deg,#9B5DE5,#06D6A0);border-radius:10px;transition:width .4s;width:0%"></div>
+  </div>
+  <div style="text-align:center;font-size:12px;color:rgba(255,255,255,.5);font-weight:700;margin-bottom:12px" id="numQLabel">שאלה 1</div>
+  <div class="num-q-card">
+    <div class="num-q-display" id="numQDisplay"></div>
+    <div class="num-q-text" id="numQText"></div>
+    <button class="num-speak" onclick="numSpeakQ()" style="margin-top:0">🔊 שמע שוב</button>
+  </div>
+  <div class="num-answers" id="numAnswers"></div>
+  <div class="num-feedback" id="numFeedback"></div>
+  <button class="num-next-q" id="numNextQ" onclick="numNextQuestion()">הבא ←</button>
+  <div class="num-end" id="numEnd">
+    <span class="num-end-emoji">🏆</span>
+    <div class="num-end-title" id="numEndTitle"></div>
+    <div class="num-end-sub" id="numEndSub"></div>
+    <button class="num-replay" onclick="numStartQuiz()">שחק שאלון שוב 🔄</button>
+    <button class="num-to-learn" onclick="numShowMode('learn')">חזור ללמידה 📖</button>
+    <button class="num-home-btn" onclick="closeNumbers()">תפריט ראשי 🏠</button>
+  </div>
+</div>
+</div>
+
+<!-- ANIMALS WORLD SCREEN -->
+<div class="game-screen" id="animalsScreen">
+<style>
+.aw-topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px;position:sticky;top:0;z-index:10;backdrop-filter:blur(10px);background:rgba(0,0,0,.25)}
+.aw-back{background:rgba(255,255,255,.2);border:none;border-radius:14px;padding:8px 16px;font-family:'Assistant',sans-serif;font-weight:700;font-size:14px;color:#fff;cursor:pointer}
+.aw-modes{display:flex;gap:8px}
+.aw-mode-btn{background:rgba(255,255,255,.15);border:2px solid transparent;border-radius:20px;padding:6px 14px;font-family:'Fredoka One',cursive;font-size:13px;color:rgba(255,255,255,.8);cursor:pointer;transition:all .2s}
+.aw-mode-btn.active{background:rgba(255,255,255,.9);color:#1a6e3a}
+.aw-score{background:rgba(255,255,255,.2);border-radius:14px;padding:6px 14px;font-weight:700;font-size:14px;color:#fff}
+.aw-score span{color:#FFD166}
+
+/* GROUP SELECTOR */
+.aw-groups{padding:12px 16px;display:flex;flex-direction:column;gap:0}
+.aw-group-title{font-family:'Fredoka One',cursive;font-size:18px;color:#fff;padding:6px 0 10px;opacity:.8}
+.aw-group-cards{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.aw-group-btn{border:none;border-radius:22px;padding:18px 12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;transition:all .2s;box-shadow:0 4px 16px rgba(0,0,0,.2)}
+.aw-group-btn:active{transform:scale(.95)}
+.aw-group-icon{font-size:38px}
+.aw-group-name{font-family:'Fredoka One',cursive;font-size:16px}
+.aw-group-desc{font-size:11px;opacity:.75;font-weight:700}
+
+/* TOUR CARD */
+.aw-tour{padding:0 16px 80px;display:none}
+.aw-group-header{border-radius:24px;padding:20px;text-align:center;margin-bottom:14px}
+.aw-group-header-icon{font-size:52px;display:block;margin-bottom:6px}
+.aw-group-header-name{font-family:'Fredoka One',cursive;font-size:28px;color:#fff}
+.aw-group-header-desc{font-size:14px;color:rgba(255,255,255,.85);font-weight:700;margin-top:4px;line-height:1.5}
+.aw-animals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+.aw-animal{background:rgba(255,255,255,.12);border-radius:18px;padding:14px 6px;text-align:center;cursor:pointer;transition:all .2s;border:2px solid transparent}
+.aw-animal:active,.aw-animal.selected{border-color:rgba(255,255,255,.6);background:rgba(255,255,255,.25)}
+.aw-animal-emoji{font-size:42px;display:block;margin-bottom:4px}
+.aw-animal-name{font-family:'Fredoka One',cursive;font-size:14px;color:#fff}
+.aw-animal-fact{font-size:11px;color:rgba(255,255,255,.7);font-weight:700;margin-top:2px}
+.aw-fun-fact{background:rgba(255,255,255,.12);border-radius:18px;padding:14px 16px;margin-bottom:14px;font-size:14px;font-weight:700;color:rgba(255,255,255,.9);line-height:1.5}
+.aw-tour-nav{display:flex;gap:10px}
+.aw-tour-nav-btn{flex:1;border:none;border-radius:18px;padding:14px;font-family:'Fredoka One',cursive;font-size:17px;color:#fff;cursor:pointer}
+.aw-tour-back-btn{background:rgba(255,255,255,.15)}
+.aw-tour-next-btn{background:rgba(255,255,255,.3)}
+
+/* QUIZ */
+.aw-quiz{padding:0 16px 60px;display:none}
+.aw-q-progress{height:8px;background:rgba(255,255,255,.15);border-radius:10px;margin:8px 0 4px;overflow:hidden}
+.aw-q-progress-fill{height:100%;border-radius:10px;transition:width .4s;background:rgba(255,255,255,.7)}
+.aw-q-label{text-align:center;font-size:12px;color:rgba(255,255,255,.5);font-weight:700;margin-bottom:10px}
+.aw-q-card{background:rgba(255,255,255,.1);border-radius:24px;padding:22px 18px;text-align:center;margin-bottom:14px}
+.aw-q-emoji{font-size:72px;display:block;margin-bottom:10px}
+.aw-q-text{font-family:'Fredoka One',cursive;font-size:20px;color:#fff;line-height:1.3}
+.aw-q-speak{background:rgba(255,255,255,.12);border:none;border-radius:16px;padding:7px 14px;font-size:12px;font-weight:700;color:rgba(255,255,255,.7);cursor:pointer;margin-top:8px}
+.aw-answers{display:grid;gap:10px}
+.aw-ans{background:rgba(255,255,255,.12);border:2px solid rgba(255,255,255,.15);border-radius:18px;padding:14px 10px;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;cursor:pointer;display:flex;align-items:center;gap:10px;transition:all .15s}
+.aw-ans:active{transform:scale(.97)}
+.aw-ans.correct{background:rgba(6,214,160,.3);border-color:#06D6A0}
+.aw-ans.wrong{background:rgba(255,71,87,.3);border-color:#FF4757}
+.aw-feedback{text-align:center;font-family:'Fredoka One',cursive;font-size:21px;min-height:48px;padding:8px;color:#FFD166}
+.aw-next-q{display:none;width:100%;border:none;border-radius:18px;padding:15px;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;cursor:pointer;background:rgba(255,255,255,.25)}
+.aw-next-q.show{display:block;animation:slideUp .3s}
+.aw-end{display:none;text-align:center;padding:40px 20px}
+.aw-end.show{display:block}
+.aw-end-emoji{font-size:70px;display:block;margin-bottom:12px}
+.aw-end-title{font-family:'Fredoka One',cursive;font-size:26px;color:#fff;margin-bottom:6px}
+.aw-end-sub{color:rgba(255,255,255,.6);font-size:14px;font-weight:700;margin-bottom:24px}
+.aw-btn-green{background:rgba(6,214,160,.5);border:none;border-radius:18px;padding:14px 32px;font-family:'Fredoka One',cursive;font-size:17px;color:#fff;cursor:pointer;margin-bottom:10px;display:block;width:100%}
+.aw-btn-soft{background:rgba(255,255,255,.12);border:none;border-radius:18px;padding:12px 32px;font-family:'Fredoka One',cursive;font-size:15px;color:rgba(255,255,255,.8);cursor:pointer;width:100%}
+</style>
+
+<div id="awBg" style="position:absolute;inset:0;transition:background 0.5s;background:linear-gradient(160deg,#0d4a1a,#1a7a30);z-index:0"></div>
+<div style="position:relative;z-index:1;height:100%;overflow-y:auto">
+
+<div class="aw-topbar">
+  <button class="aw-back" onclick="closeAnimals()">← חזור</button>
+  <div class="aw-modes">
+    <button class="aw-mode-btn active" id="awLearnBtn" onclick="awShowMode('learn')">🌍 סיור</button>
+    <button class="aw-mode-btn" id="awQuizBtn" onclick="awShowMode('quiz')">❓ שאלון</button>
+  </div>
+  <div class="aw-score">⭐ <span id="awScore">0</span></div>
+</div>
+
+<!-- GROUP SELECTOR -->
+<div id="awGroupsEl" class="aw-groups">
+  <div class="aw-group-title">בחר קבוצת חיות:</div>
+  <div class="aw-group-cards" id="awGroupCards"></div>
+  <button onclick="awShowMode('quiz')" style="width:100%;border:none;border-radius:20px;padding:16px;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;background:rgba(255,255,255,.2);cursor:pointer;margin-top:4px">❓ לשאלון על כל החיות</button>
+</div>
+
+<!-- TOUR -->
+<div class="aw-tour" id="awTour">
+  <div class="aw-group-header" id="awGroupHeader"></div>
+  <div class="aw-animals-grid" id="awAnimalsGrid"></div>
+  <div class="aw-fun-fact" id="awFunFact"></div>
+  <div class="aw-tour-nav">
+    <button class="aw-tour-nav-btn aw-tour-back-btn" onclick="awBackToGroups()">← כל הקבוצות</button>
+    <button class="aw-tour-nav-btn aw-tour-next-btn" id="awTourNext" onclick="awNextGroup()">קבוצה הבאה ←</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div class="aw-quiz" id="awQuiz">
+  <div class="aw-q-progress"><div class="aw-q-progress-fill" id="awQFill" style="width:0%"></div></div>
+  <div class="aw-q-label" id="awQLabel">שאלה 1</div>
+  <div class="aw-q-card">
+    <span class="aw-q-emoji" id="awQEmoji"></span>
+    <div class="aw-q-text" id="awQText"></div>
+    <button class="aw-q-speak" onclick="awSpeakQ()">🔊 שמע שוב</button>
+  </div>
+  <div class="aw-answers" id="awAnswers"></div>
+  <div class="aw-feedback" id="awFeedback"></div>
+  <button class="aw-next-q" id="awNextQ" onclick="awNextQ()">הבא ←</button>
+  <div class="aw-end" id="awEnd">
+    <span class="aw-end-emoji">🏆</span>
+    <div class="aw-end-title" id="awEndTitle"></div>
+    <div class="aw-end-sub" id="awEndSub"></div>
+    <button class="aw-btn-green" onclick="awStartQuiz()">שחק שאלון שוב 🔄</button>
+    <button class="aw-btn-soft" onclick="awShowMode('learn')">חזור לסיור 🌍</button>
+    <button class="aw-btn-soft" onclick="closeAnimals()" style="margin-top:8px">תפריט ראשי 🏠</button>
+  </div>
+</div>
+
+</div><!-- /relative -->
+</div><!-- /animalsScreen -->
+
+<!-- GAME SCREEN (fullscreen overlay) -->
+<div class="game-screen" id="gameScreen">
+  <div class="game-topbar">
+    <button class="back-btn" onclick="goHome()">← חזור</button>
+    <div class="score-display">⭐ <span id="scoreNum">0</span></div>
+  </div>
+  <div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  <div class="progress-label" id="progressLabel">שאלה 1 מתוך 8</div>
+  <div class="question-card">
+    <div class="question-emoji-area" id="qEmoji"></div>
+    <div class="question-text" id="qText"></div>
+    <button class="speak-btn" onclick="speakQ()">🔊 שמע שוב</button>
+  </div>
+  <div class="answers" id="answersGrid"></div>
+  <div class="feedback" id="feedbackArea"></div>
+  <button class="next-btn" id="nextBtn" onclick="nextQ()">הבא ←</button>
+  <div class="end-screen" id="endScreen">
+    <span class="end-emoji-big" id="endEmoji">🏆</span>
+    <div class="end-title" id="endTitle">כל הכבוד לביא!</div>
+    <div class="end-score-txt" id="endScore"></div>
+    <div class="end-stars" id="endStars"></div>
+    <button class="replay-btn" onclick="replayGame()">שחק שוב 🔄</button>
+    <button class="menu-btn2" onclick="goHome()">תפריט ראשי 🏠</button>
+  </div>
+</div>
+
+<div class="confetti-wrap" id="confettiWrap"></div>
+
+<script>
+/* ════════════════════════════════════════════
+   ACTIVITIES DATA
+════════════════════════════════════════════ */
+const data = {
+  art:{ title:"🎨 פעילויות יצירה", activities:[
+    {icon:"🖐️",title:"טביעות ידיים וצבעים",subtitle:"פעילות קלאסית ואהובה",prep:"low",prepLabel:"⏱️ 5 דקות הכנה",goals:["קואורדינציה עדינה","הכרת גוף","ביטוי יצירתי"],materials:["צבעי אצבע","דף גדול","מגבות לח"],steps:["שמים דף גדול על הרצפה עם עיתונים מסביב.","מניחים צבע על כף היד – __NAME__ בוחר את הצבע.","לוחצים את היד על הדף ומרימים לאט.","מסתכלים יחד – 'זאת יד של __NAME__!'","אפשר לצייר עיניים ופה ולהפוך לחיה.","שוטפים ידיים ביחד – גם זה כיף!"],tips:["🗣️ תאר בקול: 'עכשיו אנחנו שמים אדום...'","❓ שאל: 'באיזה צבע רוצה? למה?'","🐾 עשו רגליים גם – להשוות גדול/קטן","📸 צלם ותשלח לסבא סבתא יחד איתו"]},
+    {icon:"🥔",title:"חותמות ירקות",subtitle:"בטטה, גזר ותפו\"א = חותמות",prep:"low",prepLabel:"⏱️ 5 דקות הכנה",goals:["יצירתיות","מרקמים","הכרת ירקות"],materials:["תפוח אדמה / גזר / בטטה","צבעי אצבע","דף לבן","סכין (אתה חותך)"],steps:["חותכים ירקות לחצי — עיגול, ריבוע, כוכב.","__NAME__ בוחר צבע ומניח את הירק בצבע.","לוחצים על הדף בחוזקה — ומרימים!","מגלים יחד מה הצורה שיצאה.","מערבבים ירקות וצבעים — יוצרים ציור שלם."],tips:["🥕 גזר = עיגולים קטנים, בטטה = צורות אורגניות","🎨 כמה שיותר ירקות — כמה שיותר כיף","🖼️ זה נראה מדהים בגמר — מתאים לתלות"]},
+    {icon:"🕯️",title:"ציור קסם בנר",subtitle:"סוד בנייר — הוא מגלה אותו",prep:"low",prepLabel:"⏱️ 3 דקות הכנה",goals:["פליאה וסקרנות","ביטוי יצירתי","הפתעה"],materials:["נר לבן / גיר לבן","צבעי מים","דף לבן","מברשת"],steps:["אתה מצייר ציור חבוי עם נר/גיר לבן על דף לבן.","נותנים ל__NAME__ מברשת עם צבעי מים.","הוא מברשים על הדף — והציור מתגלה!","'וואו! מה זה?!' — הוא יזכור זאת לנצח.","עכשיו הוא מצייר, ואתה מגלה."],tips:["✨ הרגע שהציור מופיע = קסם אמיתי","🎯 צייר דברים שהוא מכיר: אריה, מכונית, לב","🔁 תחליפו תפקידים"]},
+    {icon:"🌿",title:"קולאז' טבע",subtitle:"אוספים, מדביקים, יוצרים",prep:"low",prepLabel:"⏱️ יציאה קצרה לחוץ",goals:["חיבור לטבע","מיון וסיווג","עבודה עדינה"],materials:["עלים / אבנים קטנות / פרחים","דף קרטון","דבק שקוף"],steps:["יוצאים יחד לחוץ ואוספים חומרים.","כל פריט – __NAME__ מחזיק, מרגיש, ומתאר.","חוזרים הביתה ומניחים הכל על הדף.","ביחד מחליטים איפה כל דבר.","כותבים יחד את שמות הדברים."],tips:["🔍 כלי מעולה לחיזוק שפה","🌳 שאל: 'מאיזה עץ זה לדעתך?'","🖼️ תלו את היצירה על הקיר"]},
+    {icon:"🧱",title:"פיסול בבצק מלוח",subtitle:"מכינים ביחד – ומשחקים ביחד",prep:"med",prepLabel:"⏱️ 10 דקות הכנה",goals:["חיזוק שרירי כף יד","דמיון","חוויית מרקם"],materials:["2 כוסות קמח","1 כוס מלח","מים","צבע מאכל אופציונלי"],steps:["__NAME__ שופך ומוסיף את הרכיבים – לא אתה.","לשים ביחד – הוא שם ידיים, גם אתה.","מכינים צורות: נחש, כדור, עוגה.","אפשר ללחוץ, למרוח, לקרוע – הכל מותר.","מייבשים בתנור 120 מעלות שעה."],tips:["💪 לישה חזקה = תרגול שרירים לכתיבה","🎯 שאל: 'מה זה לדעתך?' – קבל כל תשובה","🌈 בצקים בצבעים שונים – ערבבו ותראו"]}
+  ]},
+  language:{ title:"💬 חיזוק שפה ודיבור", activities:[
+    {icon:"📚",title:"סיפור הפוך",subtitle:"אתה טועה — הוא מתקן",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["זיכרון","הבנת סיפור","ביטחון בדיבור"],materials:["ספר ידוע שאוהב"],steps:["פותחים ספר מוכר.","אתה מספר את הסיפור – עם טעויות מכוונות.","'פעם היה כלב קטן...' – הוא יצעק 'לא! אריה!'","תגיד 'אה, צודק!' ותמשיך עם טעות נוספת.","ממשיכים עד שהוא מספר לך את כל הסיפור."],tips:["😂 זה גורם לו לצחוק ולדבר הרבה","🧠 מחזק זיכרון סיפורי וסדר אירועים","🎭 תהיה דרמטי – 'וואו, אני טועה כל הזמן!'"]},
+    {icon:"🔤",title:"ציד אותיות בבית",subtitle:"מצא משהו שמתחיל ב...",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["מודעות פונטית","אוצר מילים","תנועה"],materials:["הבית שלכם"],steps:["קוראים אות: 'מצא משהו שמתחיל ב-כ!'","__NAME__ רץ ומחפש: כדור, כיסא, כוס...","כשמוצא — מביא ומספר מה זה.","עכשיו הוא קורא אות ואתה רץ.","מי שמצא יותר דברים — ניצח!"],tips:["🏆 לאבא מותר לטעות כדי שהוא יצחק","📝 התחל מאותיות קלות: מ, כ, ב, א","⚡ המשחק הזה שורף אנרגיה וגם מלמד"]},
+    {icon:"🎤",title:"מה אתה רואה?",subtitle:"הליכה + תיאור = שפה עשירה",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["הרחבת אוצר מילים","תצפית","יצירת משפטים"],materials:["רחוב / גינה / מרכול"],steps:["בכל יציאה – הופכים לפעילות.","שאל: 'מה אתה רואה?' – חכה לתשובה מלאה.","הרחב: 'כן! כלב שחור גדול עם שיער ארוך!'","בקש: 'תאר לי – הוא שמח? עייף?'","שחק: 'אני רואה משהו אדום ועגול... מה זה?'"],tips:["🌍 כל יציאה = הזדמנות שפתית","⏸️ תן לו זמן – אל תמהר לענות","📝 שים לב למילים חדשות שלמד"]},
+    {icon:"🎭",title:"משחק תפקידים",subtitle:"חנות, מסעדה, רופא",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["שפה חברתית","דמיון","הבנת עולם"],materials:["צעצועים קיימים בבית"],steps:["בחרו יחד מה משחקים היום.","חנות: קחו פירות / צעצועים, הוא מוכר – אתה קונה.","מסעדה: הוא מגיש, אתה מזמין בנימוס מוגזם.","רופא: הוא בודק את הבובה, אתה 'חולה'.","החליפו תפקידים."],tips:["🗣️ השתמש במילים מורכבות: 'יש לכם תפריט?'","❌ אל תתקן אותו – תפסיד את הקסם","🏆 זה אחד מהכלים הטובים ביותר לשפה"]},
+    {icon:"🎵",title:"שירים עם תנועות",subtitle:"גוף + קול + משמעות",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["זיכרון שפתי","קואורדינציה","ביטוי עצמי"],materials:["שירים שהוא אוהב"],steps:["בחרו שיר אהוב.","ממציאים ביחד תנועות לכל מילה.","שרים לאט – הוא מוביל את הקצב.","משנים מילים: 'אמא היפה' ← '__NAME__ היפה'.","ביצוע גמר: הוא שר לך – אתה קהל."],tips:["🎤 הקלט אותו שר – שמעו יחד","🔄 חזרה על שירים = חיזוק שפתי מצוין","🎊 הגב בהתלהבות – זה בונה ביטחון"]}
+  ]},
+  games:{ title:"🎮 משחקים בבית", activities:[
+    {icon:"🔦",title:"ציד אוצר בחדרים",subtitle:"פתקים עם רמזים פשוטים",prep:"med",prepLabel:"⏱️ 10 דקות הכנה",goals:["הבנת הוראות","זיכרון מרחבי","עצמאות"],materials:["4-5 פתקים","פרס קטן"],steps:["בזמן שהוא לא רואה – מסתיר פתקים בחדרים.","הפתק הראשון אצלו: 'לך למקום שנועלים נעליים'.","שם מחכה הפתק הבא: 'לך למקום שמבשלים'.","הוא הולך מרמז לרמז.","הפרס מחכה במקום הסודי."],tips:["🗺️ 3-4 תחנות מספיק לגיל הזה","📍 השתמש במקומות מוכרים: מקרר, מיטה, נעליים","🏆 הגבה גדולה בגילוי הפרס"]},
+    {icon:"🎳",title:"בולינג בקבוקים",subtitle:"מבקבוקי פלסטיק + כדור גרב",prep:"low",prepLabel:"⏱️ 3 דקות הכנה",goals:["קואורדינציה גסה","ספירה","ניצחון/הפסד"],materials:["6 בקבוקי פלסטיק ריקים","כדור גרב / ספוג"],steps:["מסדרים 6 בקבוקים בצורת משולש.","__NAME__ עומד על קו – אתה קובע את המרחק.","הוא מגלגל את הכדור ומנסה להפיל.","ספרו יחד כמה נפלו.","מי שהפיל יותר ב-5 סיבובים – ניצח."],tips:["📏 קרוב יותר = יותר הצלחות = יותר שמחה","🎉 הגזים בחגיגה על כל הפלה","💧 מלא מים בבקבוקים לקושי"]},
+    {icon:"🫙",title:"מה בתוך השקית?",subtitle:"ניחוש דרך מגע בלבד",prep:"low",prepLabel:"⏱️ 2 דקות הכנה",goals:["חושי מגע","אוצר מילים","ריכוז"],materials:["שקית בד / כיס","5-8 חפצים מהבית"],steps:["מכניסים חפצים קטנים לשקית.","הוא מכניס יד – בלי להסתכל.","מרגיש ואומר: 'זה קשה... עגול... חלק...'","מנחש מה זה לפני שמוציא.","מחליפים – עכשיו אתה מנחש, הוא בוחר."],tips:["🧠 מחזק קשרים בין מילה לתחושה","🙅 אל תמהר – תן לו לחוש ולחשוב","⬆️ הוסף חפצים מורכבים יותר בהדרגה"]},
+    {icon:"🧊",title:"מסלול מכשולים",subtitle:"כריות, שמיכות ותיבות קרטון",prep:"med",prepLabel:"⏱️ 10 דקות הכנה",goals:["גוף וחלל","תכנון","ביטחון גופני"],materials:["כריות","שמיכות","קרטונים","כיסאות"],steps:["ביחד – בנו מסלול בסלון.","כריות = לדרוך עליהן, שמיכה = לזחול מתחת, כיסא = לעבור מתחת.","הוא עובר – אתה מעודד.","עבור גם אתה – הוא יצחק!","שנו את המסלול כל פעם שמשעמם."],tips:["⏱️ הוסף 'מרוץ' עם טיימר – הוא יתלהב","🛡️ בטיחות: ודא שאין פינות חדות","👨 שחק גם אתה – זה הופך את זה ל x5 כיפי"]},
+    {icon:"🎈",title:"טניס בלון",subtitle:"כדי שלא יגע ברצפה!",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["קואורדינציה","ריכוז","פריקת אנרגיה"],materials:["בלון מנופח"],steps:["מנפחים בלון.","המשחק: הבלון לא יגע ברצפה!","הכו בידיים, בראש, בכתפיים — הכל מותר.","הוסיפו כלל: רק ביד שמאל / רק ברגל.","מי שהבלון נוחת אצלו — מפסיד נקודה."],tips:["😂 ילדים 3 שנים אובססיביים לזה — ישחקו שעה שלמה","🎯 הוסיפו 2 בלונים לכאוס מלא","💪 שורף אנרגיה בלי לצאת מהבית"]},
+    {icon:"🃏",title:"זיכרון תמונות",subtitle:"גרסה שהוא יכול לנצח",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["זיכרון חזותי","ריכוז","ויסות רגשי"],materials:["8 זוגות קלפים"],steps:["מתחילים עם 6 זוגות בלבד.","הפכו הכל עם הפנים למטה.","בתורות – כל אחד הופך 2 קלפים.","אם מצאת זוג – לוקחים ומשחקים שוב.","מי שסיים עם יותר זוגות – ניצח."],tips:["🏅 הניחו לו לנצח לפעמים – אבל לא תמיד","🎯 אם הוא מתוסכל – הפחיתו זוגות","🌟 שבחו ניסיון, לא רק ניצחון"]},
+    {icon:"🌀",title:"פנטומימה לפעוטות",subtitle:"מחקה חיות ועולם",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["הבעת גוף","שפה","שחרור"],materials:["כלום – רק מקום"],steps:["תורות: כל אחד מחקה חיה בלי להשמיע קול.","השני מנחש – ומחקה גם.","הגדלו: חקות מצבים (ישן, קר, אוכל ספגטי).","הוא ינחש אותך – תהיה קצת 'קשה'.","הוסיפו סאונד – ואז חזרו לשקט."],tips:["😂 תהיה מגוחך – זה הכוכב האמיתי","🐘 התחל בקל: חתול, כלב, פיל","🎬 הקלט סרטון קצר של ההופעות"]}
+  ]},
+  wild:{ title:"🤪 פעילויות משוגעות", activities:[
+    {icon:"😜",title:"תחרות פרצופים",subtitle:"מי עושה את הפרצוף הכי מצחיק?",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["שחרור","ביטוי רגשי","צחוק משותף"],materials:["מראה אופציונלי"],steps:["עמדו מול מראה.","כל אחד עושה פרצוף – השני מעתיק.","שפט: מי הצחיק יותר?","הגדלו: פרצוף עצוב / מפחיד / מאושר מאוד.","הקלטו סרטון ותצחקו ביחד."],tips:["📸 ילדים בגיל 3 אוהבים לראות את עצמם בסרטון","😂 תהיה ילד – זה לא הזמן להיות כבוד","🏆 אין מפסיד – כולם מצחיקים"]},
+    {icon:"🚶",title:"תחרות הליכה מגוחכת",subtitle:"מי מגיע קצה לקצה הכי מוזר?",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["שחרור גופני","יצירתיות","צחוק"],materials:["מסדרון / סלון"],steps:["כל אחד ממציא הליכה מגוחכת.","הליכת פנגווין, הליכת רובוט, הליכת עיניים עצומות.","עובר קצה לקצה – השני מעריך 1-10.","הצביעו מי הכי מצחיק.","נסו לחקות אחד את השני."],tips:["🎭 ילד 3 שנים = שחקן מחונן, תן לו במה","🦆 הליכת ברווז תמיד מנצחת","📹 הקלטה = זיכרון לכל החיים"]},
+    {icon:"🫧",title:"בועות ענק סבון",subtitle:"כמה שניות הכנה — כמה שעות כיף",prep:"low",prepLabel:"⏱️ 2 דקות הכנה",goals:["תיאום עיין-יד","פליאה","חושי"],materials:["כוס מים","כף סבון כלים","קש שתייה"],steps:["מערבבים מים + סבון בקערה.","__NAME__ טובל קש ומנסה לנשוף לאט לאט.","כשיוצאת בועה — להשתגע יחד!","ניסוי: נשיפה חזקה vs. איטית — מה יוצר בועה גדולה?","ניסוי: צינור גדול יותר = בועה גדולה יותר?"],tips:["🌬️ ללמד לנשוף ולא לשאוף!","🔬 זה בעצם ניסוי מדע מוצלח","🫧 אפשר על המרפסת = פחות ניקיון"]},
+    {icon:"🏚️",title:"בניית מבצר שמיכות",subtitle:"כיסאות + שמיכות = טירה מלכותית",prep:"med",prepLabel:"⏱️ 10 דקות הכנה",goals:["חשיבה מרחבית","שיתוף פעולה","משחק דמיוני"],materials:["כיסאות","שמיכות","כריות","פנס אופציונלי"],steps:["ביחד תכננו: 'כמה חדרים יהיה במבצר?'","הציבו כיסאות, כסו בשמיכות.","הכניסו פנס / מנורת לילה פנימה.","שבו בפנים יחד — ספרו סיפור / אכלו חטיף.","המבצר הוא שלו — הוא מחליט מי נכנס!"],tips:["🔦 פנס בפנים = חוויה מאגית לחלוטין","🍕 חטיף בפנים = כבוד מלכותי","🌙 אפשר לשם להתחיל את שגרת השינה"]},
+    {icon:"❄️",title:"מלחמת שלגים מגרביים",subtitle:"ספורט אחי – בלי לצאת מהסלון",prep:"low",prepLabel:"⏱️ 3 דקות הכנה",goals:["תיאום וזריקה","אסטרטגיה","פריקת אנרגיה"],materials:["גרביים ישנות","כריות כ'מחסה'"],steps:["מגלגלים גרביים לכדורים.","כל אחד בוחר צד ומחסה.","יורים כדורי גרב אחד על השני.","מי שנפגע מחכה 5 שניות לפני שיורה שוב.","מי שנגמרו לו הכדורים — הפסיד!"],tips:["😂 ילד 3 שנים ירצה לשחק זה כל יום","🛡️ כרית גדולה = מגן מושלם","📏 התחל קרוב — הרחק ככל שמשתפר"]},
+    {icon:"💃",title:"מוסיקה קופאת",subtitle:"כשהמוסיקה נעצרת — מתקפאים!",prep:"zero",prepLabel:"✅ ללא הכנה",goals:["ויסות גוף","הקשבה","צחוק"],materials:["מוסיקה מהטלפון"],steps:["מדליקים מוסיקה — כולם רוקדים ומשתגעים.","פתאום מכבים — כולם קופאים כמו פסל!","מי שנע — 'נתפס'!","הגדלו: קפאון מצחיק (עם יד למעלה / רגל אחת).","__NAME__ מוחא כפיים — אתה קופא."],tips:["🎵 שיר עם קצב = יותר ריקוד אמיתי","🗿 הגזימו בקפאון – ילדים אוהבים פסלים מוגזמים","😂 תהיה הכי דרמטי שאפשר"]},
+    {icon:"🎪",title:"מופע קרקס ביתי",subtitle:"הוא הלהטוטן — אתה הקהל הקולני",prep:"low",prepLabel:"⏱️ 5 דקות הכנה",goals:["ביטחון עצמי","יצירתיות","ביטוי"],materials:["כרית","כדור","מוסיקה"],steps:["הצהירו: 'הקרקס של __NAME__ פתוח!'","הוא מציג מספרים: לצעוד על קו ישר, לזרוק ולתפוס.","אתה הקהל – מחא כפיים, לחייץ, תתלהב.","הוסיפו מוסיקה דרמטית ברקע.","בסוף – קשת גדולה והנהה עמוקה."],tips:["🎺 מוסיקה ברקע = x10 דרמה","🎟️ עשו כרטיסים מקרטון","🤩 כל תנועה = הישג ענק בגיל הזה"]}
+  ]},
+  cooking:{ title:"🍳 מתכונים להכנה יחד", activities:[
+    {icon:"🍌",title:"בננות קפואות בשוקולד",subtitle:"קר + חם + מתוק = חוויה",prep:"med",prepLabel:"⏱️ + שעה מקפיא",goals:["מרקמים: רך/קשה/נוזלי","ספירה","עצמאות"],materials:["2 בננות","שוקולד להמסה","מקלות ארטיק","טובינגים"],steps:["הוא מקלף את הבננות (עם עזרה).","חותכים לשניים – הוא מונה.","מכניסים מקל ארטיק לכל חצי.","ממיסים שוקולד – הוא מרגיש את החום.","הוא טובל את הבננה בשוקולד.","מפזרים טובינגים ומכניסים למקפיא שעה.","פותחים יחד ואוכלים – 'זה קשה עכשיו! למה?'"],tips:["🌡️ דברו על: חם/קר, רך/קשה, נוזל/מוצק","⏳ ההמתנה גם חשובה – 'עוד כמה זמן?'","🔬 זה ניסוי מדע + קינוח"]},
+    {icon:"🥣",title:"כדורי גרנולה ואנרגיה",subtitle:"ללוש, לגלגל, לאכול",prep:"low",prepLabel:"⏱️ 5 דקות הכנה",goals:["מרקם דביק ופירורי","כוח יד","גאווה ביצירה"],materials:["1 כוס שיבולת שועל","3 כפות דבש","2 כפות חמאת בוטנים","שוקולד צ'יפס"],steps:["הוא שופך את השיבולת שועל לקערה.","מוסיף דבש וחמאת בוטנים – מרגיש כמה זה דביק.","לשים ביחד – ידיים בפנים.","מגלגלים כדורים – הוא עושה לבד.","מקשטים בשוקולד צ'יפס ומכניסים למקרר 30 דקות.","אוכלים יחד – 'אנחנו הכנו את זה!'"],tips:["👐 הרגשת הדבק בידיים = חוויה חושית חשובה","💪 גלגול = תרגול כוח כפות ידיים","🎁 אפשר לתת לסבתא"]},
+    {icon:"🥞",title:"פנקייקס מינייצ'ור",subtitle:"קטן = שלו",prep:"low",prepLabel:"⏱️ 5 דקות הכנה",goals:["מרקם רך ואוורירי","ספירה ומדידה","בחירה עצמאית"],materials:["1 כוס קמח","1 ביצה","1 כוס חלב","1 כפית אבקת אפייה","חמאה"],steps:["הוא שובר את הביצה לקערה (עם עזרה).","מוסיף חלב – הוא שופך לאט לאט.","ערבוב: ידיו + כף עץ גדולה.","אתה צולה – הוא מסתכל על 'הבועות'.","כשמוכן – הוא בוחר: דבש / ריבה / סוכר.","ממקם הכל בצלחת שלו."],tips:["🔍 'תראה בועות? זה אומר שצריך להפוך!'","🎨 אפשר לצקת בצורות עם בקבוק סחיטה","🏆 הוא שבר ביצה = הישג ענק"]},
+    {icon:"🍕",title:"פיצה אישית על לחם",subtitle:"הוא מרכיב לבד",prep:"low",prepLabel:"⏱️ 5 דקות הכנה",goals:["מרקמים: קריספי/רך/נמתח","בחירות ועצמאות","אכילה מה שהכין"],materials:["לחמניות / פיתה","רסק עגבניות","גבינה מגוררת","ירקות חתוכים"],steps:["__NAME__ מורח רסק עגבניות על הלחמניה.","מרגיש: 'קר? רטוב? מה הריח?'","מפזר גבינה בידיים – מרגיש כמה היא דביקה.","מוסיף ירקות לפי בחירתו.","נכנס לתנור 10 דקות (180 מעלות).","מוציאים – הגבינה נמסה! 'ראית את הקסם?'"],tips:["🧀 נמתח הגבינה = חוויית מרקם אייקונית","🥕 הוסיף ירק אחד שלא אוהב – אולי יאכל","📸 צלמו לפני ואחר"]},
+    {icon:"🧁",title:"עוגיות 3 רכיבים",subtitle:"בננה + שיבולת + שוקולד",prep:"low",prepLabel:"⏱️ 5 דקות + 12 דקות אפייה",goals:["מרקם רך ודביק","מדידה ושפיכה","סבלנות"],materials:["2 בננות בשלות","1 כוס שיבולת שועל","שוקולד צ'יפס"],steps:["__NAME__ לש את הבננות בידיים עד לדייסה.","מוסיף שיבולת שועל ומערבב עם כף.","מוסיף שוקולד צ'יפס – הוא ספרן: 'אחת, שתיים...'","מניחים כדורים על תבנית.","תנור 175 מעלות — 12 דקות.","ממתינים, מריחים, ואוכלים ביחד."],tips:["🍌 בננות ככל שיותר בשלות — יותר מתוק","⏳ 12 דקות = הזמן לסיפור אחד קצר","🏆 3 רכיבים = הוא יכול לספור לבד"]}
+  ]}
+};
+
+/* ════════════════════════════════════════════
+   GAMES DATA  (emoji only – no number emoji)
+════════════════════════════════════════════ */
+const GAMES = {
+  count:{ name:"כמה יש?", questions:[
+    {emoji:"🍎",        q:"כמה תפוחים יש?",    ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"3",e:"3"}], correct:"1"},
+    {emoji:"🐱🐱",      q:"כמה חתולים יש?",    ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"3",e:"3"}], correct:"2"},
+    {emoji:"⭐⭐⭐",      q:"כמה כוכבים יש?",    ans:[{v:"2",e:"2"},{v:"3",e:"3"},{v:"4",e:"4"}], correct:"3"},
+    {emoji:"🍌🍌🍌🍌",  q:"כמה בננות יש?",     ans:[{v:"3",e:"3"},{v:"4",e:"4"},{v:"5",e:"5"}], correct:"4"},
+    {emoji:"🐶🐶🐶🐶🐶",q:"כמה כלבים יש?",     ans:[{v:"4",e:"4"},{v:"5",e:"5"},{v:"6",e:"6"}], correct:"5"},
+    {emoji:"🌸🌸",      q:"כמה פרחים יש?",     ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"4",e:"4"}], correct:"2"},
+    {emoji:"🚗🚗🚗",    q:"כמה מכוניות יש?",   ans:[{v:"2",e:"2"},{v:"3",e:"3"},{v:"5",e:"5"}], correct:"3"},
+    {emoji:"🐠🐠🐠🐠",  q:"כמה דגים יש?",      ans:[{v:"3",e:"3"},{v:"4",e:"4"},{v:"6",e:"6"}], correct:"4"},
+  ]},
+  words:{ name:"איך אומרים?", questions:[
+    {emoji:"🐱", q:"איך אומרים חתול באנגלית?",    ans:[{v:"Cat",e:"Cat"},{v:"Dog",e:"Dog"},{v:"Bird",e:"Bird"}],   correct:"Cat"},
+    {emoji:"🐶", q:"איך אומרים כלב באנגלית?",     ans:[{v:"Cat",e:"Cat"},{v:"Dog",e:"Dog"},{v:"Fish",e:"Fish"}],   correct:"Dog"},
+    {emoji:"🍎", q:"איך אומרים תפוח באנגלית?",   ans:[{v:"Apple",e:"Apple"},{v:"Banana",e:"Banana"},{v:"Orange",e:"Orange"}], correct:"Apple"},
+    {emoji:"🌙", q:"איך אומרים ירח באנגלית?",     ans:[{v:"Sun",e:"Sun"},{v:"Star",e:"Star"},{v:"Moon",e:"Moon"}], correct:"Moon"},
+    {emoji:"🚗", q:"איך אומרים מכונית באנגלית?", ans:[{v:"Car",e:"Car"},{v:"Bus",e:"Bus"},{v:"Bike",e:"Bike"}],    correct:"Car"},
+    {emoji:"🏠", q:"איך אומרים בית באנגלית?",     ans:[{v:"Tree",e:"Tree"},{v:"House",e:"House"},{v:"Door",e:"Door"}], correct:"House"},
+    {emoji:"🍌", q:"איך אומרים בננה באנגלית?",    ans:[{v:"Apple",e:"Apple"},{v:"Mango",e:"Mango"},{v:"Banana",e:"Banana"}], correct:"Banana"},
+    {emoji:"☀️", q:"איך אומרים שמש באנגלית?",     ans:[{v:"Rain",e:"Rain"},{v:"Sun",e:"Sun"},{v:"Cloud",e:"Cloud"}], correct:"Sun"},
+  ]},
+  numbers:{ name:"מה הספרה?", questions:[
+    {emoji:"1",        q:"מה הספרה הזאת?",  ans:[{v:"1",e:"אחת"},{v:"2",e:"שתיים"},{v:"3",e:"שלוש"}], correct:"1"},
+    {emoji:"2",        q:"מה הספרה הזאת?",  ans:[{v:"1",e:"אחת"},{v:"2",e:"שתיים"},{v:"4",e:"ארבע"}],  correct:"2"},
+    {emoji:"3",        q:"מה הספרה הזאת?",  ans:[{v:"2",e:"שתיים"},{v:"3",e:"שלוש"},{v:"5",e:"חמש"}],  correct:"3"},
+    {emoji:"4",        q:"מה הספרה הזאת?",  ans:[{v:"3",e:"שלוש"},{v:"4",e:"ארבע"},{v:"6",e:"שש"}],    correct:"4"},
+    {emoji:"5",        q:"מה הספרה הזאת?",  ans:[{v:"4",e:"ארבע"},{v:"5",e:"חמש"},{v:"7",e:"שבע"}],    correct:"5"},
+    {emoji:"⭐⭐⭐",     q:"כמה כוכבים? מצא את הספרה", ans:[{v:"2",e:"שתיים"},{v:"3",e:"שלוש"},{v:"4",e:"ארבע"}], correct:"3"},
+    {emoji:"🍕🍕",     q:"כמה פיצות? מצא את הספרה",  ans:[{v:"1",e:"אחת"},{v:"2",e:"שתיים"},{v:"3",e:"שלוש"}], correct:"2"},
+    {emoji:"🐸🐸🐸🐸", q:"כמה צפרדעים? מצא את הספרה",ans:[{v:"3",e:"שלוש"},{v:"4",e:"ארבע"},{v:"5",e:"חמש"}],  correct:"4"},
+  ]},
+  missing:{ name:"מה נעלם?", questions:[
+    {emoji:"🍎 🍌 ❓", q:"ראית גם תפוז — מה נעלם?",    ans:[{v:"🍊",e:"תפוז"},{v:"🍇",e:"ענבים"},{v:"🍓",e:"תות"}], correct:"🍊"},
+    {emoji:"🐱 ❓ 🐶", q:"ראית גם ארנב — מה נעלם?",    ans:[{v:"🐰",e:"ארנב"},{v:"🐸",e:"צפרדע"},{v:"🐻",e:"דוב"}], correct:"🐰"},
+    {emoji:"⭐ ⭐ ❓",  q:"ראית שלושה כוכבים — מה נעלם?",ans:[{v:"⭐",e:"כוכב"},{v:"🌙",e:"ירח"},{v:"☀️",e:"שמש"}], correct:"⭐"},
+    {emoji:"🚗 🚂 ❓", q:"ראית גם מטוס — מה נעלם?",    ans:[{v:"✈️",e:"מטוס"},{v:"🚲",e:"אופניים"},{v:"🚀",e:"רקטה"}], correct:"✈️"},
+    {emoji:"🎈 ❓ 🎁", q:"ראית גם עוגה — מה נעלם?",    ans:[{v:"🎂",e:"עוגה"},{v:"🍭",e:"סוכריה"},{v:"🎊",e:"קונפטי"}], correct:"🎂"},
+    {emoji:"🔴 🔵 ❓", q:"ראית גם צהוב — מה נעלם?",    ans:[{v:"🟡",e:"צהוב"},{v:"🟢",e:"ירוק"},{v:"🟠",e:"כתום"}], correct:"🟡"},
+    {emoji:"🐘 🦒 ❓", q:"ראית גם אריה — מה נעלם?",    ans:[{v:"🦁",e:"אריה"},{v:"🐆",e:"נמר"},{v:"🦓",e:"זברה"}], correct:"🦁"},
+    {emoji:"א ב ❓",   q:"ראית גם גימל — מה נעלם?",    ans:[{v:"ג",e:"גימל"},{v:"ד",e:"דלת"},{v:"ה",e:"הא"}], correct:"ג"},
+  ]},
+  odd:{ name:"מה שונה?", questions:[
+    {emoji:"🍎 🍌 🍊 🚗",  q:"מה לא שייך לפירות?",        ans:[{v:"🚗",e:"מכונית"},{v:"🍎",e:"תפוח"},{v:"🍌",e:"בננה"}], correct:"🚗"},
+    {emoji:"🐱 🐶 🐰 ✈️",  q:"מה לא חיה?",                 ans:[{v:"🐱",e:"חתול"},{v:"✈️",e:"מטוס"},{v:"🐰",e:"ארנב"}],  correct:"✈️"},
+    {emoji:"🚗 🚂 ✈️ 🍕",  q:"מה לא כלי תחבורה?",         ans:[{v:"🚗",e:"מכונית"},{v:"🍕",e:"פיצה"},{v:"✈️",e:"מטוס"}], correct:"🍕"},
+    {emoji:"🎈 🎊 🎁 🔧",  q:"מה לא שייך למסיבה?",         ans:[{v:"🎈",e:"בלון"},{v:"🔧",e:"מפתח ברגים"},{v:"🎁",e:"מתנה"}], correct:"🔧"},
+    {emoji:"👕 👗 👟 🍦",  q:"מה לא בגד או נעל?",          ans:[{v:"👕",e:"חולצה"},{v:"🍦",e:"גלידה"},{v:"👟",e:"נעל"}], correct:"🍦"},
+    {emoji:"🌹 🌷 🌻 🐊",  q:"מה לא פרח?",                 ans:[{v:"🌹",e:"ורד"},{v:"🌻",e:"חמניה"},{v:"🐊",e:"תנין"}],  correct:"🐊"},
+    {emoji:"🍕 🍔 🌮 🏀",  q:"מה לא אוכל?",                ans:[{v:"🍕",e:"פיצה"},{v:"🏀",e:"כדורסל"},{v:"🍔",e:"המבורגר"}], correct:"🏀"},
+    {emoji:"🐠 🐋 🦈 🦁",  q:"מה לא חי במים?",             ans:[{v:"🐠",e:"דג"},{v:"🦁",e:"אריה"},{v:"🐋",e:"לווייתן"}], correct:"🦁"},
+  ]},
+  feelings:{ name:"איך מרגיש?", questions:[
+    {emoji:"😊", q:"הפרצוף הזה מרגיש...", ans:[{v:"שמח",e:"😊 שמח"},{v:"עצוב",e:"😢 עצוב"},{v:"כועס",e:"😠 כועס"}],       correct:"שמח"},
+    {emoji:"😢", q:"הפרצוף הזה מרגיש...", ans:[{v:"שמח",e:"😊 שמח"},{v:"עצוב",e:"😢 עצוב"},{v:"מופתע",e:"😲 מופתע"}],    correct:"עצוב"},
+    {emoji:"😠", q:"הפרצוף הזה מרגיש...", ans:[{v:"עייף",e:"😴 עייף"},{v:"שמח",e:"😊 שמח"},{v:"כועס",e:"😠 כועס"}],       correct:"כועס"},
+    {emoji:"😴", q:"הפרצוף הזה מרגיש...", ans:[{v:"עייף",e:"😴 עייף"},{v:"עצוב",e:"😢 עצוב"},{v:"מפוחד",e:"😨 מפוחד"}],   correct:"עייף"},
+    {emoji:"😨", q:"הפרצוף הזה מרגיש...", ans:[{v:"שמח",e:"😊 שמח"},{v:"מפוחד",e:"😨 מפוחד"},{v:"כועס",e:"😠 כועס"}],    correct:"מפוחד"},
+    {emoji:"🤩", q:"הפרצוף הזה מרגיש...", ans:[{v:"נפלא",e:"🤩 נפלא"},{v:"עצוב",e:"😢 עצוב"},{v:"עייף",e:"😴 עייף"}],    correct:"נפלא"},
+    {emoji:"😂", q:"הפרצוף הזה...",        ans:[{v:"בוכה",e:"😢 בוכה"},{v:"צוחק",e:"😂 צוחק"},{v:"כועס",e:"😠 כועס"}],    correct:"צוחק"},
+    {emoji:"🥰", q:"הפרצוף הזה מרגיש...", ans:[{v:"כועס",e:"😠 כועס"},{v:"אוהב",e:"🥰 אוהב"},{v:"עייף",e:"😴 עייף"}],    correct:"אוהב"},
+  ]},
+  sort:{ name:"שייך לאיפה?", questions:[
+    {emoji:"🐠", q:"הדג שייך ל...",         ans:[{v:"ים",e:"🌊 ים"},{v:"יער",e:"🌳 יער"},{v:"בית",e:"🏠 בית"}], correct:"ים"},
+    {emoji:"🛏️", q:"המיטה שייכת ל...",      ans:[{v:"ים",e:"🌊 ים"},{v:"בית",e:"🏠 בית"},{v:"יער",e:"🌳 יער"}], correct:"בית"},
+    {emoji:"🦁", q:"האריה שייך ל...",       ans:[{v:"יער",e:"🌳 יער"},{v:"בית",e:"🏠 בית"},{v:"ים",e:"🌊 ים"}],  correct:"יער"},
+    {emoji:"🍽️", q:"הצלחת שייכת ל...",     ans:[{v:"ים",e:"🌊 ים"},{v:"יער",e:"🌳 יער"},{v:"בית",e:"🏠 בית"}], correct:"בית"},
+    {emoji:"🐙", q:"התמנון שייך ל...",      ans:[{v:"ים",e:"🌊 ים"},{v:"יער",e:"🌳 יער"},{v:"בית",e:"🏠 בית"}], correct:"ים"},
+    {emoji:"🦊", q:"השועל שייך ל...",       ans:[{v:"ים",e:"🌊 ים"},{v:"בית",e:"🏠 בית"},{v:"יער",e:"🌳 יער"}], correct:"יער"},
+    {emoji:"🛁", q:"האמבטיה שייכת ל...",   ans:[{v:"ים",e:"🌊 ים"},{v:"בית",e:"🏠 בית"},{v:"יער",e:"🌳 יער"}], correct:"בית"},
+    {emoji:"🐚", q:"הצדף שייך ל...",        ans:[{v:"יער",e:"🌳 יער"},{v:"בית",e:"🏠 בית"},{v:"ים",e:"🌊 ים"}],  correct:"ים"},
+  ]},
+  size:{ name:"גדול או קטן?", questions:[
+    {emoji:"🐘  vs  🐭",      q:"מי יותר גדול?",          ans:[{v:"פיל",e:"🐘 פיל"},{v:"עכבר",e:"🐭 עכבר"}],               correct:"פיל"},
+    {emoji:"🌳  vs  🌱",      q:"מה יותר גדול?",           ans:[{v:"עץ",e:"🌳 עץ"},{v:"שתיל",e:"🌱 שתיל"}],                 correct:"עץ"},
+    {emoji:"🦋  vs  🐝",      q:"מי קטן יותר?",            ans:[{v:"פרפר",e:"🦋 פרפר"},{v:"דבורה",e:"🐝 דבורה"}],           correct:"דבורה"},
+    {emoji:"🌊🌊🌊  vs  💧",  q:"איפה יש יותר מים?",       ans:[{v:"גלים",e:"🌊 גלים"},{v:"טיפה",e:"💧 טיפה"}],             correct:"גלים"},
+    {emoji:"⭐⭐⭐⭐  vs  ⭐",  q:"איפה יש יותר כוכבים?",   ans:[{v:"ארבעה",e:"⭐⭐⭐⭐"},{v:"אחד",e:"⭐"}],                  correct:"ארבעה"},
+    {emoji:"🏠  vs  🏰",      q:"מה יותר גדול?",           ans:[{v:"בית",e:"🏠 בית"},{v:"טירה",e:"🏰 טירה"}],               correct:"טירה"},
+    {emoji:"🐜  vs  🦒",      q:"מי קטן יותר?",            ans:[{v:"נמלה",e:"🐜 נמלה"},{v:"ג'ירף",e:"🦒 ג'ירף"}],           correct:"נמלה"},
+    {emoji:"🍇🍇  vs  🍇🍇🍇🍇", q:"איפה יש יותר ענבים?", ans:[{v:"שתיים",e:"🍇🍇 שתיים"},{v:"ארבע",e:"🍇🍇🍇🍇 ארבע"}],  correct:"ארבע"},
+  ]},
+  hebrew_letters:{ name:"אותיות בעברית", questions:[
+    {emoji:"א", q:"איזו אות זאת?", ans:[{v:"א",e:"א"},{v:"ב",e:"ב"},{v:"ג",e:"ג"}], correct:"א"},
+    {emoji:"ב", q:"איזו אות זאת?", ans:[{v:"ב",e:"ב"},{v:"ד",e:"ד"},{v:"א",e:"א"}], correct:"ב"},
+    {emoji:"ג", q:"איזו אות זאת?", ans:[{v:"א",e:"א"},{v:"ג",e:"ג"},{v:"ה",e:"ה"}], correct:"ג"},
+    {emoji:"ד", q:"איזו אות זאת?", ans:[{v:"ד",e:"ד"},{v:"ב",e:"ב"},{v:"ז",e:"ז"}], correct:"ד"},
+    {emoji:"מ", q:"איזו אות זאת?", ans:[{v:"מ",e:"מ"},{v:"נ",e:"נ"},{v:"ש",e:"ש"}], correct:"מ"},
+    {emoji:"ש", q:"איזו אות זאת?", ans:[{v:"ש",e:"ש"},{v:"מ",e:"מ"},{v:"ת",e:"ת"}], correct:"ש"},
+    {emoji:"ל", q:"איזו אות זאת?", ans:[{v:"ל",e:"ל"},{v:"ר",e:"ר"},{v:"כ",e:"כ"}], correct:"ל"},
+    {emoji:"כ", q:"איזו אות זאת?", ans:[{v:"כ",e:"כ"},{v:"ל",e:"ל"},{v:"נ",e:"נ"}], correct:"כ"},
+  ]},
+  hebrew_words:{ name:"מילים בעברית", questions:[
+    {emoji:"🐱", q:"איך כותבים את החיה הזאת?", ans:[{v:"חתול",e:"חתול"},{v:"כלב",e:"כלב"},{v:"דג",e:"דג"}], correct:"חתול"},
+    {emoji:"🐶", q:"איך כותבים את החיה הזאת?", ans:[{v:"חתול",e:"חתול"},{v:"כלב",e:"כלב"},{v:"ציפור",e:"ציפור"}], correct:"כלב"},
+    {emoji:"🌞", q:"איך כותבים את זה?", ans:[{v:"שמש",e:"שמש"},{v:"ירח",e:"ירח"},{v:"כוכב",e:"כוכב"}], correct:"שמש"},
+    {emoji:"🌙", q:"איך כותבים את זה?", ans:[{v:"שמש",e:"שמש"},{v:"ירח",e:"ירח"},{v:"ים",e:"ים"}], correct:"ירח"},
+    {emoji:"🏠", q:"איך כותבים את זה?", ans:[{v:"בית",e:"בית"},{v:"גן",e:"גן"},{v:"דרך",e:"דרך"}], correct:"בית"},
+    {emoji:"🍎", q:"איך כותבים את הפרי הזה?", ans:[{v:"תפוח",e:"תפוח"},{v:"בננה",e:"בננה"},{v:"ענב",e:"ענב"}], correct:"תפוח"},
+    {emoji:"🍌", q:"איך כותבים את הפרי הזה?", ans:[{v:"בננה",e:"בננה"},{v:"תפוח",e:"תפוח"},{v:"מנגו",e:"מנגו"}], correct:"בננה"},
+    {emoji:"🚗", q:"איך כותבים את זה?", ans:[{v:"מכונית",e:"מכונית"},{v:"אופניים",e:"אופניים"},{v:"רכבת",e:"רכבת"}], correct:"מכונית"},
+  ]},
+  english_letters:{ name:"אותיות באנגלית", questions:[
+    {emoji:"A", q:"איזו אות זאת? What letter?", ans:[{v:"A",e:"A"},{v:"B",e:"B"},{v:"C",e:"C"}], correct:"A"},
+    {emoji:"B", q:"איזו אות זאת? What letter?", ans:[{v:"A",e:"A"},{v:"B",e:"B"},{v:"D",e:"D"}], correct:"B"},
+    {emoji:"C", q:"איזו אות זאת? What letter?", ans:[{v:"C",e:"C"},{v:"D",e:"D"},{v:"A",e:"A"}], correct:"C"},
+    {emoji:"D", q:"איזו אות זאת? What letter?", ans:[{v:"B",e:"B"},{v:"D",e:"D"},{v:"E",e:"E"}], correct:"D"},
+    {emoji:"E", q:"איזו אות זאת? What letter?", ans:[{v:"E",e:"E"},{v:"F",e:"F"},{v:"A",e:"A"}], correct:"E"},
+    {emoji:"M", q:"איזו אות זאת? What letter?", ans:[{v:"M",e:"M"},{v:"N",e:"N"},{v:"W",e:"W"}], correct:"M"},
+    {emoji:"S", q:"איזו אות זאת? What letter?", ans:[{v:"Z",e:"Z"},{v:"S",e:"S"},{v:"X",e:"X"}], correct:"S"},
+    {emoji:"T", q:"איזו אות זאת? What letter?", ans:[{v:"T",e:"T"},{v:"L",e:"L"},{v:"F",e:"F"}], correct:"T"},
+  ]},
+  english_words:{ name:"מילים באנגלית", questions:[
+    {emoji:"🐶", q:"How do you spell this animal?", ans:[{v:"Dog",e:"Dog"},{v:"Cat",e:"Cat"},{v:"Bird",e:"Bird"}], correct:"Dog"},
+    {emoji:"🐱", q:"How do you spell this animal?", ans:[{v:"Dog",e:"Dog"},{v:"Cat",e:"Cat"},{v:"Fish",e:"Fish"}], correct:"Cat"},
+    {emoji:"☀️", q:"How do you spell this?", ans:[{v:"Sun",e:"Sun"},{v:"Moon",e:"Moon"},{v:"Star",e:"Star"}], correct:"Sun"},
+    {emoji:"🏠", q:"How do you spell this?", ans:[{v:"Tree",e:"Tree"},{v:"House",e:"House"},{v:"Car",e:"Car"}], correct:"House"},
+    {emoji:"📕", q:"How do you spell this?", ans:[{v:"Book",e:"Book"},{v:"Door",e:"Door"},{v:"Bag",e:"Bag"}], correct:"Book"},
+    {emoji:"🍎", q:"How do you spell this fruit?", ans:[{v:"Apple",e:"Apple"},{v:"Banana",e:"Banana"},{v:"Mango",e:"Mango"}], correct:"Apple"},
+    {emoji:"⚽", q:"How do you spell this?", ans:[{v:"Ball",e:"Ball"},{v:"Bell",e:"Bell"},{v:"Doll",e:"Doll"}], correct:"Ball"},
+    {emoji:"🌳", q:"How do you spell this?", ans:[{v:"Tree",e:"Tree"},{v:"Three",e:"Three"},{v:"Free",e:"Free"}], correct:"Tree"},
+  ]},
+  shapes:{ name:"צורות", questions:[
+    {emoji:"⭕", q:"איזו צורה זאת?", ans:[{v:"עיגול",e:"⭕ עיגול"},{v:"ריבוע",e:"🟦 ריבוע"},{v:"משולש",e:"🔺 משולש"}], correct:"עיגול"},
+    {emoji:"🟦", q:"איזו צורה זאת?", ans:[{v:"עיגול",e:"⭕ עיגול"},{v:"ריבוע",e:"🟦 ריבוע"},{v:"משולש",e:"🔺 משולש"}], correct:"ריבוע"},
+    {emoji:"🔺", q:"איזו צורה זאת?", ans:[{v:"כוכב",e:"⭐ כוכב"},{v:"משולש",e:"🔺 משולש"},{v:"לב",e:"❤️ לב"}], correct:"משולש"},
+    {emoji:"⭐", q:"איזו צורה זאת?", ans:[{v:"לב",e:"❤️ לב"},{v:"כוכב",e:"⭐ כוכב"},{v:"עיגול",e:"⭕ עיגול"}], correct:"כוכב"},
+    {emoji:"❤️", q:"איזו צורה זאת?", ans:[{v:"לב",e:"❤️ לב"},{v:"ריבוע",e:"🟦 ריבוע"},{v:"כוכב",e:"⭐ כוכב"}], correct:"לב"},
+    {emoji:"🔶", q:"איזו צורה זאת?", ans:[{v:"מעוין",e:"🔶 מעוין"},{v:"עיגול",e:"⭕ עיגול"},{v:"ריבוע",e:"🟦 ריבוע"}], correct:"מעוין"},
+    {emoji:"🌙", q:"איזו צורה זאת?", ans:[{v:"לב",e:"❤️ לב"},{v:"ירח",e:"🌙 ירח"},{v:"כוכב",e:"⭐ כוכב"}], correct:"ירח"},
+    {emoji:"🟩", q:"איזו צורה וצבע?", ans:[{v:"ריבוע ירוק",e:"🟩 ירוק"},{v:"ריבוע כחול",e:"🟦 כחול"},{v:"ריבוע אדום",e:"🟥 אדום"}], correct:"ריבוע ירוק"},
+    {emoji:"🟥", q:"איזו צורה וצבע?", ans:[{v:"ריבוע אדום",e:"🟥 אדום"},{v:"ריבוע ירוק",e:"🟩 ירוק"},{v:"ריבוע צהוב",e:"🟨 צהוב"}], correct:"ריבוע אדום"},
+    {emoji:"🟨", q:"איזו צורה וצבע?", ans:[{v:"ריבוע אדום",e:"🟥 אדום"},{v:"ריבוע צהוב",e:"🟨 צהוב"},{v:"ריבוע כחול",e:"🟦 כחול"}], correct:"ריבוע צהוב"},
+  ]},
+  animals_english:{ name:"חיות באנגלית", questions:[
+    {emoji:"🐶", q:"What animal is this?", ans:[{v:"Dog",e:"🐶 Dog"},{v:"Cat",e:"🐱 Cat"},{v:"Cow",e:"🐮 Cow"}], correct:"Dog"},
+    {emoji:"🐱", q:"What animal is this?", ans:[{v:"Cat",e:"🐱 Cat"},{v:"Dog",e:"🐶 Dog"},{v:"Mouse",e:"🐭 Mouse"}], correct:"Cat"},
+    {emoji:"🐮", q:"What animal is this?", ans:[{v:"Pig",e:"🐷 Pig"},{v:"Cow",e:"🐮 Cow"},{v:"Sheep",e:"🐑 Sheep"}], correct:"Cow"},
+    {emoji:"🐷", q:"What animal is this?", ans:[{v:"Pig",e:"🐷 Pig"},{v:"Bear",e:"🐻 Bear"},{v:"Lion",e:"🦁 Lion"}], correct:"Pig"},
+    {emoji:"🦁", q:"What animal is this?", ans:[{v:"Tiger",e:"🐯 Tiger"},{v:"Lion",e:"🦁 Lion"},{v:"Cat",e:"🐱 Cat"}], correct:"Lion"},
+    {emoji:"🐯", q:"What animal is this?", ans:[{v:"Lion",e:"🦁 Lion"},{v:"Tiger",e:"🐯 Tiger"},{v:"Cat",e:"🐱 Cat"}], correct:"Tiger"},
+    {emoji:"🐘", q:"What animal is this?", ans:[{v:"Elephant",e:"🐘 Elephant"},{v:"Hippo",e:"🦛 Hippo"},{v:"Cow",e:"🐮 Cow"}], correct:"Elephant"},
+    {emoji:"🦒", q:"What animal is this?", ans:[{v:"Horse",e:"🐴 Horse"},{v:"Giraffe",e:"🦒 Giraffe"},{v:"Zebra",e:"🦓 Zebra"}], correct:"Giraffe"},
+    {emoji:"🐰", q:"What animal is this?", ans:[{v:"Rabbit",e:"🐰 Rabbit"},{v:"Mouse",e:"🐭 Mouse"},{v:"Cat",e:"🐱 Cat"}], correct:"Rabbit"},
+    {emoji:"🐸", q:"What animal is this?", ans:[{v:"Fish",e:"🐠 Fish"},{v:"Frog",e:"🐸 Frog"},{v:"Snake",e:"🐍 Snake"}], correct:"Frog"},
+    {emoji:"🐠", q:"What animal is this?", ans:[{v:"Fish",e:"🐠 Fish"},{v:"Bird",e:"🐦 Bird"},{v:"Whale",e:"🐋 Whale"}], correct:"Fish"},
+    {emoji:"🐦", q:"What animal is this?", ans:[{v:"Bird",e:"🐦 Bird"},{v:"Bee",e:"🐝 Bee"},{v:"Bat",e:"🦇 Bat"}], correct:"Bird"},
+  ]},
+  math_add:{ name:"חיבור פשוט", questions:[
+    {emoji:"🍎 + 🍎", q:"כמה תפוחים יש?", ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"3",e:"3"}], correct:"2"},
+    {emoji:"⭐ + ⭐ + ⭐", q:"כמה כוכבים יש?", ans:[{v:"2",e:"2"},{v:"3",e:"3"},{v:"4",e:"4"}], correct:"3"},
+    {emoji:"🐱 + 🐱", q:"חתול ועוד חתול. כמה?", ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"3",e:"3"}], correct:"2"},
+    {emoji:"🍌 + 🍌 + 🍌 + 🍌", q:"כמה בננות?", ans:[{v:"3",e:"3"},{v:"4",e:"4"},{v:"5",e:"5"}], correct:"4"},
+    {emoji:"🐶 + 🐶 + 🐶", q:"כלב ועוד כלב ועוד כלב. כמה?", ans:[{v:"2",e:"2"},{v:"3",e:"3"},{v:"4",e:"4"}], correct:"3"},
+    {emoji:"🎈 1 + 1", q:"אחד ועוד אחד. כמה זה?", ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"3",e:"3"}], correct:"2"},
+    {emoji:"🎈 2 + 1", q:"שתיים ועוד אחד. כמה זה?", ans:[{v:"2",e:"2"},{v:"3",e:"3"},{v:"4",e:"4"}], correct:"3"},
+    {emoji:"🎈 2 + 2", q:"שתיים ועוד שתיים. כמה זה?", ans:[{v:"3",e:"3"},{v:"4",e:"4"},{v:"5",e:"5"}], correct:"4"},
+  ]},
+  math_subtract:{ name:"חיסור פשוט", questions:[
+    {emoji:"🍎🍎🍎 ← 🍎", q:"היו 3 תפוחים. אחד נאכל. כמה נשארו?", ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"3",e:"3"}], correct:"2"},
+    {emoji:"⭐⭐ ← ⭐", q:"היו 2 כוכבים. אחד נעלם. כמה נשארו?", ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"3",e:"3"}], correct:"1"},
+    {emoji:"🐦🐦🐦🐦 ← 🐦", q:"היו 4 ציפורים. אחת עפה. כמה נשארו?", ans:[{v:"2",e:"2"},{v:"3",e:"3"},{v:"4",e:"4"}], correct:"3"},
+    {emoji:"🎈 3 - 1", q:"שלוש פחות אחד. כמה זה?", ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"3",e:"3"}], correct:"2"},
+    {emoji:"🎈 4 - 2", q:"ארבע פחות שתיים. כמה זה?", ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"3",e:"3"}], correct:"2"},
+    {emoji:"🎈 5 - 1", q:"חמש פחות אחד. כמה זה?", ans:[{v:"3",e:"3"},{v:"4",e:"4"},{v:"5",e:"5"}], correct:"4"},
+    {emoji:"🍌🍌 ← 🍌🍌", q:"היו 2 בננות. אכלנו את שתיהן. כמה נשאר?", ans:[{v:"0",e:"0"},{v:"1",e:"1"},{v:"2",e:"2"}], correct:"0"},
+    {emoji:"🎈 3 - 2", q:"שלוש פחות שתיים. כמה זה?", ans:[{v:"1",e:"1"},{v:"2",e:"2"},{v:"3",e:"3"}], correct:"1"},
+  ]},
+  math_compare:{ name:"איפה יש יותר?", questions:[
+    {emoji:"🍎🍎 לעומת 🍎🍎🍎", q:"איפה יש יותר תפוחים?", ans:[{v:"שתיים",e:"🍎🍎"},{v:"שלוש",e:"🍎🍎🍎"}], correct:"שלוש"},
+    {emoji:"⭐ לעומת ⭐⭐⭐", q:"איפה יש יותר כוכבים?", ans:[{v:"אחד",e:"⭐"},{v:"שלושה",e:"⭐⭐⭐"}], correct:"שלושה"},
+    {emoji:"🐱🐱🐱🐱 לעומת 🐱", q:"איפה יש יותר חתולים?", ans:[{v:"ארבעה",e:"🐱🐱🐱🐱"},{v:"אחד",e:"🐱"}], correct:"ארבעה"},
+    {emoji:"🍌🍌🍌 לעומת 🍌🍌", q:"איפה יש יותר בננות?", ans:[{v:"שלוש",e:"🍌🍌🍌"},{v:"שתיים",e:"🍌🍌"}], correct:"שלוש"},
+    {emoji:"⚽ לעומת ⚽⚽", q:"איפה יש יותר כדורים?", ans:[{v:"אחד",e:"⚽"},{v:"שניים",e:"⚽⚽"}], correct:"שניים"},
+    {emoji:"🚗🚗🚗🚗🚗 לעומת 🚗🚗", q:"איפה יש יותר מכוניות?", ans:[{v:"חמש",e:"🚗🚗🚗🚗🚗"},{v:"שתיים",e:"🚗🚗"}], correct:"חמש"},
+    {emoji:"🎈🎈 לעומת 🎈🎈🎈🎈", q:"איפה יש יותר בלונים?", ans:[{v:"שתיים",e:"🎈🎈"},{v:"ארבע",e:"🎈🎈🎈🎈"}], correct:"ארבע"},
+    {emoji:"🌸🌸🌸 לעומת 🌸🌸🌸🌸🌸", q:"איפה יש יותר פרחים?", ans:[{v:"שלושה",e:"🌸🌸🌸"},{v:"חמישה",e:"🌸🌸🌸🌸🌸"}], correct:"חמישה"},
+  ]},
+
+  shadows:{ name:"צלליות — מה מסתתר?", questions:[
+    {emoji:"🌑",  shadow:"🐘", q:"מה החיה שמסתתרת בצל?", ans:[{v:"פיל",e:"🐘 פיל"},{v:"ארנב",e:"🐰 ארנב"},{v:"חתול",e:"🐱 חתול"}], correct:"פיל"},
+    {emoji:"🌑",  shadow:"🦁", q:"מה החיה שמסתתרת בצל?", ans:[{v:"כלב",e:"🐶 כלב"},{v:"אריה",e:"🦁 אריה"},{v:"פרה",e:"🐮 פרה"}], correct:"אריה"},
+    {emoji:"🌑",  shadow:"🚗", q:"איזה רכב מסתתר בצל?", ans:[{v:"מכונית",e:"🚗 מכונית"},{v:"אופניים",e:"🚲 אופניים"},{v:"מטוס",e:"✈️ מטוס"}], correct:"מכונית"},
+    {emoji:"🌑",  shadow:"✈️", q:"איזה רכב מסתתר בצל?", ans:[{v:"סירה",e:"⛵ סירה"},{v:"רכבת",e:"🚂 רכבת"},{v:"מטוס",e:"✈️ מטוס"}], correct:"מטוס"},
+    {emoji:"🌑",  shadow:"🌵", q:"איזה צמח מסתתר בצל?", ans:[{v:"עץ",e:"🌳 עץ"},{v:"קקטוס",e:"🌵 קקטוס"},{v:"פרח",e:"🌸 פרח"}], correct:"קקטוס"},
+    {emoji:"🌑",  shadow:"🐸", q:"מה החיה שמסתתרת בצל?", ans:[{v:"צב",e:"🐢 צב"},{v:"צפרדע",e:"🐸 צפרדע"},{v:"דג",e:"🐠 דג"}], correct:"צפרדע"},
+    {emoji:"🌑",  shadow:"🚂", q:"איזה רכב מסתתר בצל?", ans:[{v:"מכונית",e:"🚗 מכונית"},{v:"רכבת",e:"🚂 רכבת"},{v:"אופנוע",e:"🏍️ אופנוע"}], correct:"רכבת"},
+    {emoji:"🌑",  shadow:"🦒", q:"מה החיה שמסתתרת בצל?", ans:[{v:"סוס",e:"🐴 סוס"},{v:"גמל",e:"🐪 גמל"},{v:"ג'ירף",e:"🦒 ג'ירף"}], correct:"ג'ירף"},
+    {emoji:"🌑",  shadow:"⭐", q:"איזה צורה מסתתרת בצל?", ans:[{v:"עיגול",e:"⭕ עיגול"},{v:"כוכב",e:"⭐ כוכב"},{v:"לב",e:"❤️ לב"}], correct:"כוכב"},
+    {emoji:"🌑",  shadow:"🏠", q:"מה מסתתר בצל?", ans:[{v:"בית",e:"🏠 בית"},{v:"עץ",e:"🌳 עץ"},{v:"הר",e:"⛰️ הר"}], correct:"בית"},
+  ]},
+
+  hot_cold:{ name:"חם או קר?", questions:[
+    {emoji:"☀️", q:"השמש — חמה או קרה?", ans:[{v:"חמה",e:"🔥 חמה"},{v:"קרה",e:"❄️ קרה"}], correct:"חמה"},
+    {emoji:"🧊", q:"קרח — חם או קר?", ans:[{v:"חם",e:"🔥 חם"},{v:"קר",e:"❄️ קר"}], correct:"קר"},
+    {emoji:"🍦", q:"גלידה — חמה או קרה?", ans:[{v:"חמה",e:"🔥 חמה"},{v:"קרה",e:"❄️ קרה"}], correct:"קרה"},
+    {emoji:"🔥", q:"אש — חמה או קרה?", ans:[{v:"חמה",e:"🔥 חמה"},{v:"קרה",e:"❄️ קרה"}], correct:"חמה"},
+    {emoji:"⛄", q:"איש השלג — חם או קר?", ans:[{v:"חם",e:"🔥 חם"},{v:"קר",e:"❄️ קר"}], correct:"קר"},
+    {emoji:"🍵", q:"תה חם — חם או קר?", ans:[{v:"חם",e:"🔥 חם"},{v:"קר",e:"❄️ קר"}], correct:"חם"},
+    {emoji:"🏔️", q:"הר עם שלג — חם או קר?", ans:[{v:"חם",e:"🔥 חם"},{v:"קר",e:"❄️ קר"}], correct:"קר"},
+    {emoji:"🌋", q:"הר געש — חם או קר?", ans:[{v:"חם",e:"🔥 חם"},{v:"קר",e:"❄️ קר"}], correct:"חם"},
+    {emoji:"🌊", q:"גלידה בים — קרה או חמה?", ans:[{v:"קרה",e:"❄️ קרה"},{v:"חמה",e:"🔥 חמה"}], correct:"קרה"},
+    {emoji:"☕", q:"קפה חם — חם או קר?", ans:[{v:"חם",e:"🔥 חם"},{v:"קר",e:"❄️ קר"}], correct:"חם"},
+  ]},
+
+  animal_sounds:{ name:"מה השמע הזה?", questions:[
+    {emoji:"🐶", q:"מה הכלב אומר?", ans:[{v:"הב הב",e:"🐶 הב הב"},{v:"מיאו",e:"🐱 מיאו"},{v:"מוּ",e:"🐮 מוּ"}], correct:"הב הב"},
+    {emoji:"🐱", q:"מה החתול אומר?", ans:[{v:"הב הב",e:"🐶 הב הב"},{v:"מיאו",e:"🐱 מיאו"},{v:"גועגע",e:"🐐 גועגע"}], correct:"מיאו"},
+    {emoji:"🐮", q:"מה הפרה אומרת?", ans:[{v:"מוּ מוּ",e:"🐮 מוּ"},{v:"קוּ קוּ",e:"🐔 קוּ קוּ"},{v:"הב הב",e:"🐶 הב הב"}], correct:"מוּ מוּ"},
+    {emoji:"🐸", q:"מה הצפרדע אומרת?", ans:[{v:"קוואק קוואק",e:"🐸 קוואק"},{v:"פיפיפ",e:"🐣 פיפ"},{v:"גועגע",e:"🐐 גועגע"}], correct:"קוואק קוואק"},
+    {emoji:"🦁", q:"מה האריה עושה?", ans:[{v:"שואג",e:"🦁 שואג"},{v:"נובח",e:"🐶 נובח"},{v:"מייאו",e:"🐱 מייאו"}], correct:"שואג"},
+    {emoji:"🐔", q:"מה התרנגולת אומרת?", ans:[{v:"קוּ קוּ",e:"🐔 קוּ קוּ"},{v:"מוּ מוּ",e:"🐮 מוּ"},{v:"הב הב",e:"🐶 הב"}], correct:"קוּ קוּ"},
+    {emoji:"🐑", q:"מה הכבשה אומרת?", ans:[{v:"מֶה מֶה",e:"🐑 מֶה"},{v:"מוּ מוּ",e:"🐮 מוּ"},{v:"קוואק",e:"🐸 קוואק"}], correct:"מֶה מֶה"},
+    {emoji:"🐍", q:"מה הנחש עושה?", ans:[{v:"שש שש",e:"🐍 שש"},{v:"הב הב",e:"🐶 הב"},{v:"מיאו",e:"🐱 מיאו"}], correct:"שש שש"},
+    {emoji:"🦜", q:"מה התוכי עושה?", ans:[{v:"מחקה ומדבר",e:"🦜 מדבר"},{v:"נובח",e:"🐶 נובח"},{v:"שואג",e:"🦁 שואג"}], correct:"מחקה ומדבר"},
+    {emoji:"🐝", q:"מה הדבורה עושה?", ans:[{v:"זוממת",e:"🐝 זממ"},{v:"מייאו",e:"🐱 מיאו"},{v:"קוואק",e:"🐸 קוואק"}], correct:"זוממת"},
+  ]},
+
+  colors_missing:{ name:"איזה צבע חסר?", questions:[
+    {emoji:"🔴 🟡 🔵 ⬜", q:"איזה צבע חסר? (כתום)", ans:[{v:"כתום",e:"🟠 כתום"},{v:"ירוק",e:"🟢 ירוק"},{v:"סגול",e:"🟣 סגול"}], correct:"כתום"},
+    {emoji:"🔴 🟢 🔵 ⬜", q:"איזה צבע חסר? (צהוב)", ans:[{v:"צהוב",e:"🟡 צהוב"},{v:"כתום",e:"🟠 כתום"},{v:"לבן",e:"⬜ לבן"}], correct:"צהוב"},
+    {emoji:"🟡 🟢 🟣 ⬜", q:"איזה צבע חסר? (אדום)", ans:[{v:"אדום",e:"🔴 אדום"},{v:"כחול",e:"🔵 כחול"},{v:"שחור",e:"⬛ שחור"}], correct:"אדום"},
+    {emoji:"🔴 🟡 🟢 ⬜", q:"איזה צבע חסר? (כחול)", ans:[{v:"סגול",e:"🟣 סגול"},{v:"כחול",e:"🔵 כחול"},{v:"חום",e:"🟫 חום"}], correct:"כחול"},
+    {emoji:"🔴 🔵 🟣 ⬜", q:"איזה צבע חסר? (ירוק)", ans:[{v:"ירוק",e:"🟢 ירוק"},{v:"צהוב",e:"🟡 צהוב"},{v:"כתום",e:"🟠 כתום"}], correct:"ירוק"},
+    {emoji:"🟠 🟢 🔵 ⬜", q:"איזה צבע חסר? (אדום)", ans:[{v:"אדום",e:"🔴 אדום"},{v:"סגול",e:"🟣 סגול"},{v:"צהוב",e:"🟡 צהוב"}], correct:"אדום"},
+    {emoji:"🔴 🟡 🟠 ⬜", q:"איזה צבע חסר? (ירוק)", ans:[{v:"ירוק",e:"🟢 ירוק"},{v:"כחול",e:"🔵 כחול"},{v:"סגול",e:"🟣 סגול"}], correct:"ירוק"},
+    {emoji:"🟢 🔵 🟣 ⬜", q:"איזה צבע חסר? (צהוב)", ans:[{v:"כתום",e:"🟠 כתום"},{v:"צהוב",e:"🟡 צהוב"},{v:"אדום",e:"🔴 אדום"}], correct:"צהוב"},
+  ]},
+
+  face_parts:{ name:"השלם את הפרצוף", questions:[
+    {emoji:"😶", q:"מה חסר לפרצוף?", ans:[{v:"פה",e:"👄 פה"},{v:"עיניים",e:"👁️ עיניים"},{v:"אוזניים",e:"👂 אוזניים"}], correct:"פה"},
+    {emoji:"🫥", q:"מה חסר לפרצוף?", ans:[{v:"עיניים ופה",e:"👁️ עיניים ופה"},{v:"שיניים",e:"🦷 שיניים"},{v:"שיער",e:"💇 שיער"}], correct:"עיניים ופה"},
+    {emoji:"😮", q:"מה יש לפרצוף הזה?", ans:[{v:"פה פתוח",e:"😮 פה פתוח"},{v:"פה סגור",e:"😐 פה סגור"},{v:"שפם",e:"🧔 שפם"}], correct:"פה פתוח"},
+    {emoji:"🤔", q:"מה עושה הפרצוף הזה?", ans:[{v:"חושב",e:"🤔 חושב"},{v:"שר",e:"🎤 שר"},{v:"ישן",e:"😴 ישן"}], correct:"חושב"},
+    {emoji:"😴", q:"מה עושה הפרצוף?", ans:[{v:"ישן",e:"😴 ישן"},{v:"בוכה",e:"😢 בוכה"},{v:"צוחק",e:"😂 צוחק"}], correct:"ישן"},
+    {emoji:"🤧", q:"מה קורה לפרצוף?", ans:[{v:"מתעטש",e:"🤧 מתעטש"},{v:"שר",e:"🎵 שר"},{v:"אוכל",e:"🍽️ אוכל"}], correct:"מתעטש"},
+    {emoji:"😋", q:"הפרצוף הזה מרגיש...", ans:[{v:"טעים לו",e:"😋 טעים"},{v:"עצוב",e:"😢 עצוב"},{v:"עייף",e:"😴 עייף"}], correct:"טעים לו"},
+    {emoji:"🧐", q:"מה עושה הפרצוף?", ans:[{v:"מסתכל ובודק",e:"🧐 בודק"},{v:"ישן",e:"😴 ישן"},{v:"צוחק",e:"😂 צוחק"}], correct:"מסתכל ובודק"},
+  ]},
+
+  count_visual:{ name:"ספור וצבע", questions:[
+    {emoji:"🍎", q:"כמה תפוחים? בחר את הספרה!", ans:[{v:"1",e:"1️⃣"},{v:"2",e:"2️⃣"},{v:"3",e:"3️⃣"}], correct:"1"},
+    {emoji:"🍌🍌", q:"כמה בננות? בחר את הספרה!", ans:[{v:"1",e:"1️⃣"},{v:"2",e:"2️⃣"},{v:"3",e:"3️⃣"}], correct:"2"},
+    {emoji:"⭐⭐⭐", q:"כמה כוכבים? בחר את הספרה!", ans:[{v:"2",e:"2️⃣"},{v:"3",e:"3️⃣"},{v:"4",e:"4️⃣"}], correct:"3"},
+    {emoji:"🐶🐶🐶🐶", q:"כמה כלבים? בחר את הספרה!", ans:[{v:"3",e:"3️⃣"},{v:"4",e:"4️⃣"},{v:"5",e:"5️⃣"}], correct:"4"},
+    {emoji:"🌸🌸🌸🌸🌸", q:"כמה פרחים? בחר את הספרה!", ans:[{v:"4",e:"4️⃣"},{v:"5",e:"5️⃣"},{v:"6",e:"6️⃣"}], correct:"5"},
+    {emoji:"🍕🍕", q:"כמה פיצות? בחר את הספרה!", ans:[{v:"1",e:"1️⃣"},{v:"2",e:"2️⃣"},{v:"3",e:"3️⃣"}], correct:"2"},
+    {emoji:"🚗🚗🚗", q:"כמה מכוניות? בחר את הספרה!", ans:[{v:"2",e:"2️⃣"},{v:"3",e:"3️⃣"},{v:"4",e:"4️⃣"}], correct:"3"},
+    {emoji:"🐠🐠🐠🐠", q:"כמה דגים? בחר את הספרה!", ans:[{v:"3",e:"3️⃣"},{v:"4",e:"4️⃣"},{v:"5",e:"5️⃣"}], correct:"4"},
+  ]},
+
+  body:{ name:"גוף האדם", questions:[
+    {emoji:"🦴", q:"מה שומר על הגוף שלנו ועוזר לנו לעמוד?", ans:[{v:"עצמות",e:"🦴 עצמות"},{v:"שיניים",e:"🦷 שיניים"},{v:"שיניים",e:"💇 שיער"}], correct:"עצמות"},
+    {emoji:"💪", q:"מה גדל כשמתאמנים ועושים ספורט?", ans:[{v:"שרירים",e:"💪 שרירים"},{v:"עיניים",e:"👁️ עיניים"},{v:"שיניים",e:"🦷 שיניים"}], correct:"שרירים"},
+    {emoji:"❤️", q:"מה עוזר לדם לזרום בכל הגוף?", ans:[{v:"ריאות",e:"🫁 ריאות"},{v:"לב",e:"❤️ לב"},{v:"בטן",e:"🫃 בטן"}], correct:"לב"},
+    {emoji:"🫁", q:"במה אנחנו נושמים?", ans:[{v:"ריאות",e:"🫁 ריאות"},{v:"קיבה",e:"🫄 קיבה"},{v:"לב",e:"❤️ לב"}], correct:"ריאות"},
+    {emoji:"🧠", q:"באיזה איבר אנחנו חושבים וחולמים?", ans:[{v:"מוח",e:"🧠 מוח"},{v:"לב",e:"❤️ לב"},{v:"עין",e:"👁️ עין"}], correct:"מוח"},
+    {emoji:"👁️", q:"במה אנחנו רואים?", ans:[{v:"אוזניים",e:"👂 אוזניים"},{v:"עיניים",e:"👁️ עיניים"},{v:"אף",e:"👃 אף"}], correct:"עיניים"},
+    {emoji:"👂", q:"במה אנחנו שומעים?", ans:[{v:"עיניים",e:"👁️ עיניים"},{v:"אוזניים",e:"👂 אוזניים"},{v:"ידיים",e:"🤲 ידיים"}], correct:"אוזניים"},
+    {emoji:"👃", q:"במה אנחנו מריחים?", ans:[{v:"פה",e:"👄 פה"},{v:"עיניים",e:"👁️ עיניים"},{v:"אף",e:"👃 אף"}], correct:"אף"},
+    {emoji:"👄", q:"במה אנחנו טועמים?", ans:[{v:"לשון ופה",e:"👄 פה"},{v:"אף",e:"👃 אף"},{v:"ידיים",e:"🤲 ידיים"}], correct:"לשון ופה"},
+    {emoji:"🦷", q:"מה עוזר לנו ללעוס אוכל?", ans:[{v:"שיניים",e:"🦷 שיניים"},{v:"שיער",e:"💇 שיער"},{v:"ציפורניים",e:"💅 ציפורניים"}], correct:"שיניים"},
+    {emoji:"🦵", q:"במה אנחנו הולכים ורצים?", ans:[{v:"ידיים",e:"🤲 ידיים"},{v:"רגליים",e:"🦵 רגליים"},{v:"ראש",e:"🗣️ ראש"}], correct:"רגליים"},
+    {emoji:"🤲", q:"במה אנחנו אוחזים ומרגישים?", ans:[{v:"ידיים",e:"🤲 ידיים"},{v:"רגליים",e:"🦵 רגליים"},{v:"גב",e:"🔙 גב"}], correct:"ידיים"},
+    {emoji:"🫀", q:"כמה פעמים הלב שלנו פועם בדקה?", ans:[{v:"כמה פעמים בשנייה",e:"⚡ הרבה"},{v:"פעם אחת ביום",e:"☀️ פעם ביום"},{v:"פעם בשבוע",e:"📅 פעם בשבוע"}], correct:"כמה פעמים בשנייה"},
+    {emoji:"🏃", q:"מה קורה ללב כשאנחנו רצים?", ans:[{v:"פועם מהר יותר",e:"💓 מהר"},{v:"עוצר",e:"⏹️ עוצר"},{v:"ישן",e:"😴 ישן"}], correct:"פועם מהר יותר"},
+    {emoji:"🦴", q:"איך קוראים לעמוד הגדול שיש לנו בגב?", ans:[{v:"עמוד שדרה",e:"🦴 עמוד שדרה"},{v:"עצם הרגל",e:"🦵 רגל"},{v:"הצלע",e:"💪 הצלע"}], correct:"עמוד שדרה"},
+    {emoji:"🩸", q:"מה זורם בתוך הורידים שלנו?", ans:[{v:"דם",e:"🩸 דם"},{v:"מים",e:"💧 מים"},{v:"מיץ",e:"🧃 מיץ"}], correct:"דם"},
+    {emoji:"🍽️", q:"לאן הולך האוכל אחרי שאנחנו בולעים?", ans:[{v:"לקיבה",e:"🫄 לקיבה"},{v:"ללב",e:"❤️ ללב"},{v:"לריאות",e:"🫁 לריאות"}], correct:"לקיבה"},
+    {emoji:"😴", q:"למה אנחנו צריכים לישון?", ans:[{v:"כדי שהגוף יתחזק",e:"💪 מתחזק"},{v:"כי משעמם",e:"😑 משעמם"},{v:"כי חשוך",e:"🌙 חשוך"}], correct:"כדי שהגוף יתחזק"},
+    {emoji:"💪", q:"מה יקרה לשרירים אם לא נזוז הרבה?", ans:[{v:"יחלשו",e:"😓 יחלשו"},{v:"יגדלו",e:"💪 יגדלו"},{v:"יעופו",e:"🦋 יעופו"}], correct:"יחלשו"},
+    {emoji:"🥛", q:"מה עוזר לעצמות שלנו להיות חזקות?", ans:[{v:"חלב וגבינה",e:"🥛 חלב"},{v:"ממתקים",e:"🍬 ממתקים"},{v:"מיץ",e:"🧃 מיץ"}], correct:"חלב וגבינה"},
+  ]}
+};
+
+/* ════════════════════════════════════════════
+   ACTIVITIES LOGIC
+════════════════════════════════════════════ */
+let currentCat = 'art';
+let openCard = null;
+
+function switchTab(cat, el) {
+  currentCat = cat;
+  document.getElementById('searchInput').value = '';
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+  openCard = null;
+
+  const cardsList   = document.getElementById('cards-list');
+  const learnSec    = document.getElementById('learnSection');
+  const scienceSec  = document.getElementById('scienceSection');
+  const secHeader   = document.getElementById('section-title');
+  const secCount    = document.getElementById('section-count');
+  const searchWrap  = document.querySelector('.search-wrap');
+
+  // hide all special sections first
+  learnSec.classList.remove('active');
+  scienceSec.classList.remove('active');
+  cardsList.innerHTML = '';
+  cardsList.style.display = 'none';
+  searchWrap.style.display = 'none';
+
+  if (cat === 'learn') {
+    learnSec.classList.add('active');
+    secHeader.textContent = '📚 לומדים ומשחקים';
+    secCount.textContent  = '20 משחקים';
+  } else if (cat === 'science') {
+    scienceSec.classList.add('active');
+    secHeader.textContent = '🔬 מדע';
+    secCount.textContent  = '5 נושאים';
+  } else {
+    cardsList.style.display = '';
+    searchWrap.style.display = '';
+    renderCards();
+  }
+}
+
+function onSearch(val) {
+  if (!val.trim()) { renderCards(); return; }
+  const q = val.trim().toLowerCase();
+  let results = [];
+  for (const [cat, catData] of Object.entries(data)) {
+    catData.activities.forEach(act => {
+      const hay = (act.title+act.subtitle+act.goals.join(' ')+(act.materials||[]).join(' ')).toLowerCase();
+      if (hay.includes(q)) results.push({...act, cat});
+    });
+  }
+  document.getElementById('section-title').textContent = `🔍 תוצאות "${val}"`;
+  document.getElementById('section-count').textContent  = results.length + ' פעילויות';
+  const list = document.getElementById('cards-list');
+  list.style.display = '';
+  list.innerHTML = '';
+  if (!results.length) { list.innerHTML='<div class="empty"><span>🤷</span>לא נמצאו פעילויות</div>'; return; }
+  results.forEach((act,i) => list.appendChild(buildCard(act, act.cat, 's'+i)));
+}
+
+function renderCards() {
+  const cat = data[currentCat];
+  document.getElementById('section-title').textContent = cat.title;
+  document.getElementById('section-count').textContent  = cat.activities.length + ' פעילויות';
+  const list = document.getElementById('cards-list');
+  list.style.display = '';
+  list.innerHTML = '';
+  cat.activities.forEach((act,i) => list.appendChild(buildCard(act, currentCat, i)));
+}
+
+function buildCard(act, catName, idx) {
+  const card = document.createElement('div');
+  card.className = `activity-card cat-${catName}`;
+  card.id = `card-${catName}-${idx}`;
+  const childName = getChildName();
+  const replaceName = (s) => (s||'').replaceAll('__NAME__', childName);
+  const goals = act.goals.map(g=>`<span class="goal-tag">${replaceName(g)}</span>`).join('');
+  const mats  = (act.materials||[]).map(m=>`<span class="material-chip">${replaceName(m)}</span>`).join('');
+  const steps = act.steps.map((s,i)=>`<li><span class="step-num">${i+1}</span><span>${replaceName(s)}</span></li>`).join('');
+  const tips  = act.tips.map(t=>`<li>${replaceName(t)}</li>`).join('');
+  const pc    = act.prep==='zero'?'prep-zero':act.prep==='low'?'prep-low':'prep-med';
+  card.innerHTML=`
+    <div class="card-header" onclick="toggleCard('${catName}-${idx}')">
+      <div class="card-icon-wrap">${act.icon}</div>
+      <div class="card-title-wrap">
+        <div class="card-title">${replaceName(act.title)}</div>
+        <div class="card-subtitle">${replaceName(act.subtitle)}</div>
+        <span class="prep-badge ${pc}">${act.prepLabel}</span>
+      </div>
+      <div class="card-arrow">▼</div>
+    </div>
+    <div class="card-body">
+      <div class="section-block"><div class="block-title">🎯 מטרות</div>${goals}</div>
+      ${mats?`<div class="section-block"><div class="block-title">🛒 מה צריך</div><div class="materials-wrap">${mats}</div></div>`:''}
+      <div class="section-block"><div class="block-title">📋 שלבי הפעילות</div><ul class="steps-list">${steps}</ul></div>
+      <div class="section-block"><div class="block-title">💡 טיפים חשובים</div><ul class="tips-list">${tips}</ul></div>
+    </div>`;
+  return card;
+}
+
+function toggleCard(id) {
+  const card = document.getElementById(`card-${id}`);
+  if (!card) return;
+  if (card.classList.contains('open')) { card.classList.remove('open'); openCard=null; }
+  else {
+    if (openCard) { const p=document.getElementById(`card-${openCard}`); if(p) p.classList.remove('open'); }
+    card.classList.add('open');
+    openCard = id;
+    setTimeout(()=>card.scrollIntoView({behavior:'smooth',block:'nearest'}),100);
+  }
+}
+
+/* ════════════════════════════════════════════
+   GAMES LOGIC
+════════════════════════════════════════════ */
+let gKey=null, gQuestions=[], gIdx=0, gScore=0, gAnswered=false, gSpeakText='';
+
+function startGame(key) {
+  gKey = key;
+  gQuestions = shuffle([...GAMES[key].questions]);
+  gIdx=0; gScore=0; gAnswered=false;
+  document.getElementById('scoreNum').textContent='0';
+  document.getElementById('endScreen').classList.remove('show');
+  document.getElementById('gameScreen').classList.add('active');
+  showQ();
+}
+
+function showQ() {
+  if (gIdx>=gQuestions.length){showEnd();return;}
+  gAnswered=false;
+  const q=gQuestions[gIdx];
+  const total=gQuestions.length;
+  document.getElementById('progressFill').style.width=((gIdx/total)*100)+'%';
+  document.getElementById('progressLabel').textContent=`שאלה ${gIdx+1} מתוך ${total}`;
+
+  // Style question card based on game type
+  const qCard = document.querySelector('.question-card');
+  if(gKey==='shadows'){
+    qCard.style.background='linear-gradient(135deg,#1a1a3e,#2d2d6e)';
+    qCard.style.color='white';
+  } else {
+    qCard.style.background='white';
+    qCard.style.color='';
+  }
+
+  // render emoji — handle different question types
+  const emojiEl = document.getElementById('qEmoji');
+  const emojiText = q.emoji;
+  
+  // Shadow game — show emoji as dark silhouette
+  if(gKey==='shadows' && q.shadow){
+    emojiEl.innerHTML=`
+      <div style="position:relative;display:flex;flex-direction:column;align-items:center;gap:6px">
+        <div style="font-size:90px;line-height:1;filter:brightness(0);opacity:0.85">${q.shadow}</div>
+        <div style="font-size:12px;color:#888;font-weight:700;letter-spacing:1px">מה מסתתר?</div>
+      </div>`;
+  }
+  // Check if single letter/digit (one char only)
+  else if(/^[\u0590-\u05FFA-Za-z0-9]$/.test(emojiText) && emojiText.length===1){
+    emojiEl.innerHTML=`<span style="font-family:'Fredoka One',cursive;font-size:120px;color:#9B5DE5;line-height:1;font-weight:900">${emojiText}</span>`;
+  } 
+  // Check if comparison question (contains "לעומת" or "vs")
+  else if(emojiText.includes('לעומת') || emojiText.includes(' vs ')){
+    const parts = emojiText.split(/לעומת|\s+vs\s+/);
+    if(parts.length===2){
+      emojiEl.innerHTML=`
+        <div style="display:flex;align-items:center;justify-content:center;gap:20px;width:100%;flex-wrap:nowrap">
+          <div style="flex:1;font-size:36px;line-height:1.2;text-align:center;word-break:break-all">${parts[0].trim()}</div>
+          <div style="font-family:'Fredoka One',cursive;font-size:18px;color:#FF8C42;flex-shrink:0;background:#FFF0DC;padding:6px 12px;border-radius:14px">לעומת</div>
+          <div style="flex:1;font-size:36px;line-height:1.2;text-align:center;word-break:break-all">${parts[1].trim()}</div>
+        </div>`;
+    } else {
+      emojiEl.textContent = emojiText;
+    }
+  }
+  // Check for math equations (contains + - or arrow)
+  else if(/[+\-←]/.test(emojiText)){
+    emojiEl.innerHTML=`<div style="font-size:38px;line-height:1.3;text-align:center">${emojiText}</div>`;
+  }
+  // Default: just emojis
+  else {
+    emojiEl.textContent = emojiText;
+  }
+
+  document.getElementById('qText').textContent=q.q;
+  document.getElementById('feedbackArea').textContent='';
+  document.getElementById('feedbackArea').className='feedback';
+  document.getElementById('nextBtn').classList.remove('show');
+
+  gSpeakText=q.q;
+  setTimeout(()=>sayIt(q.q),400);
+
+  const grid=document.getElementById('answersGrid');
+  const cols=q.ans.length===2?'cols2':'cols3';
+  grid.className=`answers ${cols}`;
+  grid.innerHTML='';
+  shuffle([...q.ans]).forEach(a=>{
+    const btn=document.createElement('button');
+    btn.className='ans-btn';
+    btn.innerHTML=`<span style="font-size:22px">${a.e}</span><span class="ans-label">${a.v}</span>`;
+    btn.onclick=()=>checkAns(a.v, q.correct, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function checkAns(selected, correct, btn) {
+  if (gAnswered) return;
+  gAnswered=true;
+  // Speak the answer that was clicked first
+  sayIt(selected);
+  if (selected===correct) {
+    btn.classList.add('correct');
+    gScore++;
+    document.getElementById('scoreNum').textContent=gScore;
+    const praise=rndPraise();
+    document.getElementById('feedbackArea').textContent=praise;
+    document.getElementById('feedbackArea').className='feedback correct';
+    // praise speech AFTER answer playback (queued)
+    setTimeout(()=>sayIt(rndPraiseSpeech()), 1200);
+    if (gScore%3===0) confetti();
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('feedbackArea').textContent=rndWrong();
+    document.getElementById('feedbackArea').className='feedback wrong';
+    setTimeout(()=>sayIt(rndWrongSpeech()), 1200);
+    setTimeout(()=>{
+      document.querySelectorAll('.ans-btn').forEach(b=>{
+        if(b.querySelector('.ans-label')?.textContent===correct) b.classList.add('correct');
+      });
+    },600);
+  }
+  document.getElementById('nextBtn').classList.add('show');
+}
+
+function nextQ() { gIdx++; showQ(); }
+
+function showEnd() {
+  document.getElementById('progressFill').style.width='100%';
+  const total=gQuestions.length;
+  const pct=Math.round((gScore/total)*100);
+  const name=getChildName();
+  const emoji=pct>=80?'🏆':pct>=50?'😊':'💪';
+  const title=pct>=80?`כל הכבוד ${name}!`:pct>=50?'יופי! ממשיכים!':'מנסים שוב?';
+  const stars=pct>=80?'⭐⭐⭐':pct>=50?'⭐⭐':'⭐';
+  document.getElementById('endEmoji').textContent=emoji;
+  document.getElementById('endTitle').textContent=title;
+  document.getElementById('endScore').textContent=`ענית נכון על ${gScore} מתוך ${total}`;
+  document.getElementById('endStars').textContent=stars;
+  document.getElementById('endScreen').classList.add('show');
+  document.getElementById('nextBtn').classList.remove('show');
+  document.getElementById('answersGrid').innerHTML='';
+  document.getElementById('qEmoji').textContent='';
+  document.getElementById('qText').textContent='';
+  document.getElementById('feedbackArea').textContent='';
+  if(pct>=80){confetti();setTimeout(confetti,600);}
+  sayIt(title);
+}
+
+function replayGame(){ startGame(gKey); }
+
+function goHome(){
+  document.getElementById('gameScreen').classList.remove('active');
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+}
+
+function speakQ(){ if(gSpeakText) sayIt(gSpeakText); }
+
+/* ── SPEECH ENGINE ── */
+let _voices=[];
+let _googleApiKey='';
+let _audioCache={};
+let _currentAudio=null;
+
+function _loadVoices(){
+  _voices=window.speechSynthesis?window.speechSynthesis.getVoices():[];
+}
+if(window.speechSynthesis){
+  _loadVoices();
+  window.speechSynthesis.addEventListener('voiceschanged',_loadVoices);
+}
+
+function _pickVoice(){
+  return _voices.find(v=>v.lang==='he-IL'&&/carmit|miriam/i.test(v.name))
+      || _voices.find(v=>v.lang==='he-IL')
+      || _voices.find(v=>v.lang.startsWith('he'))
+      || null;
+}
+
+function _cleanText(t){
+  return t.replace(/[\u{1F000}-\u{1FAFF}]/gu,'')
+          .replace(/[\u{2600}-\u{26FF}]/gu,'')
+          .replace(/[\u{2700}-\u{27BF}]/gu,'')
+          .replace(/[\u{FE00}-\u{FEFF}]/gu,'')
+          .replace(/\s+/g,' ').trim();
+}
+
+/* Google TTS call */
+/* Voice selection support */
+function getVoiceQuality(){
+  try{ return localStorage.getItem('lavi_voice_quality')||'chirp'; }
+  catch(e){ return 'chirp'; }
+}
+function setVoiceQuality(q){
+  try{ localStorage.setItem('lavi_voice_quality',q); _audioCache={}; }catch(e){}
+}
+
+async function _googleTTS(text){
+  if(!_googleApiKey) return null;
+  const clean=_cleanText(text);
+  if(!clean) return null;
+  
+  // Detect language - if mostly English chars, use English voice
+  const isEnglish = /^[A-Za-z\s.,!?'"-]+$/.test(clean);
+  const quality = getVoiceQuality();
+  const lang = isEnglish ? 'en-US' : 'he-IL';
+  
+  // Chirp 3 HD = highest quality (newer, more natural pronunciation)
+  // Wavenet = older but reliable fallback
+  let voice;
+  if(quality==='chirp'){
+    voice = isEnglish ? 'en-US-Chirp3-HD-Aoede' : 'he-IL-Chirp3-HD-Aoede';
+  } else {
+    voice = isEnglish ? 'en-US-Neural2-F' : 'he-IL-Wavenet-B';
+  }
+  
+  const cacheKey = quality + '::' + lang + '::' + clean;
+  if(_audioCache[cacheKey]) return _audioCache[cacheKey];
+  
+  // Chirp 3 doesn't support pitch/SSML, only speakingRate
+  const audioConfig = quality==='chirp'
+    ? {audioEncoding:'MP3',speakingRate:1.0,sampleRateHertz:24000}
+    : {audioEncoding:'MP3',speakingRate:0.95,pitch:0,volumeGainDb:2.0,sampleRateHertz:24000};
+  
+  try{
+    const res=await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${_googleApiKey}`,{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        input:{text:clean},
+        voice:{languageCode:lang,name:voice},
+        audioConfig:audioConfig
+      })
+    });
+    if(!res.ok){
+      // Chirp 3 might not be available — fall back to Wavenet
+      if(quality==='chirp'){
+        const fallbackVoice = isEnglish ? 'en-US-Neural2-F' : 'he-IL-Wavenet-B';
+        const fallbackRes = await fetch(`https://texttospeech.googleapis.com/v1/text:synthesize?key=${_googleApiKey}`,{
+          method:'POST',
+          headers:{'Content-Type':'application/json'},
+          body:JSON.stringify({
+            input:{text:clean},
+            voice:{languageCode:lang,name:fallbackVoice},
+            audioConfig:{audioEncoding:'MP3',speakingRate:0.95,pitch:0,volumeGainDb:2.0,sampleRateHertz:24000}
+          })
+        });
+        if(!fallbackRes.ok) return null;
+        const data=await fallbackRes.json();
+        if(!data.audioContent) return null;
+        const url='data:audio/mp3;base64,'+data.audioContent;
+        _audioCache[cacheKey]=url;
+        return url;
+      }
+      return null;
+    }
+    const data=await res.json();
+    if(!data.audioContent) return null;
+    const url='data:audio/mp3;base64,'+data.audioContent;
+    _audioCache[cacheKey]=url;
+    return url;
+  } catch(e){ return null; }
+}
+
+/* Fallback: Web Speech API */
+function _webSpeech(text){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const clean=_cleanText(text);
+  if(!clean) return;
+  const sentences=clean.match(/[^.!?،؟]+[.!?،؟]?/g)||[clean];
+  function next(i){
+    if(i>=sentences.length) return;
+    const s=sentences[i].trim(); if(!s){next(i+1);return;}
+    const u=new SpeechSynthesisUtterance(s);
+    u.lang='he-IL'; u.rate=0.82; u.pitch=1.2; u.volume=1;
+    const v=_pickVoice(); if(v) u.voice=v;
+    u.onend=()=>next(i+1); u.onerror=()=>next(i+1);
+    window.speechSynthesis.speak(u);
+  }
+  next(0);
+}
+
+/* Main sayIt — tries Google first, falls back to Web Speech */
+let _sayCallId=0;
+async function sayIt(text){
+  // Stop everything immediately
+  _sayCallId++;
+  const myCallId=_sayCallId;
+  if(_currentAudio){
+    try{ _currentAudio.pause(); _currentAudio.src=''; _currentAudio.load(); }catch(e){}
+    _currentAudio=null;
+  }
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  if(!text) return;
+
+  const url=await _googleTTS(text);
+  // If a newer call started while we were fetching, abort
+  if(myCallId!==_sayCallId) return;
+
+  if(url){
+    const audio=new Audio(url);
+    _currentAudio=audio;
+    audio.onended=()=>{ if(_currentAudio===audio) _currentAudio=null; };
+    audio.play().catch(()=>{
+      if(myCallId===_sayCallId) _webSpeech(text);
+    });
+  } else {
+    _webSpeech(text);
+  }
+}
+
+/* ── API KEY SETUP UI ── */
+function _showApiSetup(){
+  const existing=document.getElementById('apiSetupModal');
+  if(existing) existing.remove();
+  const savedKey = (function(){try{return localStorage.getItem('lavi_gkey')||'';}catch(e){return '';}})();
+  const currentQ = getVoiceQuality();
+  const modal=document.createElement('div');
+  modal.id='apiSetupModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
+  modal.innerHTML=`
+    <div style="background:#fff;border-radius:24px;padding:28px 24px;max-width:400px;width:100%;direction:rtl;font-family:Assistant,sans-serif;margin:20px 0">
+      <div style="font-size:36px;text-align:center;margin-bottom:12px">🔊</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;text-align:center;margin-bottom:8px">הגדרת קול Google</div>
+
+      <div style="font-size:13px;color:#888;font-weight:700;margin:14px 0 6px">איכות קול:</div>
+      <div style="display:flex;gap:8px;margin-bottom:14px">
+        <button id="vqChirp" onclick="_selectVoice('chirp')" style="flex:1;padding:12px 8px;border-radius:14px;border:2px solid ${currentQ==='chirp'?'#06D6A0':'#eee'};background:${currentQ==='chirp'?'#E8FBF4':'#fff'};font-family:'Fredoka One',cursive;font-size:15px;color:${currentQ==='chirp'?'#06A060':'#666'};cursor:pointer;line-height:1.2">
+          ⭐ Chirp 3 HD<br><span style="font-size:11px;font-weight:600">איכות גבוהה</span>
+        </button>
+        <button id="vqWavenet" onclick="_selectVoice('wavenet')" style="flex:1;padding:12px 8px;border-radius:14px;border:2px solid ${currentQ==='wavenet'?'#FF8C42':'#eee'};background:${currentQ==='wavenet'?'#FFF0DC':'#fff'};font-family:'Fredoka One',cursive;font-size:15px;color:${currentQ==='wavenet'?'#E06A1A':'#666'};cursor:pointer;line-height:1.2">
+          🔊 Wavenet<br><span style="font-size:11px;font-weight:600">איכות סטנדרטית</span>
+        </button>
+      </div>
+      <div style="font-size:11px;color:#888;margin-bottom:18px;line-height:1.5">⭐ <b>Chirp 3 HD</b> — קול חדש ואיכותי במיוחד עם הגייה טבעית. אם לא עובד, ה-Wavenet ישמש כגיבוי.</div>
+
+      <div style="font-size:13px;color:#888;font-weight:700;margin-bottom:6px">API Key מ-Google Cloud:</div>
+      <input id="apiKeyInput" type="text" placeholder="AIza..." dir="ltr" value="${savedKey}"
+        style="width:100%;padding:12px;border-radius:14px;border:2px solid #eee;font-size:14px;margin-bottom:8px;outline:none">
+      <div style="font-size:11px;color:#888;margin-bottom:14px;line-height:1.5">
+        <a href="https://console.cloud.google.com/" target="_blank" style="color:#4A90E2;font-weight:700">פתח Google Cloud Console</a> → Text-to-Speech API → Credentials → Create API Key
+      </div>
+
+      <button onclick="_saveApiKey()" style="width:100%;background:linear-gradient(135deg,#4A90E2,#2860B0);border:none;border-radius:14px;padding:14px;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;cursor:pointer;margin-bottom:8px">שמור ושמע ✅</button>
+      <button onclick="document.getElementById('apiSetupModal').remove()" style="width:100%;background:#f5f5f5;border:none;border-radius:14px;padding:12px;font-family:'Fredoka One',cursive;font-size:16px;color:#666;cursor:pointer">בטל</button>
+    </div>`;
+  document.body.appendChild(modal);
+  setTimeout(()=>document.getElementById('apiKeyInput')?.focus(),300);
+}
+
+let _selectedVoice=null;
+function _selectVoice(v){
+  _selectedVoice=v;
+  const c=document.getElementById('vqChirp');
+  const w=document.getElementById('vqWavenet');
+  if(v==='chirp'){
+    c.style.border='2px solid #06D6A0';c.style.background='#E8FBF4';c.style.color='#06A060';
+    w.style.border='2px solid #eee';w.style.background='#fff';w.style.color='#666';
+  } else {
+    w.style.border='2px solid #FF8C42';w.style.background='#FFF0DC';w.style.color='#E06A1A';
+    c.style.border='2px solid #eee';c.style.background='#fff';c.style.color='#666';
+  }
+}
+
+function _saveApiKey(){
+  const k=document.getElementById('apiKeyInput')?.value?.trim();
+  if(!k){alert('נא להכניס API key');return;}
+  _googleApiKey=k;
+  const q=_selectedVoice||getVoiceQuality();
+  setVoiceQuality(q);
+  _audioCache={};
+  try{localStorage.setItem('lavi_gkey',k);}catch(e){}
+  document.getElementById('apiSetupModal').remove();
+  _selectedVoice=null;
+  sayIt('שלום! הקול החדש עובד מצוין!');
+}
+
+/* load saved key on startup */
+try{
+  const saved=localStorage.getItem('lavi_gkey');
+  if(saved) _googleApiKey=saved;
+  // Clear old cache from previous voice settings
+  const cacheVersion='v4';
+  if(localStorage.getItem('lavi_voice_v')!==cacheVersion){
+    _audioCache={};
+    localStorage.setItem('lavi_voice_v',cacheVersion);
+  }
+}catch(e){}
+
+/* ── HELPERS ── */
+function shuffle(arr){
+  for(let i=arr.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[arr[i],arr[j]]=[arr[j],arr[i]];}
+  return arr;
+}
+const praises=['כל הכבוד! 🎉','יפה מאוד! ⭐','כל הכבוד! מתקדם יפה 🌟','נהדר! 🎊','מצוין! 👏'];
+const wrongPraises=['לא נורא! 💪','בפעם הבאה תצליח 💪','כמעט! 💪'];
+function rndPraise(){return praises[Math.floor(Math.random()*praises.length)];}
+function rndPraiseSpeech(){
+  const name=getChildName();
+  const options=[
+    `כל הכבוד ${name}!`,
+    `יפה מאוד ${name}, תמשיך כך!`,
+    `כל הכבוד ${name}, אתה מתקדם יפה מאוד!`,
+    `נהדר ${name}!`,
+    `מצוין ${name}!`
+  ];
+  return options[Math.floor(Math.random()*options.length)];
+}
+function rndWrongSpeech(){
+  const name=getChildName();
+  const options=[
+    'תשובה לא נכונה, תנסה שוב',
+    `לא נורא ${name}, בפעם הבאה אתה תצליח`,
+    'תנסה שוב, אתה יכול'
+  ];
+  return options[Math.floor(Math.random()*options.length)];
+}
+function rndWrong(){return wrongPraises[Math.floor(Math.random()*wrongPraises.length)];}
+
+/* ── CHILD NAME ── */
+function getChildName(){
+  try{ return localStorage.getItem('lavi_child_name')||'לביא'; }
+  catch(e){ return 'לביא'; }
+}
+function setChildName(n){
+  try{ localStorage.setItem('lavi_child_name',n); }catch(e){}
+}
+function _showNameSetup(){
+  const existing=document.getElementById('nameSetupModal');
+  if(existing) existing.remove();
+  const current=getChildName();
+  const currentParent=getParentType();
+  const modal=document.createElement('div');
+  modal.id='nameSetupModal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px';
+  modal.innerHTML=`
+    <div style="background:#fff;border-radius:24px;padding:28px 24px;max-width:380px;width:100%;direction:rtl;font-family:Assistant,sans-serif">
+      <div style="font-size:42px;text-align:center;margin-bottom:8px">👨‍👩‍👧</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:22px;text-align:center;margin-bottom:8px">הגדרות אישיות</div>
+      <div style="font-size:13px;color:#666;margin-bottom:16px;text-align:center">המערכת תפנה לילד/ה בשם וההורה הזה</div>
+
+      <div style="font-size:13px;color:#888;font-weight:700;margin-bottom:6px">שם הילד / הילדה:</div>
+      <input id="childNameInput" type="text" placeholder="לביא" dir="rtl"
+        style="width:100%;padding:14px;border-radius:14px;border:2px solid #eee;font-size:16px;margin-bottom:14px;outline:none;text-align:center;font-family:Assistant,sans-serif;font-weight:700;background:#fff;color:#000;-webkit-appearance:none">
+
+      <div style="font-size:13px;color:#888;font-weight:700;margin-bottom:6px">מי משחק:</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <button id="parentDad" onclick="_selectParent('אבא')" style="flex:1;padding:14px;border-radius:14px;border:2px solid ${currentParent==='אבא'?'#FF8C42':'#eee'};background:${currentParent==='אבא'?'#FFF0DC':'#fff'};font-family:'Fredoka One',cursive;font-size:18px;color:${currentParent==='אבא'?'#E06A1A':'#666'};cursor:pointer">👨 אבא</button>
+        <button id="parentMom" onclick="_selectParent('אמא')" style="flex:1;padding:14px;border-radius:14px;border:2px solid ${currentParent==='אמא'?'#EF476F':'#eee'};background:${currentParent==='אמא'?'#FFE0E8':'#fff'};font-family:'Fredoka One',cursive;font-size:18px;color:${currentParent==='אמא'?'#C22B54':'#666'};cursor:pointer">👩 אמא</button>
+      </div>
+
+      <button onclick="_saveChildName()" style="width:100%;background:linear-gradient(135deg,#FF8C42,#E06A1A);border:none;border-radius:14px;padding:14px;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;cursor:pointer;margin-bottom:8px">שמור ✅</button>
+      <button onclick="document.getElementById('nameSetupModal').remove()" style="width:100%;background:#f5f5f5;border:none;border-radius:14px;padding:12px;font-family:'Fredoka One',cursive;font-size:16px;color:#666;cursor:pointer">בטל</button>
+    </div>`;
+  document.body.appendChild(modal);
+  // Set value via JS (not in HTML attribute) — works better on iOS
+  const input = document.getElementById('childNameInput');
+  if(input){
+    input.value = current;
+    // Do NOT auto-focus — let user tap. Auto-focus blocks input on iOS PWA.
+  }
+}
+
+let _selectedParent=null;
+function _selectParent(p){
+  _selectedParent=p;
+  // Update visual state
+  const dad=document.getElementById('parentDad');
+  const mom=document.getElementById('parentMom');
+  if(p==='אבא'){
+    dad.style.border='2px solid #FF8C42';dad.style.background='#FFF0DC';dad.style.color='#E06A1A';
+    mom.style.border='2px solid #eee';mom.style.background='#fff';mom.style.color='#666';
+  } else {
+    mom.style.border='2px solid #EF476F';mom.style.background='#FFE0E8';mom.style.color='#C22B54';
+    dad.style.border='2px solid #eee';dad.style.background='#fff';dad.style.color='#666';
+  }
+}
+
+function getParentType(){
+  try{ return localStorage.getItem('lavi_parent_type')||'אבא'; }
+  catch(e){ return 'אבא'; }
+}
+function setParentType(p){
+  try{ localStorage.setItem('lavi_parent_type',p); }catch(e){}
+}
+
+function _saveChildName(){
+  const n=document.getElementById('childNameInput')?.value?.trim();
+  if(!n){alert('נא להכניס שם');return;}
+  setChildName(n);
+  const parent=_selectedParent||getParentType();
+  setParentType(parent);
+  // Refresh all dynamic text (header, h1, learn intro, cards)
+  refreshAllNames();
+  document.getElementById('nameSetupModal').remove();
+  sayIt(`שלום ${n}, בוא נשחק!`);
+  _selectedParent=null;
+}
+
+function confetti(){
+  const wrap=document.getElementById('confettiWrap');
+  const cols=['#FF8C42','#9B5DE5','#2EC4B6','#FFD166','#EF476F','#06D6A0','#4A90E2'];
+  for(let i=0;i<35;i++){
+    const p=document.createElement('div');
+    p.className='cp';
+    const size=7+Math.random()*9;
+    p.style.cssText=`left:${Math.random()*100}%;width:${size}px;height:${size}px;background:${cols[Math.floor(Math.random()*cols.length)]};border-radius:${Math.random()>.5?'50%':'3px'};animation-duration:${1.6+Math.random()*1.4}s;animation-delay:${Math.random()*.4}s;`;
+    wrap.appendChild(p);
+    setTimeout(()=>p.remove(),3200);
+  }
+}
+
+// Refresh all dynamic name texts
+function refreshAllNames(){
+  const name=getChildName();
+  const parent=getParentType();
+  const hSub=document.getElementById('headerSubtitle');
+  if(hSub) hSub.textContent=`פעילויות מיוחדות ל${parent} ול${name}`;
+  const mainTitle=document.getElementById('mainTitle');
+  if(mainTitle) mainTitle.textContent=`${name} ואני`;
+  const learnIntro=document.getElementById('learnIntro');
+  if(learnIntro) learnIntro.textContent=`בחר משחק לשחק עם ${name} 👇`;
+  // re-render cards to update __NAME__ in steps/tips
+  if(typeof renderCards==='function' && currentCat!=='learn') renderCards();
+}
+
+/* ════════════════════════════════════════════
+   NUMBERS 10-30 MODULE
+════════════════════════════════════════════ */
+const NUM_DATA = [
+  { n:10, name:"עֶשֶׂר",       hint:"10 = עשר!",         dots:"⭐".repeat(10) },
+  { n:11, name:"אַחַד עָשָׂר", hint:"10 + 1 = אחד עשר", dots:"⭐".repeat(11) },
+  { n:12, name:"שְׁנֵים עָשָׂר",hint:"10 + 2 = שניים עשר",dots:"⭐".repeat(12) },
+  { n:13, name:"שְׁלֹשָׁה עָשָׂר",hint:"10 + 3",          dots:"🌟".repeat(13) },
+  { n:14, name:"אַרְבָּעָה עָשָׂר",hint:"10 + 4",         dots:"🌟".repeat(14) },
+  { n:15, name:"חֲמִשָּׁה עָשָׂר",hint:"10 + 5 = חצי שלושים!",dots:"⭐".repeat(15) },
+  { n:16, name:"שִׁשָּׁה עָשָׂר",hint:"10 + 6",           dots:"🔵".repeat(16) },
+  { n:17, name:"שִׁבְעָה עָשָׂר",hint:"10 + 7",           dots:"🔵".repeat(17) },
+  { n:18, name:"שְׁמוֹנָה עָשָׂר",hint:"10 + 8",          dots:"🟡".repeat(18) },
+  { n:19, name:"תִּשְׁעָה עָשָׂר",hint:"10 + 9",          dots:"🟡".repeat(19) },
+  { n:20, name:"עֶשְׂרִים",      hint:"שני עשרות!",       dots:"❤️".repeat(20) },
+  { n:21, name:"עֶשְׂרִים וְאֶחָד",hint:"20 + 1",        dots:"❤️".repeat(21) },
+  { n:22, name:"עֶשְׂרִים וּשְׁתַּיִם",hint:"20 + 2",    dots:"🟠".repeat(22) },
+  { n:25, name:"עֶשְׂרִים וְחָמֵשׁ",hint:"20 + 5",        dots:"🟠".repeat(25) },
+  { n:30, name:"שְׁלֹשִׁים",      hint:"שלוש עשרות!",     dots:"🌈".repeat(30) },
+];
+
+// Quiz questions — simple, age-appropriate
+const NUM_QUIZ = [
+  // Part 1: identify the number
+  { type:'identify', display:"10", q:"איזה מספר זה?",     ans:["10","12","8"],  correct:"10" },
+  { type:'identify', display:"11", q:"איזה מספר זה?",     ans:["9","11","13"],  correct:"11" },
+  { type:'identify', display:"15", q:"איזה מספר זה?",     ans:["12","15","18"], correct:"15" },
+  { type:'identify', display:"20", q:"איזה מספר זה?",     ans:["20","15","25"], correct:"20" },
+  { type:'identify', display:"13", q:"איזה מספר זה?",     ans:["11","13","16"], correct:"13" },
+  // Part 2: missing number (always X, __, X+2)
+  { type:'missing', display:"10,  __ , 12", q:"איזה מספר חסר?", ans:["9","11","13"],  correct:"11" },
+  { type:'missing', display:"13,  __ , 15", q:"איזה מספר חסר?", ans:["12","14","16"],  correct:"14" },
+  { type:'missing', display:"18,  __ , 20", q:"איזה מספר חסר?", ans:["17","19","21"],  correct:"19" },
+  { type:'missing', display:"10,  __ , 12", q:"מה המספר האמצעי?", ans:["10","11","12"], correct:"11" },
+  { type:'missing', display:"20,  __ , 22", q:"איזה מספר חסר?", ans:["19","21","23"],  correct:"21" },
+  // Part 3: name to number
+  { type:'name', display:"עֶשֶׂר",    q:"מה הספרה של עשר?",          ans:["8","10","12"],  correct:"10" },
+  { type:'name', display:"עֶשְׂרִים",  q:"מה הספרה של עשרים?",        ans:["12","20","25"], correct:"20" },
+  { type:'name', display:"חֲמִשָּׁה עָשָׂר", q:"מה הספרה של חמישה עשר?", ans:["13","15","17"], correct:"15" },
+];
+
+let _numLearnIdx = 0;
+let _numSpeakTxt = '';
+let _numQuizIdx = 0;
+let _numScore = 0;
+let _numAnswered = false;
+let _numQSpeakTxt = '';
+
+function startNumbers(){
+  _numLearnIdx = 0;
+  _numScore = 0;
+  document.getElementById('numScore').textContent = '0';
+  document.getElementById('numbersScreen').classList.add('active');
+  numShowMode('learn');
+}
+
+function closeNumbers(){
+  document.getElementById('numbersScreen').classList.remove('active');
+  window.speechSynthesis && window.speechSynthesis.cancel();
+}
+
+function numShowMode(mode){
+  document.getElementById('numLearn').style.display = mode==='learn' ? 'block' : 'none';
+  document.getElementById('numQuiz').style.display  = mode==='quiz'  ? 'block' : 'none';
+  document.getElementById('numLearnBtn').classList.toggle('active', mode==='learn');
+  document.getElementById('numQuizBtn').classList.toggle('active', mode==='quiz');
+  if(mode==='learn') numRenderLearn();
+  if(mode==='quiz')  numStartQuiz();
+}
+
+function numRenderLearn(){
+  const d = NUM_DATA[_numLearnIdx];
+  // big number
+  document.getElementById('numBig').textContent = d.n;
+  document.getElementById('numName').textContent = d.name;
+  // dots — limit to 20 for display
+  const dotsEl = document.getElementById('numDots');
+  const dotArr = [...d.dots];
+  if(dotArr.length > 20){
+    // show 20 + count label
+    dotsEl.innerHTML = dotArr.slice(0,20).join('') +
+      `<span style="font-family:'Fredoka One',cursive;font-size:18px;color:#FFD166;margin-right:6px">...סה"כ ${d.n}</span>`;
+  } else {
+    dotsEl.textContent = d.dots;
+  }
+  document.getElementById('numHint').textContent = d.hint;
+  // nav
+  document.getElementById('numPrev').style.display = _numLearnIdx===0 ? 'none' : 'block';
+  document.getElementById('numNext').textContent = _numLearnIdx===NUM_DATA.length-1 ? 'לשאלון! ✅' : 'הבא ←';
+  // pips
+  const pips = document.getElementById('numPips');
+  pips.innerHTML = NUM_DATA.map((nd,i)=>`
+    <div class="num-pip ${i===_numLearnIdx?'current':i<_numLearnIdx?'done':''}"
+      onclick="numJump(${i})" title="${nd.n}">${nd.n}</div>`).join('');
+  // speak
+  const txt = `${d.n} — ${d.name}. ${d.hint}`;
+  _numSpeakTxt = txt;
+  setTimeout(()=>sayIt(txt), 300);
+}
+
+function numJump(i){ _numLearnIdx=i; numRenderLearn(); }
+
+function numLearnNav(dir){
+  if(dir===1 && _numLearnIdx===NUM_DATA.length-1){ numShowMode('quiz'); return; }
+  _numLearnIdx = Math.max(0, Math.min(NUM_DATA.length-1, _numLearnIdx+dir));
+  numRenderLearn();
+}
+
+function numSpeak(){ sayIt(_numSpeakTxt); }
+
+/* QUIZ */
+function numStartQuiz(){
+  _numQuizIdx = 0;
+  _numAnswered = false;
+  document.getElementById('numEnd').classList.remove('show');
+  document.getElementById('numNextQ').classList.remove('show');
+  document.getElementById('numFeedback').textContent = '';
+  numRenderQ();
+}
+
+function numRenderQ(){
+  const total = NUM_QUIZ.length;
+  if(_numQuizIdx >= total){ numShowEnd(); return; }
+  _numAnswered = false;
+  const q = NUM_QUIZ[_numQuizIdx];
+  document.getElementById('numQProgress').style.width = ((_numQuizIdx/total)*100)+'%';
+  document.getElementById('numQLabel').textContent = `שאלה ${_numQuizIdx+1} מתוך ${total}`;
+  document.getElementById('numQDisplay').textContent = q.display;
+  document.getElementById('numQText').textContent = q.q;
+  document.getElementById('numFeedback').textContent = '';
+  document.getElementById('numNextQ').classList.remove('show');
+  document.getElementById('numEnd').classList.remove('show');
+  _numQSpeakTxt = q.q;
+  setTimeout(()=>sayIt(q.q), 300);
+  // build answer buttons
+  const grid = document.getElementById('numAnswers');
+  grid.innerHTML = '';
+  shuffle([...q.ans]).forEach(a=>{
+    const btn = document.createElement('button');
+    btn.className = 'num-ans';
+    btn.textContent = a;
+    btn.onclick = ()=>numCheckAns(a, q.correct, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function numCheckAns(sel, correct, btn){
+  if(_numAnswered) return;
+  _numAnswered = true;
+  sayIt(sel);
+  if(sel===correct){
+    btn.classList.add('correct');
+    _numScore++;
+    document.getElementById('numScore').textContent = _numScore;
+    document.getElementById('numFeedback').textContent = rndPraise();
+    document.getElementById('numFeedback').style.color = '#06D6A0';
+    setTimeout(()=>sayIt(rndPraiseSpeech()), 1200);
+    confetti();
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('numFeedback').textContent = rndWrong();
+    document.getElementById('numFeedback').style.color = '#FF4757';
+    setTimeout(()=>sayIt(rndWrongSpeech()), 1200);
+    setTimeout(()=>{
+      document.querySelectorAll('.num-ans').forEach(b=>{
+        if(b.textContent===correct) b.classList.add('correct');
+      });
+    }, 600);
+  }
+  document.getElementById('numNextQ').classList.add('show');
+}
+
+function numNextQuestion(){ _numQuizIdx++; numRenderQ(); }
+function numSpeakQ(){ sayIt(_numQSpeakTxt); }
+
+function numShowEnd(){
+  const name = getChildName();
+  const pct = Math.round((_numScore/NUM_QUIZ.length)*100);
+  const title = pct>=80 ? `כל הכבוד ${name}! אתה מתמטיקאי!` : pct>=50 ? `יופי ${name}! ממשיכים!` : `מנסים שוב ${name}?`;
+  document.getElementById('numEndTitle').textContent = title;
+  document.getElementById('numEndSub').textContent = `ענית נכון על ${_numScore} מתוך ${NUM_QUIZ.length}`;
+  document.getElementById('numEnd').classList.add('show');
+  document.getElementById('numNextQ').classList.remove('show');
+  document.getElementById('numAnswers').innerHTML = '';
+  document.getElementById('numQDisplay').textContent = '';
+  document.getElementById('numQText').textContent = '';
+  document.getElementById('numFeedback').textContent = '';
+  if(pct>=80){ confetti(); setTimeout(confetti,700); }
+  sayIt(title);
+}
+
+/* ════════════════════════════════════════════
+   ANIMALS WORLD MODULE
+════════════════════════════════════════════ */
+const AW_GROUPS = [
+  {
+    id:'mammals', name:'יונקים', icon:'🐘', color:'#1a6e3a', bg:'linear-gradient(160deg,#0d4a1a,#1a7a30)',
+    desc:'חיות שהאמא מניקה את התינוק שלה 🤱\nהן חמות ובדרך כלל מכוסות בשיער!',
+    fun:'💡 כלבים, חתולים, פילים, אריות — וגם בני אדם! כולנו יונקים!',
+    animals:[
+      {e:'🐘', name:'פיל',    fact:'הכי גדול ביבשה!'},
+      {e:'🦁', name:'אריה',   fact:'מלך הג\'ונגל'},
+      {e:'🐶', name:'כלב',    fact:'חבר הכי טוב של האדם'},
+      {e:'🐮', name:'פרה',    fact:'נותנת לנו חלב'},
+      {e:'🐰', name:'ארנב',   fact:'אוהב גזר'},
+      {e:'🦒', name:'ג\'ירף', fact:'הצוואר הכי ארוך!'},
+    ]
+  },
+  {
+    id:'birds', name:'ציפורים', icon:'🦅', color:'#1a3a6e', bg:'linear-gradient(160deg,#0d1f4a,#1a3a8a)',
+    desc:'חיות עם כנפיים ונוצות 🪶\nרוב הציפורים יכולות לעוף!',
+    fun:'🥚 כל הציפורים מטילות ביצים — גם תרנגולות!',
+    animals:[
+      {e:'🦅', name:'נשר',     fact:'עף הכי גבוה'},
+      {e:'🦜', name:'תוכי',    fact:'מחקה ומדבר!'},
+      {e:'🐧', name:'פינגווין', fact:'ציפור שלא עפה!'},
+      {e:'🦚', name:'טווס',    fact:'זנב יפהפה'},
+      {e:'🐦', name:'ציפור',   fact:'שרה בבוקר'},
+      {e:'🦆', name:'ברווז',   fact:'אוהב מים'},
+    ]
+  },
+  {
+    id:'fish', name:'דגים', icon:'🐟', color:'#0d3a6e', bg:'linear-gradient(160deg,#061a4a,#0d3a8a)',
+    desc:'חיות שחיות במים 🌊\nנושמות דרך זימים בלי לצאת מהמים!',
+    fun:'🌊 יש יותר מ-30,000 סוגי דגים בעולם!',
+    animals:[
+      {e:'🐠', name:'דג ציון',  fact:'כמו ניומו!'},
+      {e:'🦈', name:'כריש',     fact:'השיניים הכי חדות'},
+      {e:'🐬', name:'דולפין',   fact:'חכם מאוד!'},
+      {e:'🐙', name:'תמנון',    fact:'8 זרועות!'},
+      {e:'🐟', name:'דג',       fact:'שוחה מהר'},
+      {e:'🦭', name:'כלב ים',   fact:'בין ים ויבשה'},
+    ]
+  },
+  {
+    id:'reptiles', name:'זוחלים', icon:'🦎', color:'#4a3a0d', bg:'linear-gradient(160deg,#2a1f00,#5a4a10)',
+    desc:'חיות עם קשקשים 🐍\nמטילות ביצים ואוהבות חום!',
+    fun:'🌡️ זוחלים לא מחממים את עצמם — הם צריכים את השמש לחמם אותם!',
+    animals:[
+      {e:'🐍', name:'נחש',   fact:'אין לו רגליים!'},
+      {e:'🦎', name:'לטאה',  fact:'יכולה לאבד זנב'},
+      {e:'🐢', name:'צב',    fact:'חי מאות שנים!'},
+      {e:'🐊', name:'תנין',  fact:'השיניים הכי חזקות'},
+      {e:'🦕', name:'דינוזאור',fact:'זוחל עתיק!'},
+      {e:'🐉', name:'דרקון', fact:'ממיתוסים עתיקים'},
+    ]
+  },
+  {
+    id:'insects', name:'חרקים', icon:'🐝', color:'#3a1a6e', bg:'linear-gradient(160deg,#1f0a4a,#3a1a7a)',
+    desc:'חיות קטנטנות עם 6 רגליים! 🦋\nיש להם שלוש חלקי גוף.',
+    fun:'🐝 דבורות מייצרות דבש — מזון שאנחנו אוהבים לאכול!',
+    animals:[
+      {e:'🐝', name:'דבורה',    fact:'מייצרת דבש'},
+      {e:'🦋', name:'פרפר',     fact:'היה קודם זחל!'},
+      {e:'🐛', name:'זחל',      fact:'הופך לפרפר'},
+      {e:'🐞', name:'חיפושית',  fact:'נקודות אדומות'},
+      {e:'🐜', name:'נמלה',     fact:'חזקה פי 50 ממשקלה!'},
+      {e:'🦗', name:'צרצר',     fact:'שר בלילה'},
+    ]
+  }
+];
+
+const AW_QUIZ = [
+  {emoji:'🐘', q:'הפיל — לאיזה קבוצה הוא שייך?', ans:[{v:'יונקים',e:'🐘 יונקים'},{v:'דגים',e:'🐟 דגים'},{v:'זוחלים',e:'🦎 זוחלים'}], correct:'יונקים'},
+  {emoji:'🐍', q:'הנחש — לאיזה קבוצה הוא שייך?', ans:[{v:'ציפורים',e:'🦅 ציפורים'},{v:'זוחלים',e:'🦎 זוחלים'},{v:'חרקים',e:'🐝 חרקים'}], correct:'זוחלים'},
+  {emoji:'🦅', q:'הנשר — לאיזה קבוצה הוא שייך?', ans:[{v:'ציפורים',e:'🦅 ציפורים'},{v:'יונקים',e:'🐘 יונקים'},{v:'דגים',e:'🐟 דגים'}], correct:'ציפורים'},
+  {emoji:'🐠', q:'הדג — איפה הוא חי?', ans:[{v:'במים',e:'🌊 במים'},{v:'ביער',e:'🌳 ביער'},{v:'בשמיים',e:'☁️ בשמיים'}], correct:'במים'},
+  {emoji:'🐝', q:'לדבורה כמה רגליים יש?', ans:[{v:'4',e:'4 רגליים'},{v:'6',e:'6 רגליים'},{v:'8',e:'8 רגליים'}], correct:'6'},
+  {emoji:'🐧', q:'הפינגווין הוא ציפור שלא...', ans:[{v:'אוכלת',e:'🐟 אוכלת'},{v:'עפה',e:'✈️ עפה'},{v:'שוחה',e:'🌊 שוחה'}], correct:'עפה'},
+  {emoji:'🦋', q:'מה הפרפר היה לפני?', ans:[{v:'ציפור',e:'🐦 ציפור'},{v:'זחל',e:'🐛 זחל'},{v:'דג',e:'🐠 דג'}], correct:'זחל'},
+  {emoji:'🐢', q:'הצב — לאיזה קבוצה הוא שייך?', ans:[{v:'יונקים',e:'🐘 יונקים'},{v:'זוחלים',e:'🦎 זוחלים'},{v:'חרקים',e:'🐝 חרקים'}], correct:'זוחלים'},
+  {emoji:'🐬', q:'הדולפין — הוא יונק, כלומר...', ans:[{v:'מניק את תינוקיו',e:'🤱 מניק'},{v:'מטיל ביצים',e:'🥚 ביצים'},{v:'עף',e:'✈️ עף'}], correct:'מניק את תינוקיו'},
+  {emoji:'🐝', q:'מה הדבורה מייצרת?', ans:[{v:'חלב',e:'🥛 חלב'},{v:'דבש',e:'🍯 דבש'},{v:'שמן',e:'🫙 שמן'}], correct:'דבש'},
+  {emoji:'🦁', q:'האריה — חיה חמה ומכוסה שיער. מה הוא?', ans:[{v:'יונק',e:'🐘 יונק'},{v:'זוחל',e:'🦎 זוחל'},{v:'חרק',e:'🐝 חרק'}], correct:'יונק'},
+  {emoji:'🐍', q:'לנחש — יש לו...', ans:[{v:'רגליים',e:'🦶 רגליים'},{v:'כנפיים',e:'🦅 כנפיים'},{v:'אין לו רגליים!',e:'❌ אין רגליים'}], correct:'אין לו רגליים!'},
+  {emoji:'🐜', q:'הנמלה היא חרק. כמה חלקי גוף יש לחרקים?', ans:[{v:'2',e:'2 חלקים'},{v:'3',e:'3 חלקים'},{v:'5',e:'5 חלקים'}], correct:'3'},
+];
+
+let _awGroupIdx = 0;
+let _awQuizIdx = 0;
+let _awScore = 0;
+let _awAnswered = false;
+let _awQSpeak = '';
+
+function startAnimals(){
+  _awScore = 0;
+  document.getElementById('awScore').textContent = '0';
+  document.getElementById('animalsScreen').classList.add('active');
+  awShowMode('learn');
+  awBuildGroupCards();
+}
+
+function closeAnimals(){
+  document.getElementById('animalsScreen').classList.remove('active');
+  window.speechSynthesis && window.speechSynthesis.cancel();
+}
+
+function awSetBg(bg){
+  document.getElementById('awBg').style.background = bg;
+}
+
+function awShowMode(mode){
+  document.getElementById('awLearnBtn').classList.toggle('active', mode==='learn');
+  document.getElementById('awQuizBtn').classList.toggle('active', mode==='quiz');
+  const isLearn = mode==='learn';
+  document.getElementById('awGroupsEl').style.display = isLearn ? 'block' : 'none';
+  document.getElementById('awTour').style.display = 'none';
+  document.getElementById('awQuiz').style.display = isLearn ? 'none' : 'block';
+  if(mode==='learn') awSetBg('linear-gradient(160deg,#0d4a1a,#1a7a30)');
+  if(mode==='quiz') awStartQuiz();
+}
+
+function awBuildGroupCards(){
+  const el = document.getElementById('awGroupCards');
+  el.innerHTML = AW_GROUPS.map((g,i)=>`
+    <button class="aw-group-btn" onclick="awOpenGroup(${i})"
+      style="background:${g.bg}">
+      <span class="aw-group-icon">${g.icon}</span>
+      <span class="aw-group-name" style="color:#fff">${g.name}</span>
+      <span class="aw-group-desc" style="color:rgba(255,255,255,.7)">${g.animals.map(a=>a.e).join('')}</span>
+    </button>`).join('');
+}
+
+function awOpenGroup(idx){
+  _awGroupIdx = idx;
+  const g = AW_GROUPS[idx];
+  awSetBg(g.bg);
+  document.getElementById('awGroupsEl').style.display='none';
+  document.getElementById('awTour').style.display='block';
+  // header
+  document.getElementById('awGroupHeader').innerHTML=`
+    <span class="aw-group-header-icon">${g.icon}</span>
+    <div class="aw-group-header-name">${g.name}</div>
+    <div class="aw-group-header-desc">${g.desc.replace(/\n/g,'<br>')}</div>`;
+  document.getElementById('awGroupHeader').style.background='rgba(255,255,255,.1)';
+  // animals
+  document.getElementById('awAnimalsGrid').innerHTML = g.animals.map((a,i)=>`
+    <div class="aw-animal" onclick="awSayAnimal('${a.name}', '${a.fact}', this)">
+      <span class="aw-animal-emoji">${a.e}</span>
+      <div class="aw-animal-name">${a.name}</div>
+      <div class="aw-animal-fact">${a.fact}</div>
+    </div>`).join('');
+  document.getElementById('awFunFact').textContent = g.fun;
+  document.getElementById('awTourNext').textContent = idx===AW_GROUPS.length-1 ? 'לשאלון! ✅' : 'קבוצה הבאה ←';
+  // speak
+  const txt = `${g.name}! ${g.desc.replace(/\n/g,' ')} ${g.fun.replace(/[💡🌡️🥚🌊🐝]/g,'')}`;
+  setTimeout(()=>sayIt(txt),300);
+}
+
+function awSayAnimal(name, fact, el){
+  document.querySelectorAll('.aw-animal').forEach(a=>a.classList.remove('selected'));
+  el.classList.add('selected');
+  sayIt(`${name}! ${fact}`);
+}
+
+function awBackToGroups(){
+  awSetBg('linear-gradient(160deg,#0d4a1a,#1a7a30)');
+  document.getElementById('awGroupsEl').style.display='block';
+  document.getElementById('awTour').style.display='none';
+}
+
+function awNextGroup(){
+  if(_awGroupIdx===AW_GROUPS.length-1){ awShowMode('quiz'); return; }
+  awOpenGroup(_awGroupIdx+1);
+}
+
+/* QUIZ */
+function awStartQuiz(){
+  _awQuizIdx = 0;
+  _awAnswered = false;
+  document.getElementById('awEnd').classList.remove('show');
+  document.getElementById('awNextQ').classList.remove('show');
+  document.getElementById('awFeedback').textContent='';
+  awSetBg('linear-gradient(160deg,#1a1a5e,#2d2d8f)');
+  awRenderQ();
+}
+
+function awRenderQ(){
+  const total = AW_QUIZ.length;
+  if(_awQuizIdx>=total){ awShowEnd(); return; }
+  _awAnswered = false;
+  const q = shuffle([...AW_QUIZ])[0]; // use shuffled pool per session
+  const sq = AW_QUIZ[_awQuizIdx];
+  document.getElementById('awQFill').style.width=((_awQuizIdx/total)*100)+'%';
+  document.getElementById('awQLabel').textContent=`שאלה ${_awQuizIdx+1} מתוך ${total}`;
+  document.getElementById('awQEmoji').textContent=sq.emoji;
+  document.getElementById('awQText').textContent=sq.q;
+  document.getElementById('awFeedback').textContent='';
+  document.getElementById('awNextQ').classList.remove('show');
+  document.getElementById('awEnd').classList.remove('show');
+  _awQSpeak = sq.q;
+  setTimeout(()=>sayIt(sq.q),300);
+  const grid = document.getElementById('awAnswers');
+  grid.innerHTML='';
+  // 2 or 3 columns
+  grid.style.gridTemplateColumns = sq.ans.length===2 ? '1fr 1fr' : '1fr';
+  shuffle([...sq.ans]).forEach(a=>{
+    const btn=document.createElement('button');
+    btn.className='aw-ans';
+    btn.innerHTML=`<span style="font-size:24px">${a.e}</span>`;
+    btn.onclick=()=>awCheckAns(a.v, sq.correct, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function awCheckAns(sel, correct, btn){
+  if(_awAnswered) return;
+  _awAnswered = true;
+  sayIt(sel);
+  if(sel===correct){
+    btn.classList.add('correct');
+    _awScore++;
+    document.getElementById('awScore').textContent=_awScore;
+    document.getElementById('awFeedback').textContent=rndPraise();
+    setTimeout(()=>sayIt(rndPraiseSpeech()),1200);
+    confetti();
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('awFeedback').textContent=rndWrong();
+    setTimeout(()=>sayIt(rndWrongSpeech()),1200);
+    setTimeout(()=>{
+      document.querySelectorAll('.aw-ans').forEach(b=>{
+        if(b.textContent.includes(correct)) b.classList.add('correct');
+      });
+    },600);
+  }
+  document.getElementById('awNextQ').classList.add('show');
+}
+
+function awNextQ(){ _awQuizIdx++; awRenderQ(); }
+function awSpeakQ(){ sayIt(_awQSpeak); }
+
+function awShowEnd(){
+  const name=getChildName();
+  const pct=Math.round((_awScore/AW_QUIZ.length)*100);
+  const title=pct>=80?`כל הכבוד ${name} הזואולוג!`:pct>=50?`יופי ${name}!`:`מנסים שוב ${name}?`;
+  document.getElementById('awEndTitle').textContent=title;
+  document.getElementById('awEndSub').textContent=`ענית נכון על ${_awScore} מתוך ${AW_QUIZ.length}`;
+  document.getElementById('awEnd').classList.add('show');
+  document.getElementById('awNextQ').classList.remove('show');
+  document.getElementById('awAnswers').innerHTML='';
+  document.getElementById('awQEmoji').textContent='🏆';
+  document.getElementById('awQText').textContent='';
+  document.getElementById('awFeedback').textContent='';
+  if(pct>=80){confetti();setTimeout(confetti,700);}
+  sayIt(title);
+}
+
+// init
+refreshAllNames();
+renderCards();
+</script>
+
+<!-- ══════════════════════════════════════════
+     SPACE TOUR SCREEN
+══════════════════════════════════════════ -->
+<div class="game-screen" id="spaceScreen">
+<style>
+#spaceScreen { background: #050520; color: #fff; }
+.sp-topbar { display:flex; align-items:center; justify-content:space-between; padding:16px 16px 8px; background:#050520; position:sticky; top:0; z-index:10; }
+.sp-back { background:rgba(255,255,255,.12); border:none; border-radius:14px; padding:8px 16px; font-family:'Assistant',sans-serif; font-weight:700; font-size:14px; color:#fff; cursor:pointer; }
+.sp-mode { display:flex; gap:8px; }
+.sp-mode-btn { background:rgba(255,255,255,.1); border:2px solid transparent; border-radius:20px; padding:6px 14px; font-family:'Fredoka One',cursive; font-size:14px; color:#fff; cursor:pointer; transition:all .2s; }
+.sp-mode-btn.active { background:#7B61FF; border-color:#7B61FF; }
+
+/* TOUR */
+.sp-tour { padding:0 0 40px; }
+.sp-progress-dots { display:flex; justify-content:center; gap:6px; padding:10px 0 16px; }
+.sp-dot { width:8px; height:8px; border-radius:50%; background:rgba(255,255,255,.25); transition:all .3s; }
+.sp-dot.active { background:#7B61FF; transform:scale(1.4); }
+.sp-dot.done { background:#06D6A0; }
+
+.planet-card { margin:0 16px 20px; border-radius:28px; overflow:hidden; position:relative; }
+.planet-visual { height:200px; display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden; }
+.planet-emoji { font-size:100px; animation:floatPlanet 3s ease-in-out infinite; filter:drop-shadow(0 0 30px var(--pglow,#fff)); }
+@keyframes floatPlanet { 0%,100%{transform:translateY(0) scale(1)} 50%{transform:translateY(-12px) scale(1.04)} }
+.stars-bg { position:absolute; inset:0; overflow:hidden; }
+.star { position:absolute; width:2px; height:2px; background:white; border-radius:50%; animation:twinkle 2s infinite; }
+@keyframes twinkle { 0%,100%{opacity:.3} 50%{opacity:1} }
+
+.planet-info { background:rgba(255,255,255,.06); backdrop-filter:blur(10px); padding:20px 20px 24px; }
+.planet-name-he { font-family:'Fredoka One',cursive; font-size:32px; color:#fff; }
+.planet-name-en { font-size:14px; color:rgba(255,255,255,.5); font-weight:700; letter-spacing:2px; text-transform:uppercase; margin-bottom:12px; }
+.planet-fact-tags { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:16px; }
+.fact-tag { padding:5px 12px; border-radius:20px; font-size:12px; font-weight:700; }
+.planet-desc { font-size:16px; line-height:1.7; color:rgba(255,255,255,.88); font-weight:600; }
+.planet-fun { margin-top:14px; padding:12px 14px; background:rgba(255,255,255,.08); border-radius:16px; font-size:14px; font-weight:700; color:#FFD166; }
+
+.sp-nav { display:flex; gap:12px; padding:0 16px; }
+.sp-nav-btn { flex:1; border:none; border-radius:20px; padding:16px; font-family:'Fredoka One',cursive; font-size:18px; cursor:pointer; transition:all .2s; }
+.sp-prev-btn { background:rgba(255,255,255,.1); color:#fff; }
+.sp-next-btn { background:linear-gradient(135deg,#7B61FF,#4A90E2); color:#fff; box-shadow:0 6px 20px rgba(123,97,255,.4); }
+.sp-speak-btn { background:rgba(255,255,255,.1); border:none; border-radius:14px; padding:10px 16px; color:#fff; font-size:13px; font-weight:700; cursor:pointer; margin:12px 16px 0; }
+
+.sp-start-quiz { display:none; margin:20px 16px 0; background:linear-gradient(135deg,#06D6A0,#04A87D); border:none; border-radius:20px; padding:18px; width:calc(100% - 32px); font-family:'Fredoka One',cursive; font-size:20px; color:#fff; cursor:pointer; box-shadow:0 6px 20px rgba(6,214,160,.4); }
+.sp-start-quiz.show { display:block; animation:slideUp .3s ease; }
+@keyframes slideUp { from{opacity:0;transform:translateY(10px)} to{opacity:1;transform:translateY(0)} }
+
+/* QUIZ */
+.sp-quiz { display:none; padding:0 0 60px; }
+.sp-quiz.active { display:block; }
+.sp-q-card { margin:12px 16px; background:rgba(255,255,255,.06); border-radius:24px; padding:24px 20px; text-align:center; }
+.sp-q-emoji { font-size:64px; display:block; margin-bottom:14px; }
+.sp-q-text { font-family:'Fredoka One',cursive; font-size:21px; color:#fff; line-height:1.35; margin-bottom:10px; }
+.sp-speak-q { background:none; border:2px solid rgba(255,255,255,.2); border-radius:20px; padding:7px 16px; font-size:12px; font-weight:700; color:rgba(255,255,255,.7); cursor:pointer; }
+.sp-answers { display:grid; gap:10px; padding:0 16px; margin-top:14px; }
+.sp-answers.c2 { grid-template-columns:1fr 1fr; }
+.sp-answers.c3 { grid-template-columns:1fr 1fr 1fr; }
+.sp-ans { background:rgba(255,255,255,.09); border:2px solid rgba(255,255,255,.15); border-radius:18px; padding:14px 8px; font-family:'Fredoka One',cursive; font-size:18px; color:#fff; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:4px; transition:all .15s; }
+.sp-ans-lbl { font-size:12px; color:rgba(255,255,255,.6); font-family:'Assistant',sans-serif; font-weight:700; }
+.sp-ans:active { transform:scale(.94); }
+.sp-ans.correct { background:rgba(6,214,160,.25); border-color:#06D6A0; animation:popIn .3s; }
+.sp-ans.wrong { background:rgba(255,71,87,.25); border-color:#FF4757; animation:shake .4s; }
+.sp-feedback { text-align:center; padding:12px; font-family:'Fredoka One',cursive; font-size:20px; min-height:50px; }
+.sp-next-q { display:none; margin:0 16px; background:linear-gradient(135deg,#7B61FF,#4A90E2); border:none; border-radius:18px; padding:16px; width:calc(100% - 32px); font-family:'Fredoka One',cursive; font-size:18px; color:#fff; cursor:pointer; }
+.sp-next-q.show { display:block; animation:slideUp .3s; }
+
+.sp-end { display:none; text-align:center; padding:40px 20px; }
+.sp-end.show { display:block; }
+.sp-end-emoji { font-size:80px; display:block; margin-bottom:12px; }
+.sp-end-title { font-family:'Fredoka One',cursive; font-size:28px; color:#fff; margin-bottom:8px; }
+.sp-end-sub { color:rgba(255,255,255,.6); font-size:16px; font-weight:700; margin-bottom:24px; }
+.sp-replay { background:linear-gradient(135deg,#7B61FF,#4A90E2); border:none; border-radius:18px; padding:14px 32px; font-family:'Fredoka One',cursive; font-size:18px; color:#fff; cursor:pointer; margin-bottom:10px; display:block; width:100%; }
+.sp-home { background:rgba(255,255,255,.1); border:none; border-radius:18px; padding:13px 32px; font-family:'Fredoka One',cursive; font-size:17px; color:#fff; cursor:pointer; width:100%; }
+</style>
+
+<div class="sp-topbar">
+  <button class="sp-back" onclick="closeSpace()">← חזור</button>
+  <div class="sp-mode">
+    <button class="sp-mode-btn active" id="tourBtn" onclick="showTour()">🔭 סיור</button>
+    <button class="sp-mode-btn" id="quizBtn" onclick="showQuiz()">❓ שאלון</button>
+  </div>
+</div>
+
+<!-- TOUR -->
+<div class="sp-tour" id="spTour">
+  <div class="sp-progress-dots" id="spDots"></div>
+  <div id="spPlanetCard"></div>
+  <div class="sp-nav">
+    <button class="sp-nav-btn sp-prev-btn" id="spPrev" onclick="spNav(-1)">→ הקודם</button>
+    <button class="sp-nav-btn sp-next-btn" id="spNext" onclick="spNav(1)">הבא ←</button>
+  </div>
+  <button class="sp-speak-btn" onclick="spSpeak()">🔊 שמע שוב</button>
+  <button class="sp-start-quiz" id="spStartQuiz" onclick="showQuiz()">עכשיו לשאלון! 🚀</button>
+</div>
+
+<!-- QUIZ -->
+<div class="sp-quiz" id="spQuiz">
+  <div class="sp-q-card">
+    <span class="sp-q-emoji" id="spqEmoji"></span>
+    <div class="sp-q-text" id="spqText"></div>
+    <button class="sp-speak-q" onclick="spSpeakQ()">🔊 שמע שוב</button>
+  </div>
+  <div class="sp-answers" id="spAnswers"></div>
+  <div class="sp-feedback" id="spFeedback"></div>
+  <button class="sp-next-q" id="spNextQ" onclick="spNextQuestion()">הבא ←</button>
+  <div class="sp-end" id="spEnd">
+    <span class="sp-end-emoji">🏆</span>
+    <div class="sp-end-title" id="spEndTitle">כל הכבוד!</div>
+    <div class="sp-end-sub" id="spEndSub"></div>
+    <button class="sp-replay" onclick="spRestartQuiz()">שחק שאלון שוב 🔄</button>
+    <button class="sp-home" onclick="showTour()">חזור לסיור 🔭</button>
+  </div>
+</div>
+</div>
+
+<script>
+/* ════════ PLANETS DATA ════════ */
+const PLANETS = [
+  {
+    name:'השמש', nameEn:'The Sun', emoji:'☀️', glow:'#FF8C42',
+    bg:'linear-gradient(135deg,#FF6B00,#FF8C42)',
+    tags:[{t:'⭐ כוכב',c:'#FF8C42'},{t:'🔥 חם מאוד',c:'#FF4757'},{t:'💛 צהובה',c:'#FFD166'}],
+    desc:'השמש היא כמו כדור ענק ענק של אש! היא נותנת לנו חום ואור. בלי השמש לא היה חי כלום על כדור הארץ.',
+    fun:'😮 כמה שמשות מתאימות בפנים כדור הארץ? מיליון! שמש ענקית!'
+  },
+  {
+    name:'כוכב חמה', nameEn:'Mercury', emoji:'🪨', glow:'#A0A0A0',
+    bg:'linear-gradient(135deg,#5a5a7a,#8a8aaa)',
+    tags:[{t:'🏆 הקרוב ביותר',c:'#4A90E2'},{t:'🌡️ חם וקר',c:'#FF4757'},{t:'🔴 קטן',c:'#9B5DE5'}],
+    desc:'כוכב חמה הוא הכוכב הכי קרוב לשמש. ביום הוא רותח מאוד ובלילה הוא קפוא! הוא הכי קטן מכל הכוכבים.',
+    fun:'🎂 על כוכב חמה יש לך יום הולדת כל 88 ימים!'
+  },
+  {
+    name:'נוגה', nameEn:'Venus', emoji:'🌕', glow:'#FFE066',
+    bg:'linear-gradient(135deg,#c8a200,#ffe066)',
+    tags:[{t:'🔥 הכי חם!',c:'#FF4757'},{t:'✨ בוהק',c:'#FFD166'},{t:'☁️ עננים',c:'#A0A0A0'}],
+    desc:'נוגה הוא הכוכב הכי חם בכל מערכת השמש! הוא מכוסה בעננים עבים. לפעמים אפשר לראות אותו בשמיים בלילה — הוא נוצץ!',
+    fun:'⏰ יום אחד על נוגה ארוך יותר משנה שלמה!'
+  },
+  {
+    name:'כדור הארץ', nameEn:'Earth', emoji:'🌍', glow:'#4A90E2',
+    bg:'linear-gradient(135deg,#1a6eb5,#2EC4B6)',
+    tags:[{t:'🏠 הבית שלנו',c:'#06D6A0'},{t:'💧 יש מים',c:'#4A90E2'},{t:'🌱 יש חיים',c:'#06D6A0'}],
+    desc:'זה הבית שלנו! כדור הארץ הוא הכוכב היחיד שיש עליו חיים. יש עליו הרבה מים — לכן הוא נראה כחול מהחלל.',
+    fun:'🌊 יותר ממחצית כדור הארץ מכוסה מים!'
+  },
+  {
+    name:'מאדים', nameEn:'Mars', emoji:'🔴', glow:'#FF4757',
+    bg:'linear-gradient(135deg,#8B2500,#FF4757)',
+    tags:[{t:'🔴 כוכב אדום',c:'#FF4757'},{t:'🤖 רובוטים',c:'#9B5DE5'},{t:'🏔️ הרים',c:'#FF8C42'}],
+    desc:'מאדים נקרא "הכוכב האדום" כי הוא אדום! יש עליו הרבה אבק אדום. שלחנו לשם רובוטים על גלגלים לחקור אותו.',
+    fun:'🏔️ ההר הגבוה ביותר בכל מערכת השמש נמצא על מאדים!'
+  },
+  {
+    name:'צדק', nameEn:'Jupiter', emoji:'🟠', glow:'#FF8C42',
+    bg:'linear-gradient(135deg,#8B4513,#FF8C42)',
+    tags:[{t:'👑 הכי גדול!',c:'#FFD166'},{t:'🌀 סופות',c:'#FF8C42'},{t:'💨 גז',c:'#9B5DE5'}],
+    desc:'צדק הוא הכוכב הכי גדול מכולם! הוא עשוי מגז ויש עליו סופה ענקית שנמשכת מאות שנים. אפשר לראות אותו בשמיים!',
+    fun:'🌍 אלפי כדורי ארץ יכולים להיכנס בתוך צדק!'
+  },
+  {
+    name:'שבתאי', nameEn:'Saturn', emoji:'🪐', glow:'#FFD166',
+    bg:'linear-gradient(135deg,#8B7536,#FFD166)',
+    tags:[{t:'💍 טבעות',c:'#FFD166'},{t:'🌟 מיוחד',c:'#FF8C42'},{t:'💨 גז',c:'#9B5DE5'}],
+    desc:'שבתאי הוא הכוכב עם הטבעות! הטבעות עשויות מאבנים וקרח. הוא הכוכב הכי יפה במערכת השמש לפי הרבה אנשים!',
+    fun:'🏄 שבתאי קל כל כך — אם היה אוקיינוס ענק הוא היה צף!'
+  },
+  {
+    name:'אורנוס', nameEn:'Uranus', emoji:'🔵', glow:'#A8EDE8',
+    bg:'linear-gradient(135deg,#2EC4B6,#A8EDE8)',
+    tags:[{t:'🔵 כחול-ירוק',c:'#2EC4B6'},{t:'❄️ קפוא מאוד',c:'#4A90E2'},{t:'🎡 מסתובב צד',c:'#9B5DE5'}],
+    desc:'אורנוס הוא כוכב כחול-ירוק קפוא! הוא קר מאוד מאוד. משהו מיוחד בו — הוא מסתובב על הצד, כמו כדור מתגלגל!',
+    fun:'❄️ אורנוס הוא הכוכב הקר ביותר במערכת השמש!'
+  },
+  {
+    name:'נפטון', nameEn:'Neptune', emoji:'💙', glow:'#4A90E2',
+    bg:'linear-gradient(135deg,#0A2463,#4A90E2)',
+    tags:[{t:'💙 כחול כהה',c:'#4A90E2'},{t:'💨 הכי רוחות',c:'#9B5DE5'},{t:'🏁 הכי רחוק',c:'#06D6A0'}],
+    desc:'נפטון הוא הכוכב הרחוק ביותר מהשמש! הוא כחול כהה ויש עליו הרוחות החזקות ביותר בכל מערכת השמש.',
+    fun:'🚀 מסע לנפטון בחללית ייקח יותר מ-12 שנים!'
+  },
+  {
+    name:'הירח שלנו', nameEn:'The Moon', emoji:'🌕', glow:'#E0E0E0',
+    bg:'linear-gradient(135deg,#555,#aaa)',
+    tags:[{t:'🌙 ירח',c:'#A0A0A0'},{t:'👨‍🚀 היינו שם',c:'#06D6A0'},{t:'🌊 משפיע גלים',c:'#4A90E2'}],
+    desc:'הירח הוא השכן הקרוב ביותר שלנו בחלל! בני אדם כבר הלכו עליו. הוא מאיר בלילה אבל בעצם הוא לא מאיר לבד — הוא מחזיר את אור השמש!',
+    fun:'👣 עדיין אפשר לראות את עקבות הרגליים של האסטרונאוטים על הירח!'
+  }
+];
+
+const SP_QUIZ = [
+  { emoji:'☀️', q:'מה נותן לנו חום ואור?', ans:[{v:'השמש',e:'☀️ השמש'},{v:'הירח',e:'🌕 הירח'},{v:'מאדים',e:'🔴 מאדים'}], correct:'השמש' },
+  { emoji:'🌍', q:'איזה כוכב הוא הבית שלנו?', ans:[{v:'נוגה',e:'🌕 נוגה'},{v:'כדור הארץ',e:'🌍 כדור הארץ'},{v:'מאדים',e:'🔴 מאדים'}], correct:'כדור הארץ' },
+  { emoji:'🔴', q:'מה הצבע של מאדים?', ans:[{v:'כחול',e:'🔵 כחול'},{v:'ירוק',e:'🟢 ירוק'},{v:'אדום',e:'🔴 אדום'}], correct:'אדום' },
+  { emoji:'🪐', q:'לאיזה כוכב יש טבעות יפות?', ans:[{v:'שבתאי',e:'🪐 שבתאי'},{v:'צדק',e:'🟠 צדק'},{v:'נפטון',e:'💙 נפטון'}], correct:'שבתאי' },
+  { emoji:'👑', q:'מה הכוכב הכי גדול?', ans:[{v:'כדור הארץ',e:'🌍 כדור הארץ'},{v:'צדק',e:'🟠 צדק'},{v:'הירח',e:'🌕 הירח'}], correct:'צדק' },
+  { emoji:'🌕', q:'מה מאיר לנו בלילה?', ans:[{v:'הירח',e:'🌕 הירח'},{v:'מאדים',e:'🔴 מאדים'},{v:'שבתאי',e:'🪐 שבתאי'}], correct:'הירח' },
+  { emoji:'💧', q:'באיזה כוכב יש הרבה מים?', ans:[{v:'כוכב חמה',e:'🪨 כוכב חמה'},{v:'אורנוס',e:'🔵 אורנוס'},{v:'כדור הארץ',e:'🌍 כדור הארץ'}], correct:'כדור הארץ' },
+  { emoji:'❄️', q:'מה הכוכב הקר ביותר?', ans:[{v:'שבתאי',e:'🪐 שבתאי'},{v:'אורנוס',e:'🔵 אורנוס'},{v:'נוגה',e:'🌕 נוגה'}], correct:'אורנוס' },
+  { emoji:'🚀', q:'מה הכוכב הרחוק ביותר מהשמש?', ans:[{v:'נפטון',e:'💙 נפטון'},{v:'מאדים',e:'🔴 מאדים'},{v:'כוכב חמה',e:'🪨 כוכב חמה'}], correct:'נפטון' },
+  { emoji:'👨‍🚀', q:'לאן בני אדם כבר טסו?', ans:[{v:'מאדים',e:'🔴 מאדים'},{v:'הירח',e:'🌕 הירח'},{v:'נוגה',e:'🌕 נוגה'}], correct:'הירח' },
+];
+
+/* ════════ SPACE STATE ════════ */
+let spIdx=0, spQuizIdx=0, spQuizAnswered=false, spQuizSpeakText='', spVisited=new Set();
+
+function startSpace(){
+  spIdx=0; spVisited=new Set();
+  document.getElementById('spaceScreen').classList.add('active');
+  showTour();
+  renderSpDots();
+  renderPlanet();
+}
+
+function closeSpace(){
+  document.getElementById('spaceScreen').classList.remove('active');
+  window.speechSynthesis&&window.speechSynthesis.cancel();
+}
+
+function showTour(){
+  document.getElementById('spTour').style.display='block';
+  document.getElementById('spQuiz').classList.remove('active');
+  document.getElementById('tourBtn').classList.add('active');
+  document.getElementById('quizBtn').classList.remove('active');
+  renderPlanet();
+}
+
+function showQuiz(){
+  document.getElementById('spTour').style.display='none';
+  document.getElementById('spQuiz').classList.add('active');
+  document.getElementById('quizBtn').classList.add('active');
+  document.getElementById('tourBtn').classList.remove('active');
+  spQuizIdx=0; spQuizAnswered=false;
+  document.getElementById('spEnd').classList.remove('show');
+  document.getElementById('spNextQ').classList.remove('show');
+  document.getElementById('spFeedback').textContent='';
+  renderSpQ();
+}
+
+function renderSpDots(){
+  const c=document.getElementById('spDots');
+  c.innerHTML=PLANETS.map((_,i)=>`<div class="sp-dot${i===spIdx?' active':spVisited.has(i)?' done':''}" id="dot${i}"></div>`).join('');
+}
+
+function updateDots(){
+  PLANETS.forEach((_,i)=>{
+    const d=document.getElementById('dot'+i);
+    if(!d) return;
+    d.className='sp-dot'+(i===spIdx?' active':spVisited.has(i)?' done':'');
+  });
+}
+
+function renderPlanet(){
+  const p=PLANETS[spIdx];
+  const starsHTML=Array.from({length:25},(_,i)=>`<div class="star" style="top:${Math.random()*100}%;left:${Math.random()*100}%;animation-delay:${Math.random()*2}s"></div>`).join('');
+
+  document.getElementById('spPlanetCard').innerHTML=`
+    <div class="planet-card" style="background:${p.bg}">
+      <div class="planet-visual" style="--pglow:${p.glow}">
+        <div class="stars-bg">${starsHTML}</div>
+        <span class="planet-emoji" style="--pglow:${p.glow}">${p.emoji}</span>
+      </div>
+      <div class="planet-info">
+        <div class="planet-name-he">${p.name}</div>
+        <div class="planet-name-en">${p.nameEn}</div>
+        <div class="planet-fact-tags">${p.tags.map(t=>`<span class="fact-tag" style="background:${t.c}22;color:${t.c};border:1.5px solid ${t.c}44">${t.t}</span>`).join('')}</div>
+        <div class="planet-desc">${p.desc}</div>
+        <div class="planet-fun">${p.fun}</div>
+      </div>
+    </div>`;
+
+  // prev/next buttons
+  document.getElementById('spPrev').style.display=spIdx===0?'none':'block';
+  document.getElementById('spNext').textContent=spIdx===PLANETS.length-1?'סיום הסיור ✅':'הבא ←';
+
+  // show quiz button after seeing all
+  spVisited.add(spIdx);
+  updateDots();
+  if(spVisited.size===PLANETS.length) document.getElementById('spStartQuiz').classList.add('show');
+
+  // speak
+  const txt=`${p.name}. ${p.desc} ${p.fun.replace(/[😮🎂⏰🌊🏔️🌍🏄🎡❄️🚀👣]/g,'')}`;
+  setTimeout(()=>sayIt(txt), 400);
+  window._spSpeakTxt=txt;
+}
+
+function spNav(dir){
+  spIdx=Math.max(0,Math.min(PLANETS.length-1, spIdx+dir));
+  renderPlanet();
+}
+function spSpeak(){ sayIt(window._spSpeakTxt||''); }
+
+/* ════════ SPACE QUIZ ════════ */
+let _spqSpeakTxt='';
+
+function renderSpQ(){
+  if(spQuizIdx>=SP_QUIZ.length){ showSpEnd(); return; }
+  spQuizAnswered=false;
+  const q=SP_QUIZ[spQuizIdx];
+  document.getElementById('spqEmoji').textContent=q.emoji;
+  document.getElementById('spqText').textContent=q.q;
+  document.getElementById('spFeedback').textContent='';
+  document.getElementById('spFeedback').style.color='';
+  document.getElementById('spNextQ').classList.remove('show');
+  document.getElementById('spEnd').classList.remove('show');
+
+  _spqSpeakTxt=q.q;
+  setTimeout(()=>sayIt(q.q),400);
+
+  const grid=document.getElementById('spAnswers');
+  grid.className='sp-answers c3';
+  grid.innerHTML='';
+  shuffle([...q.ans]).forEach(a=>{
+    const btn=document.createElement('button');
+    btn.className='sp-ans';
+    btn.innerHTML=`<span style="font-size:18px">${a.e}</span><span class="sp-ans-lbl">${a.v}</span>`;
+    btn.onclick=()=>checkSpAns(a.v, q.correct, btn);
+    grid.appendChild(btn);
+  });
+}
+
+function checkSpAns(sel, correct, btn){
+  if(spQuizAnswered) return;
+  spQuizAnswered=true;
+  // Speak the clicked answer first
+  sayIt(sel);
+  if(sel===correct){
+    btn.classList.add('correct');
+    document.getElementById('spFeedback').textContent=rndPraise();
+    document.getElementById('spFeedback').style.color='#06D6A0';
+    setTimeout(()=>sayIt(rndPraiseSpeech()), 1200);
+    confetti();
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('spFeedback').textContent=rndWrong();
+    document.getElementById('spFeedback').style.color='#FF4757';
+    setTimeout(()=>sayIt(rndWrongSpeech()), 1200);
+    setTimeout(()=>{
+      document.querySelectorAll('.sp-ans').forEach(b=>{
+        if(b.querySelector('.sp-ans-lbl')?.textContent===correct) b.classList.add('correct');
+      });
+    },600);
+  }
+  document.getElementById('spNextQ').classList.add('show');
+}
+
+function spNextQuestion(){ spQuizIdx++; renderSpQ(); }
+
+function showSpEnd(){
+  const name=getChildName();
+  document.getElementById('spEnd').classList.add('show');
+  document.getElementById('spNextQ').classList.remove('show');
+  document.getElementById('spAnswers').innerHTML='';
+  document.getElementById('spqEmoji').textContent='🏆';
+  document.getElementById('spqText').textContent='';
+  document.getElementById('spFeedback').textContent='';
+  document.getElementById('spEndTitle').textContent=`כל הכבוד ${name} האסטרונאוט!`;
+  document.getElementById('spEndSub').textContent=`עברת על כל ${SP_QUIZ.length} השאלות על מערכת השמש!`;
+  confetti(); setTimeout(confetti,700);
+  sayIt(`כל הכבוד ${name}, אתה אסטרונאוט אמיתי!`);
+}
+
+function spRestartQuiz(){ spQuizIdx=0; spQuizAnswered=false; document.getElementById('spEnd').classList.remove('show'); renderSpQ(); }
+function spSpeakQ(){ sayIt(_spqSpeakTxt); }
+</script>
+</body>
+</html>
