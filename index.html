@@ -558,10 +558,6 @@ body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height
         <div class="exp-explain-text" id="expExplainText"></div>
         <div class="exp-fun-fact" id="expFunFact"></div>
       </div>
-      <div class="exp-speak-row">
-        <button class="exp-speak-btn-sm" onclick="expSpeakSteps()">🔊 שמע את השלבים</button>
-        <button class="exp-speak-btn-sm" onclick="expSpeakExplain()">🔊 הסבר</button>
-      </div>
     </div>
     <button class="exp-back-to-menu" onclick="expShowMenu()">← כל הניסויים</button>
   </div>
@@ -2277,8 +2273,6 @@ function expShowMenu(){
     </button>`).join('');
 }
 
-let _expStepsTxt='', _expExplainTxt='';
-
 function expOpen(idx){
   const e=EXPERIMENTS[idx];
   document.getElementById('expBg').style.background=e.bg;
@@ -2296,15 +2290,7 @@ function expOpen(idx){
   // explain
   document.getElementById('expExplainText').textContent=e.explain;
   document.getElementById('expFunFact').textContent=e.fun;
-  // speak texts
-  _expStepsTxt = e.steps.map((s,i)=>`שלב ${i+1}: ${s.replace(/[🥄🎨🫧🍶👀🌊🤔🎯📝🔄🥛✨🌈🧲🔍✅❌📊🔵⬜🔴📜⏳🃏⬆️🎉☀️📅💧🌱🫘🌍🛢️☁️🎃🥃🌡️🚢🚀🧼💃]/g,'')}`).join('. ');
-  _expExplainTxt = e.explain.replace(/[🌋🚢🚀🧼💃🧲🌍🌊🌳🌧️🛢️🌱]/g,'') + ' ' + e.fun.replace(/[🌋🚢🚀🧼💃🧲🌍🌊🌳🌧️🛢️🌱]/g,'');
-  // auto speak name
-  setTimeout(()=>sayIt(`ניסוי: ${e.name}`), 300);
 }
-
-function expSpeakSteps(){ sayIt(_expStepsTxt); }
-function expSpeakExplain(){ sayIt(_expExplainTxt); }
 
 /* ── ENGLISH LEARN ── */
 function startEnglishLearn(type){
