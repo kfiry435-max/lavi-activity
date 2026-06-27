@@ -50,6 +50,7 @@ body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height
 .tab[data-cat="cooking"].active{background:linear-gradient(135deg,var(--pink),#C22B54);box-shadow:0 6px 20px rgba(239,71,111,.4)}
 .tab[data-cat="learn"].active{background:linear-gradient(135deg,#4A90E2,#2860B0);box-shadow:0 6px 20px rgba(74,144,226,.4)}
 .tab[data-cat="science"].active{background:linear-gradient(135deg,#06D6A0,#04A87D);box-shadow:0 6px 20px rgba(6,214,160,.4)}
+.tab[data-cat="english"].active{background:linear-gradient(135deg,#4A90E2,#2860B0);box-shadow:0 6px 20px rgba(74,144,226,.4)}
 
 .section-header{padding:8px 20px 4px;display:flex;align-items:center;gap:10px}
 .section-header h2{font-family:'Fredoka One',cursive;font-size:24px}
@@ -191,6 +192,7 @@ body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height
     <div class="tab"        data-cat="cooking"   onclick="switchTab('cooking',this)"><span class="tab-icon">🍳</span>בישול</div>
     <div class="tab"        data-cat="learn"     onclick="switchTab('learn',this)"><span class="tab-icon">📚</span>לומדים</div>
     <div class="tab"        data-cat="science"   onclick="switchTab('science',this)"><span class="tab-icon">🔬</span>מדע</div>
+    <div class="tab"        data-cat="english"   onclick="switchTab('english',this)"><span class="tab-icon">🇬🇧</span>English</div>
   </div>
 
   <div class="section-header">
@@ -240,6 +242,21 @@ body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height
       <button class="game-btn" onclick="startGame('animal_sounds')" style="border-top:4px solid #9B5DE5"><span class="g-icon">🔊</span><span class="g-name">מה השמע הזה?</span><span class="g-desc">חיות וצלילים</span></button>
       <button class="game-btn" onclick="startGame('animals_english')" style="border-top:4px solid #06D6A0"><span class="g-icon">🦁</span><span class="g-name">חיות בעולם</span><span class="g-desc">זיהוי חיות</span></button>
       <button class="game-btn" onclick="startSpace()" style="grid-column:span 2;border-top:4px solid #7B61FF;background:linear-gradient(135deg,#1a1a5e,#2d2d8f);color:white"><span class="g-icon">🚀</span><span class="g-name" style="color:white">מערכת השמש</span><span class="g-desc" style="color:rgba(255,255,255,.75)">כוכבי הלכת + שאלון + קול</span></button>
+      <button class="game-btn" onclick="startExperiments()" style="grid-column:span 2;border-top:4px solid #06D6A0;background:linear-gradient(135deg,#E8FBF4,#C8F5E8)"><span class="g-icon">🧪</span><span class="g-name">ניסויים בבית</span><span class="g-desc">הר געש, שוקע/צף, חלב קסום ועוד</span></button>
+    </div>
+  </div>
+
+  <!-- English section -->
+  <div class="learn-section" id="englishSection">
+    <div class="learn-intro">English Learning for Lavi 🇬🇧</div>
+    <div class="game-grid">
+      <button class="game-btn" onclick="startEnglishLearn('colors')" style="grid-column:span 2;border-top:4px solid #FF8C42;background:linear-gradient(135deg,#FFF5EE,#FFE8D0)"><span class="g-icon">🎨</span><span class="g-name">Colors in English</span><span class="g-desc">Red, Blue, Yellow...</span></button>
+      <button class="game-btn" onclick="startGame('english_letters')" style="border-top:4px solid #4A90E2"><span class="g-icon">A</span><span class="g-name">Letters ABC</span><span class="g-desc">זיהוי אותיות</span></button>
+      <button class="game-btn" onclick="startGame('english_words')" style="border-top:4px solid #9B5DE5"><span class="g-icon">📚</span><span class="g-name">First Words</span><span class="g-desc">מילים ראשונות</span></button>
+      <button class="game-btn" onclick="startGame('words')" style="border-top:4px solid #2EC4B6"><span class="g-icon">🗣️</span><span class="g-name">עברית ↔ אנגלית</span><span class="g-desc">תרגום מילים</span></button>
+      <button class="game-btn" onclick="startGame('animals_english')" style="border-top:4px solid #06D6A0"><span class="g-icon">🐶</span><span class="g-name">Animals</span><span class="g-desc">חיות באנגלית</span></button>
+      <button class="game-btn" onclick="startEnglishLearn('numbers')" style="border-top:4px solid #EF476F"><span class="g-icon">🔢</span><span class="g-name">Numbers 1-10</span><span class="g-desc">ספירה באנגלית</span></button>
+      <button class="game-btn" onclick="startEnglishLearn('body')" style="border-top:4px solid #FFD166"><span class="g-icon">👁️</span><span class="g-name">Body Parts</span><span class="g-desc">חלקי גוף באנגלית</span></button>
     </div>
   </div>
     </div>
@@ -479,6 +496,148 @@ body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height
 
 </div><!-- /relative -->
 </div><!-- /animalsScreen -->
+
+<!-- EXPERIMENTS SCREEN -->
+<div class="game-screen" id="experimentsScreen">
+<style>
+#experimentsScreen{overflow-y:auto}
+#expBg{position:absolute;inset:0;transition:background .6s;z-index:0;background:linear-gradient(160deg,#0d3a1a,#1a7a40)}
+.exp-rel{position:relative;z-index:1;padding-bottom:80px}
+.exp-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;background:rgba(0,0,0,.25);backdrop-filter:blur(10px);position:sticky;top:0;z-index:10}
+.exp-back-btn{background:rgba(255,255,255,.2);border:none;border-radius:14px;padding:8px 16px;font-family:'Assistant',sans-serif;font-weight:700;font-size:14px;color:#fff;cursor:pointer}
+.exp-header-title{font-family:'Fredoka One',cursive;font-size:18px;color:#fff}
+
+/* MENU GRID */
+.exp-menu-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px}
+.exp-menu-card{border:none;border-radius:22px;padding:16px 10px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:6px;box-shadow:0 4px 18px rgba(0,0,0,.25);transition:transform .15s}
+.exp-menu-card:active{transform:scale(.95)}
+.exp-menu-icon{font-size:36px}
+.exp-menu-name{font-family:'Fredoka One',cursive;font-size:14px;color:#fff;text-align:center;line-height:1.2}
+
+/* DETAIL CARD */
+.exp-detail-wrap{padding:10px 14px 20px}
+.exp-card{background:rgba(255,255,255,.1);border-radius:24px;padding:20px 16px;margin-bottom:12px;border:1.5px solid rgba(255,255,255,.15)}
+.exp-card-title{font-family:'Fredoka One',cursive;font-size:22px;color:#fff;margin-bottom:14px;text-align:center}
+.exp-section-label{font-family:'Fredoka One',cursive;font-size:14px;color:#FFD166;margin-bottom:8px}
+.exp-chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.exp-chip{background:rgba(255,255,255,.15);border:1.5px solid rgba(255,255,255,.2);border-radius:20px;padding:5px 12px;font-size:13px;font-weight:700;color:#fff}
+.exp-step{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px}
+.exp-step-num{background:rgba(255,255,255,.2);min-width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:13px;color:#fff;flex-shrink:0}
+.exp-step-text{font-size:14px;color:rgba(255,255,255,.92);font-weight:600;line-height:1.5;padding-top:4px}
+.exp-explain-box{background:rgba(255,255,255,.12);border-radius:18px;padding:14px;margin-top:4px}
+.exp-explain-text{font-size:14px;color:rgba(255,255,255,.9);font-weight:700;line-height:1.6;margin-bottom:8px}
+.exp-fun-fact{font-size:13px;color:#FFD166;font-weight:700;line-height:1.4}
+.exp-speak-row{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.exp-speak-btn-sm{background:rgba(255,255,255,.12);border:none;border-radius:16px;padding:8px 14px;font-size:13px;font-weight:700;color:rgba(255,255,255,.8);cursor:pointer}
+.exp-back-to-menu{width:100%;border:none;border-radius:20px;padding:14px;font-family:'Fredoka One',cursive;font-size:17px;color:#fff;background:rgba(255,255,255,.18);cursor:pointer;margin-top:4px}
+</style>
+
+<div id="expBg"></div>
+<div class="exp-rel">
+  <div class="exp-topbar">
+    <button class="exp-back-btn" onclick="closeExperiments()">← חזור</button>
+    <div class="exp-header-title">🧪 ניסויים בבית</div>
+    <div style="width:60px"></div>
+  </div>
+
+  <!-- MENU -->
+  <div id="expMenu">
+    <div style="padding:10px 14px 2px;font-family:'Fredoka One',cursive;font-size:16px;color:rgba(255,255,255,.7)">בחר ניסוי 👇</div>
+    <div class="exp-menu-grid" id="expGrid"></div>
+  </div>
+
+  <!-- DETAIL -->
+  <div id="expDetail" style="display:none" class="exp-detail-wrap">
+    <div class="exp-card" id="expMainCard">
+      <div class="exp-card-title" id="expDetailTitle"></div>
+      <div class="exp-section-label">🛒 מה צריך:</div>
+      <div class="exp-chips" id="expChips"></div>
+      <div class="exp-section-label">📋 שלבים:</div>
+      <div id="expStepsList"></div>
+      <div class="exp-explain-box">
+        <div class="exp-explain-text" id="expExplainText"></div>
+        <div class="exp-fun-fact" id="expFunFact"></div>
+      </div>
+      <div class="exp-speak-row">
+        <button class="exp-speak-btn-sm" onclick="expSpeakSteps()">🔊 שמע את השלבים</button>
+        <button class="exp-speak-btn-sm" onclick="expSpeakExplain()">🔊 הסבר</button>
+      </div>
+    </div>
+    <button class="exp-back-to-menu" onclick="expShowMenu()">← כל הניסויים</button>
+  </div>
+</div>
+</div>
+
+<!-- ENGLISH LEARN SCREEN -->
+<div class="game-screen" id="englishScreen">
+<style>
+#englishScreen{background:linear-gradient(160deg,#0d1f4a,#1a3a8a);color:#fff;overflow-y:auto}
+.eng-topbar{display:flex;align-items:center;justify-content:space-between;padding:16px 16px 8px;position:sticky;top:0;z-index:10;background:rgba(13,31,74,.9);backdrop-filter:blur(8px)}
+.eng-back{background:rgba(255,255,255,.15);border:none;border-radius:14px;padding:8px 16px;font-family:'Assistant',sans-serif;font-weight:700;font-size:14px;color:#fff;cursor:pointer}
+.eng-modes{display:flex;gap:8px}
+.eng-mode-btn{background:rgba(255,255,255,.12);border:2px solid transparent;border-radius:20px;padding:6px 14px;font-family:'Fredoka One',cursive;font-size:13px;color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s}
+.eng-mode-btn.active{background:#4A90E2;border-color:#4A90E2;color:#fff}
+.eng-score{background:rgba(255,255,255,.15);border-radius:14px;padding:6px 14px;font-weight:700;font-size:14px;color:#fff}
+.eng-score span{color:#FFD166}
+.eng-learn{padding:16px 16px 60px}
+.eng-progress-bar{height:6px;background:rgba(255,255,255,.15);border-radius:10px;margin-bottom:4px;overflow:hidden}
+.eng-progress-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#4A90E2,#06D6A0);transition:width .4s}
+.eng-progress-label{text-align:center;font-size:12px;color:rgba(255,255,255,.5);font-weight:700;margin-bottom:14px}
+.eng-card{background:rgba(255,255,255,.08);border-radius:28px;padding:30px 20px;text-align:center;margin-bottom:16px;min-height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.eng-speak-btn{background:rgba(255,255,255,.1);border:none;border-radius:20px;padding:8px 18px;font-size:13px;font-weight:700;color:rgba(255,255,255,.8);cursor:pointer;margin-top:10px}
+.eng-nav{display:flex;gap:12px}
+.eng-nav-btn{flex:1;border:none;border-radius:20px;padding:16px;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;cursor:pointer}
+.eng-prev{background:rgba(255,255,255,.12)}
+.eng-next-btn{background:linear-gradient(135deg,#4A90E2,#2860B0);box-shadow:0 6px 20px rgba(74,144,226,.4)}
+.eng-quiz{padding:0 16px 60px}
+.eng-q-progress{height:6px;background:rgba(255,255,255,.15);border-radius:10px;margin:8px 0 4px;overflow:hidden}
+.eng-q-progress-fill{height:100%;border-radius:10px;background:linear-gradient(90deg,#4A90E2,#06D6A0);transition:width .4s}
+.eng-q-label{text-align:center;font-size:12px;color:rgba(255,255,255,.5);font-weight:700;margin-bottom:10px}
+.eng-q-card{background:rgba(255,255,255,.08);border-radius:24px;padding:24px 20px;text-align:center;margin-bottom:14px;min-height:140px;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.eng-feedback{text-align:center;font-family:'Fredoka One',cursive;font-size:21px;min-height:48px;padding:8px;color:#FFD166}
+.eng-end{display:none;text-align:center;padding:40px 20px}
+.eng-end.show{display:block}
+.eng-end-title{font-family:'Fredoka One',cursive;font-size:26px;color:#fff;margin-bottom:6px}
+.eng-end-sub{color:rgba(255,255,255,.6);font-size:14px;font-weight:700;margin-bottom:24px}
+</style>
+<div class="eng-topbar">
+  <button class="eng-back" onclick="closeEnglish()">← חזור</button>
+  <div class="eng-modes">
+    <button class="eng-mode-btn active" id="engLearnBtn" onclick="engShowMode('learn')">📖 Learn</button>
+    <button class="eng-mode-btn" id="engQuizBtn" onclick="engShowMode('quiz')">❓ Quiz</button>
+  </div>
+  <div class="eng-score">⭐ <span id="engScoreNum">0</span></div>
+</div>
+<div class="eng-learn" id="engLearn">
+  <div class="eng-progress-bar"><div class="eng-progress-fill" id="engProgress" style="width:0%"></div></div>
+  <div class="eng-progress-label" id="engProgressLabel">1 / 10</div>
+  <div class="eng-card" id="engCard"></div>
+  <button class="eng-speak-btn" onclick="engSpeak()">🔊 Hear it again</button>
+  <div style="height:14px"></div>
+  <div class="eng-nav">
+    <button class="eng-nav-btn eng-prev" id="engPrev" onclick="engNav(-1)" style="display:none">→ Back</button>
+    <button class="eng-nav-btn eng-next-btn" id="engNext" onclick="engNav(1)">Next ←</button>
+  </div>
+</div>
+<div class="eng-quiz" id="engQuiz" style="display:none">
+  <div class="eng-q-progress"><div class="eng-q-progress-fill" id="engQProgress" style="width:0%"></div></div>
+  <div class="eng-q-label" id="engQLabel">Question 1</div>
+  <div class="eng-q-card" id="engQCard"></div>
+  <button class="eng-speak-btn" onclick="engSpeakQ()">🔊 Hear again</button>
+  <div style="height:12px"></div>
+  <div class="answers" id="engAnswers" style="padding:0"></div>
+  <div class="eng-feedback" id="engFeedback"></div>
+  <button class="num-next-q" id="engNextQ" onclick="engNextQ()" style="display:none;background:linear-gradient(135deg,#4A90E2,#2860B0)">Next ←</button>
+  <div class="eng-end" id="engEnd">
+    <span style="font-size:70px;display:block;margin-bottom:12px">🏆</span>
+    <div class="eng-end-title" id="engEndTitle"></div>
+    <div class="eng-end-sub" id="engEndSub"></div>
+    <button onclick="engStartQuiz()" style="background:linear-gradient(135deg,#4A90E2,#2860B0);border:none;border-radius:18px;padding:14px 32px;font-family:'Fredoka One',cursive;font-size:18px;color:#fff;cursor:pointer;margin-bottom:10px;display:block;width:100%">Play again 🔄</button>
+    <button onclick="engShowMode('learn')" style="background:rgba(255,255,255,.12);border:none;border-radius:18px;padding:12px 32px;font-family:'Fredoka One',cursive;font-size:15px;color:rgba(255,255,255,.8);cursor:pointer;width:100%;margin-bottom:8px">Back to Learn 📖</button>
+    <button onclick="closeEnglish()" style="background:rgba(255,255,255,.08);border:none;border-radius:18px;padding:11px 32px;font-family:'Fredoka One',cursive;font-size:14px;color:rgba(255,255,255,.6);cursor:pointer;width:100%">Menu 🏠</button>
+  </div>
+</div>
+</div>
 
 <!-- GAME SCREEN (fullscreen overlay) -->
 <div class="game-screen" id="gameScreen">
@@ -847,6 +1006,7 @@ function switchTab(cat, el) {
   const cardsList   = document.getElementById('cards-list');
   const learnSec    = document.getElementById('learnSection');
   const scienceSec  = document.getElementById('scienceSection');
+  const englishSec  = document.getElementById('englishSection');
   const secHeader   = document.getElementById('section-title');
   const secCount    = document.getElementById('section-count');
   const searchWrap  = document.querySelector('.search-wrap');
@@ -854,6 +1014,7 @@ function switchTab(cat, el) {
   // hide all special sections first
   learnSec.classList.remove('active');
   scienceSec.classList.remove('active');
+  if(englishSec) englishSec.classList.remove('active');
   cardsList.innerHTML = '';
   cardsList.style.display = 'none';
   searchWrap.style.display = 'none';
@@ -865,7 +1026,11 @@ function switchTab(cat, el) {
   } else if (cat === 'science') {
     scienceSec.classList.add('active');
     secHeader.textContent = '🔬 מדע';
-    secCount.textContent  = '5 נושאים';
+    secCount.textContent  = '6 נושאים';
+  } else if (cat === 'english') {
+    if(englishSec) englishSec.classList.add('active');
+    secHeader.textContent = '🇬🇧 English';
+    secCount.textContent  = '7 activities';
   } else {
     cardsList.style.display = '';
     searchWrap.style.display = '';
@@ -1914,6 +2079,379 @@ function awShowEnd(){
   document.getElementById('awFeedback').textContent='';
   if(pct>=80){confetti();setTimeout(confetti,700);}
   sayIt(title);
+}
+
+/* ════════════════════════════════════════════
+   EXPERIMENTS MODULE
+════════════════════════════════════════════ */
+const EXPERIMENTS = [
+  {
+    id:'volcano', icon:'🌋', name:'הר געש ביתי',
+    bg:'linear-gradient(135deg,#8B2500,#CC3300)',
+    materials:['סודה לשתייה','חומץ לבן','צבע מאכל','סבון כלים','כוס','מגש'],
+    steps:[
+      '🥄 שמים 2 כפיות סודה לשתייה בכוס',
+      '🎨 מוסיפים כמה טיפות צבע מאכל אדום',
+      '🫧 מוסיפים טיפת סבון כלים',
+      '🍶 שופכים חומץ פנימה — ומתרחקים!',
+      '👀 מסתכלים על הר הגעש פורץ!'
+    ],
+    explain:'הסודה לשתייה והחומץ מגיבים יחד ויוצרים גז — פחמן דו-חמצני! הגז יוצר בועות שנראות כמו לבה! 🌋',
+    fun:'🌍 ככה בדיוק פורצים הרי געש אמיתיים!'
+  },
+  {
+    id:'sinkfloat', icon:'💧', name:'שוקע או צף?',
+    bg:'linear-gradient(135deg,#0d2a6e,#1a5aAA)',
+    materials:['קערה גדולה עם מים','כפית','אבן','נוצה','מטבע','גפרור','קרטון','ענבייה'],
+    steps:[
+      '🌊 ממלאים קערה גדולה במים',
+      '🤔 לוקחים חפץ ראשון — מנחשים: יצוף או ישקע?',
+      '🎯 שמים בזהירות במים ומסתכלים',
+      '📝 מסדרים: "צף" ו-"שקע" בשני ערימות',
+      '🔄 ממשיכים עם כל החפצים!'
+    ],
+    explain:'חפצים קלים וחלולים צפים, חפצים כבדים שוקעים. זה נקרא ציפה! 🚢',
+    fun:'🚢 ספינות ענקיות צפות כי הן חלולות ויש בהן הרבה אוויר!'
+  },
+  {
+    id:'magicmilk', icon:'🥛', name:'חלב קסום',
+    bg:'linear-gradient(135deg,#2d0060,#6B2DA0)',
+    materials:['חלב','צלחת שטוחה','צבעי מאכל (כמה צבעים)','סבון כלים','מקל אכילה או קיסם'],
+    steps:[
+      '🥛 שופכים חלב לצלחת — שיכסה את התחתית',
+      '🎨 מוסיפים טיפות של 3-4 צבעים שונים',
+      '🫧 טובלים קיסם בקצת סבון כלים',
+      '✨ נוגעים בעדינות במרכז החלב',
+      '🌈 מסתכלים על ריקוד הצבעים!'
+    ],
+    explain:'הסבון שובר את שומן החלב ויוצר תנועה — הצבעים רצים לכל הכיוונים! 💃',
+    fun:'🧼 לכן סבון מנקה כל כך טוב — הוא שובר שומנים!'
+  },
+  {
+    id:'balloon', icon:'🎈', name:'בלון מתנפח לבד',
+    bg:'linear-gradient(135deg,#1a5e2a,#2E9A50)',
+    materials:['בקבוק פלסטיק ריק','חומץ לבן','סודה לשתייה','בלון','כפית','משפך'],
+    steps:[
+      '🥄 שמים 2 כפיות סודה לשתייה בתוך הבלון (עם משפך)',
+      '🍶 שופכים רבע כוס חומץ לתוך הבקבוק',
+      '🎈 שמים את פי הבלון על פי הבקבוק בזהירות',
+      '⬆️ מרימים את הבלון — הסודה נופלת לחומץ',
+      '🎉 הבלון מתנפח לבד!'
+    ],
+    explain:'סודה + חומץ = גז פחמן דו-חמצני! הגז מחפש מקום — נכנס לבלון ומנפח אותו! 🚀',
+    fun:'🚀 רקטות חלל עובדות על אותו עיקרון — גז שיוצר דחיפה!'
+  },
+  {
+    id:'rainbow_water', icon:'🌈', name:'מים עוברים בגשר',
+    bg:'linear-gradient(135deg,#0d3a5e,#1a6eAA)',
+    materials:['3 כוסות שקופות','מים','צבע מאכל אדום','צבע מאכל כחול','נייר טואלט'],
+    steps:[
+      '🥃 שמים 3 כוסות בשורה',
+      '🔴 כוס שמאל: מים + צבע אדום',
+      '⬜ כוס אמצע: ריקה לגמרי',
+      '🔵 כוס ימין: מים + צבע כחול',
+      '📜 מקפלים נייר טואלט ומחברים כוס לכוס',
+      '⏳ ממתינים 15-30 דקות — הפלא מגיע!'
+    ],
+    explain:'המים מטפסים לבד בנייר הטואלט! זה נקרא כוח הנימייה. הכוס האמצעית תתמלא — ותהיה סגולה! 💜',
+    fun:'🌳 ככה עצים שותים מים — מהשורשים עד לעלים!'
+  },
+  {
+    id:'magnet', icon:'🧲', name:'מי נמשך למגנט?',
+    bg:'linear-gradient(135deg,#2a0050,#6B20C0)',
+    materials:['מגנט','מטבעות','נייר','עיפרון','כפית מתכת','כפית פלסטיק','קרטון','גרעין'],
+    steps:[
+      '🧲 לוקחים את המגנט ביד',
+      '🔍 מנסים לגעת בכל חפץ בבית',
+      '✅ מה נמשך? שמים בצד אחד',
+      '❌ מה לא נמשך? שמים בצד שני',
+      '📊 סופרים: כמה נמשכו? כמה לא?'
+    ],
+    explain:'מגנטים מושכים חפצי ברזל ופלדה. נייר, פלסטיק, עץ — לא נמשכים! 🧲',
+    fun:'🌍 כדור הארץ הוא מגנט ענק! לכן מצפן תמיד מצביע לצפון!'
+  },
+  {
+    id:'ocean', icon:'🌊', name:'אוקיינוס בבקבוק',
+    bg:'linear-gradient(135deg,#00264d,#1a6e8a)',
+    materials:['בקבוק פלסטיק שקוף עם מכסה','מים','שמן בישול','צבע מאכל כחול'],
+    steps:[
+      '🔵 מוסיפים צבע מאכל כחול למים ומערבבים',
+      '🌊 שופכים מים כחולים לבקבוק — עד חצי',
+      '🫙 מוסיפים שמן בישול עד שממלא את הבקבוק',
+      '🔒 סוגרים את המכסה חזק חזק',
+      '🌊 מטים את הבקבוק בעדינות — ורואים גלים!'
+    ],
+    explain:'מים ושמן לא מתערבבים! המים כבדים יותר ויושבים מתחת. כשמטים — יוצרים גלים כמו ים! 🌊',
+    fun:'🛢️ שמן תמיד צף על מים — לכן כתמי שמן נשארים על הים!'
+  },
+  {
+    id:'cloud', icon:'☁️', name:'גשם בכוס',
+    bg:'linear-gradient(135deg,#1a3a6e,#4a6eAA)',
+    materials:['כוס שקופה','מים','קרם גילוח','צבעי מאכל (כמה צבעים)','כפית'],
+    steps:[
+      '🥃 ממלאים כוס עד 3/4 במים',
+      '☁️ מניחים שכבה נדיבה של קרם גילוח מעל',
+      '🎨 בעדינות — מוסיפים טיפות צבע מאכל על הקרם',
+      '⏳ ממתינים כמה דקות בסבלנות',
+      '🌧️ מסתכלים — הצבעים "נופלים" דרך הקרם כמו גשם!'
+    ],
+    explain:'הקרם = ענן! הצבעים = מים כבדים. כשהענן מתמלא יותר מדי — המים נופלים כגשם! 🌧️',
+    fun:'🌧️ ככה בדיוק עובד גשם אמיתי — טיפות מים כבדות נופלות מהענן!'
+  },
+  {
+    id:'plant', icon:'🌱', name:'שעועית שצומחת',
+    bg:'linear-gradient(135deg,#0d3a1a,#1a6e35)',
+    materials:['שעועית (גרעין אחד)','כוס שקופה','אדמה','מים','שמש'],
+    steps:[
+      '🌱 שמים אדמה בכוס עד 3/4',
+      '🫘 שמים את השעועית על דפנות הכוס (שנוכל לראות)',
+      '💧 מוסיפים מים בעדינות — רק שהאדמה לחה',
+      '☀️ שמים ליד חלון עם שמש',
+      '📅 כל יום — לביא מסתכל ומצייר מה קרה!'
+    ],
+    explain:'הגרעין שותה מים ומשתמש באור השמש כדי לצמוח! שורשים יורדים, גבעול עולה! 🌱',
+    fun:'🌳 כל עץ גדול התחיל מגרעין קטן — כמו לביא שיגדל גדול!'
+  },
+  {
+    id:'hotcold', icon:'🌡️', name:'מים חמים עולים',
+    bg:'linear-gradient(135deg,#5e1a00,#AA3300)',
+    materials:['2 כוסות שקופות','מים חמים (לא רותחים!)','מים קרים','צבע מאכל אדום','צבע מאכל כחול','קרטון קשיח'],
+    steps:[
+      '🔴 כוס 1: מים חמים + צבע אדום',
+      '🔵 כוס 2: מים קרים + צבע כחול',
+      '🃏 מניחים קרטון על כוס המים הקרים',
+      '🔄 הופכים את כוס המים החמים על הקרטון',
+      '✋ מחזיקים חזק ומושכים את הקרטון בזהירות',
+      '👀 מסתכלים: הצבע האדום עולה, הכחול יורד!'
+    ],
+    explain:'מים חמים קלים יותר — הם עולים למעלה! מים קרים כבדים — הם יורדים למטה! 🌡️',
+    fun:'🌊 ככה זרמי ים עובדים — מים חמים עולים, קרים יורדים ויוצרים תנועה!'
+  }
+];
+
+const ENGLISH_COLORS = [
+  {word:'Red',he:'אדום',color:'#FF4757',emoji:'🔴'},
+  {word:'Blue',he:'כחול',color:'#4A90E2',emoji:'🔵'},
+  {word:'Yellow',he:'צהוב',color:'#FFD166',emoji:'🟡'},
+  {word:'Green',he:'ירוק',color:'#06D6A0',emoji:'🟢'},
+  {word:'Orange',he:'כתום',color:'#FF8C42',emoji:'🟠'},
+  {word:'Purple',he:'סגול',color:'#9B5DE5',emoji:'🟣'},
+  {word:'Pink',he:'ורוד',color:'#EF476F',emoji:'🩷'},
+  {word:'White',he:'לבן',color:'#E0E0E0',emoji:'⬜'},
+  {word:'Black',he:'שחור',color:'#2D2A26',emoji:'⬛'},
+  {word:'Brown',he:'חום',color:'#8B4513',emoji:'🟫'},
+];
+
+const ENGLISH_NUMBERS = [
+  {n:1,word:'One'},{n:2,word:'Two'},{n:3,word:'Three'},{n:4,word:'Four'},{n:5,word:'Five'},
+  {n:6,word:'Six'},{n:7,word:'Seven'},{n:8,word:'Eight'},{n:9,word:'Nine'},{n:10,word:'Ten'}
+];
+
+const ENGLISH_BODY = [
+  {word:'Eyes',he:'עיניים',emoji:'👁️'},{word:'Nose',he:'אף',emoji:'👃'},
+  {word:'Mouth',he:'פה',emoji:'👄'},{word:'Ears',he:'אוזניים',emoji:'👂'},
+  {word:'Hands',he:'ידיים',emoji:'🤲'},{word:'Legs',he:'רגליים',emoji:'🦵'},
+  {word:'Head',he:'ראש',emoji:'🗣️'},{word:'Tummy',he:'בטן',emoji:'🫃'},
+];
+
+let _expIdx=0, _expGuessAnswered=false, _expSpeakTxt='';
+let _engLearnType='', _engLearnIdx=0, _engSpeakTxt='';
+let _engQuizAnswered=false, _engQuizIdx=0, _engScore=0, _engQuizSpeakTxt='';
+
+/* ── EXPERIMENTS ── */
+function startExperiments(){
+  document.getElementById('experimentsScreen').classList.add('active');
+  expShowMenu();
+}
+function closeExperiments(){ document.getElementById('experimentsScreen').classList.remove('active'); }
+
+function expShowMenu(){
+  document.getElementById('expMenu').style.display='block';
+  document.getElementById('expDetail').style.display='none';
+  document.getElementById('expBg').style.background='linear-gradient(160deg,#0d3a1a,#1a7a40)';
+  const grid=document.getElementById('expGrid');
+  grid.innerHTML=EXPERIMENTS.map((e,i)=>`
+    <button class="exp-menu-card" onclick="expOpen(${i})" style="background:${e.bg}">
+      <span class="exp-menu-icon">${e.icon}</span>
+      <span class="exp-menu-name">${e.name}</span>
+    </button>`).join('');
+}
+
+let _expStepsTxt='', _expExplainTxt='';
+
+function expOpen(idx){
+  const e=EXPERIMENTS[idx];
+  document.getElementById('expBg').style.background=e.bg;
+  document.getElementById('expMenu').style.display='none';
+  document.getElementById('expDetail').style.display='block';
+  document.getElementById('expDetailTitle').textContent=e.icon+' '+e.name;
+  // chips
+  document.getElementById('expChips').innerHTML=e.materials.map(m=>`<span class="exp-chip">${m}</span>`).join('');
+  // steps
+  document.getElementById('expStepsList').innerHTML=e.steps.map((s,i)=>`
+    <div class="exp-step">
+      <div class="exp-step-num">${i+1}</div>
+      <div class="exp-step-text">${s}</div>
+    </div>`).join('');
+  // explain
+  document.getElementById('expExplainText').textContent=e.explain;
+  document.getElementById('expFunFact').textContent=e.fun;
+  // speak texts
+  _expStepsTxt = e.steps.map((s,i)=>`שלב ${i+1}: ${s.replace(/[🥄🎨🫧🍶👀🌊🤔🎯📝🔄🥛✨🌈🧲🔍✅❌📊🔵⬜🔴📜⏳🃏⬆️🎉☀️📅💧🌱🫘🌍🛢️☁️🎃🥃🌡️🚢🚀🧼💃]/g,'')}`).join('. ');
+  _expExplainTxt = e.explain.replace(/[🌋🚢🚀🧼💃🧲🌍🌊🌳🌧️🛢️🌱]/g,'') + ' ' + e.fun.replace(/[🌋🚢🚀🧼💃🧲🌍🌊🌳🌧️🛢️🌱]/g,'');
+  // auto speak name
+  setTimeout(()=>sayIt(`ניסוי: ${e.name}`), 300);
+}
+
+function expSpeakSteps(){ sayIt(_expStepsTxt); }
+function expSpeakExplain(){ sayIt(_expExplainTxt); }
+
+/* ── ENGLISH LEARN ── */
+function startEnglishLearn(type){
+  _engLearnType=type; _engLearnIdx=0; _engQuizIdx=0; _engScore=0;
+  document.getElementById('englishScreen').classList.add('active');
+  engShowMode('learn');
+}
+function closeEnglish(){ document.getElementById('englishScreen').classList.remove('active'); }
+
+function engShowMode(mode){
+  document.getElementById('engLearn').style.display=mode==='learn'?'block':'none';
+  document.getElementById('engQuiz').style.display=mode==='quiz'?'block':'none';
+  document.getElementById('engLearnBtn').classList.toggle('active',mode==='learn');
+  document.getElementById('engQuizBtn').classList.toggle('active',mode==='quiz');
+  if(mode==='learn') engRenderLearn();
+  if(mode==='quiz') engStartQuiz();
+}
+
+function engData(){ return _engLearnType==='colors'?ENGLISH_COLORS:_engLearnType==='numbers'?ENGLISH_NUMBERS:ENGLISH_BODY; }
+
+function engRenderLearn(){
+  const data=engData(), d=data[_engLearnIdx];
+  const total=data.length;
+  document.getElementById('engProgress').style.width=((_engLearnIdx/total)*100)+'%';
+  document.getElementById('engProgressLabel').textContent=`${_engLearnIdx+1} / ${total}`;
+  const card=document.getElementById('engCard');
+  if(_engLearnType==='colors'){
+    card.innerHTML=`
+      <div style="width:140px;height:140px;border-radius:50%;background:${d.color};margin:0 auto 16px;box-shadow:0 0 40px ${d.color}88;animation:numPop .4s"></div>
+      <div style="font-family:'Fredoka One',cursive;font-size:52px;color:#fff">${d.word}</div>
+      <div style="font-size:22px;color:rgba(255,255,255,.7);font-weight:700;margin-top:6px">${d.he} ${d.emoji}</div>`;
+    _engSpeakTxt=`${d.word}. ${d.he}.`;
+  } else if(_engLearnType==='numbers'){
+    card.innerHTML=`
+      <div style="font-family:'Fredoka One',cursive;font-size:100px;color:#FFD166;line-height:1;animation:numPop .4s">${d.n}</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:40px;color:#fff;margin-top:8px">${d.word}</div>
+      <div style="font-size:32px;margin-top:10px">${'⭐'.repeat(d.n)}</div>`;
+    _engSpeakTxt=`${d.word}. ${d.n}.`;
+  } else {
+    card.innerHTML=`
+      <div style="font-size:90px;animation:numPop .4s">${d.emoji}</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:44px;color:#fff;margin-top:10px">${d.word}</div>
+      <div style="font-size:22px;color:rgba(255,255,255,.7);font-weight:700;margin-top:6px">${d.he}</div>`;
+    _engSpeakTxt=`${d.word}. ${d.he}.`;
+  }
+  document.getElementById('engPrev').style.display=_engLearnIdx===0?'none':'block';
+  document.getElementById('engNext').textContent=_engLearnIdx===total-1?'לשאלון! ✅':'הבא ←';
+  setTimeout(()=>sayIt(_engSpeakTxt,'en-US'),300);
+}
+
+function engNav(dir){
+  const data=engData();
+  if(dir===1&&_engLearnIdx===data.length-1){engShowMode('quiz');return;}
+  _engLearnIdx=Math.max(0,Math.min(data.length-1,_engLearnIdx+dir));
+  engRenderLearn();
+}
+
+function engSpeak(){ sayIt(_engSpeakTxt,'en-US'); }
+
+/* ENGLISH QUIZ */
+function engStartQuiz(){
+  _engQuizIdx=0; _engQuizAnswered=false;
+  document.getElementById('engEnd').classList.remove('show');
+  document.getElementById('engNextQ').classList.remove('show');
+  document.getElementById('engFeedback').textContent='';
+  engRenderQ();
+}
+
+function engRenderQ(){
+  const data=engData(); const total=data.length;
+  if(_engQuizIdx>=total){engShowEnd();return;}
+  _engQuizAnswered=false;
+  const correct=data[_engQuizIdx];
+  // 3 random options
+  const pool=shuffle([...data]).filter(d=>d.word!==correct.word).slice(0,2);
+  const opts=shuffle([correct,...pool]);
+  document.getElementById('engQProgress').style.width=((_engQuizIdx/total)*100)+'%';
+  document.getElementById('engQLabel').textContent=`שאלה ${_engQuizIdx+1} מתוך ${total}`;
+  document.getElementById('engFeedback').textContent='';
+  document.getElementById('engNextQ').classList.remove('show');
+  document.getElementById('engEnd').classList.remove('show');
+
+  const qEl=document.getElementById('engQCard');
+  let qHTML='', qSpeak='';
+  if(_engLearnType==='colors'){
+    qHTML=`<div style="width:100px;height:100px;border-radius:50%;background:${correct.color};margin:0 auto 12px;box-shadow:0 0 30px ${correct.color}88"></div><div style="font-family:'Fredoka One',cursive;font-size:20px;color:#fff">What color is this?</div>`;
+    qSpeak='What color is this?';
+  } else if(_engLearnType==='numbers'){
+    qHTML=`<div style="font-family:'Fredoka One',cursive;font-size:80px;color:#FFD166">${correct.n}</div><div style="font-family:'Fredoka One',cursive;font-size:20px;color:#fff">What number is this?</div>`;
+    qSpeak=`What number is this?`;
+  } else {
+    qHTML=`<div style="font-size:72px">${correct.emoji}</div><div style="font-family:'Fredoka One',cursive;font-size:20px;color:#fff">What is this in English?</div>`;
+    qSpeak='What is this in English?';
+  }
+  qEl.innerHTML=qHTML;
+  _engQuizSpeakTxt=qSpeak;
+  setTimeout(()=>sayIt(qSpeak,'en-US'),300);
+
+  const grid=document.getElementById('engAnswers');
+  grid.innerHTML='';
+  grid.style.gridTemplateColumns='1fr 1fr 1fr';
+  opts.forEach(opt=>{
+    const b=document.createElement('button');
+    b.className='num-ans';
+    b.textContent=opt.word;
+    b.onclick=()=>engCheckAns(opt.word===correct.word, b, correct.word);
+    grid.appendChild(b);
+  });
+}
+
+function engCheckAns(correct, btn, correctWord){
+  if(_engQuizAnswered) return; _engQuizAnswered=true;
+  sayIt(btn.textContent,'en-US');
+  if(correct){
+    btn.classList.add('correct'); _engScore++;
+    document.getElementById('engFeedback').textContent=rndPraise();
+    document.getElementById('engFeedback').style.color='#06D6A0';
+    setTimeout(()=>sayIt(rndPraiseSpeech()),1200);
+    confetti();
+  } else {
+    btn.classList.add('wrong');
+    document.getElementById('engFeedback').textContent=rndWrong();
+    document.getElementById('engFeedback').style.color='#FF4757';
+    setTimeout(()=>sayIt(rndWrongSpeech()),1200);
+    setTimeout(()=>{
+      document.querySelectorAll('#engAnswers .num-ans').forEach(b=>{ if(b.textContent===correctWord) b.classList.add('correct'); });
+    },600);
+  }
+  document.getElementById('engNextQ').classList.add('show');
+}
+
+function engNextQ(){ _engQuizIdx++; engRenderQ(); }
+function engSpeakQ(){ sayIt(_engQuizSpeakTxt,'en-US'); }
+
+function engShowEnd(){
+  const name=getChildName();
+  const pct=Math.round((_engScore/engData().length)*100);
+  const title=pct>=80?`Well done ${name}!`:pct>=50?`Good job ${name}!`:`Try again ${name}!`;
+  document.getElementById('engEndTitle').textContent=title;
+  document.getElementById('engEndSub').textContent=`${_engScore} / ${engData().length} correct!`;
+  document.getElementById('engEnd').classList.add('show');
+  document.getElementById('engNextQ').classList.remove('show');
+  document.getElementById('engAnswers').innerHTML='';
+  document.getElementById('engQCard').innerHTML='';
+  document.getElementById('engFeedback').textContent='';
+  if(pct>=80){confetti();setTimeout(confetti,700);}
+  sayIt(title,'en-US');
 }
 
 // init
