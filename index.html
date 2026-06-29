@@ -2259,7 +2259,11 @@ function startExperiments(){
   document.getElementById('experimentsScreen').classList.add('active');
   expShowMenu();
 }
-function closeExperiments(){ document.getElementById('experimentsScreen').classList.remove('active'); }
+function closeExperiments(){
+  document.getElementById('experimentsScreen').classList.remove('active');
+  const scienceTab = document.querySelector('.tab[data-cat="science"]');
+  if(scienceTab) switchTab('science', scienceTab);
+}
 
 function expShowMenu(){
   document.getElementById('expMenu').style.display='block';
