@@ -229,6 +229,7 @@ body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height
       <button class="game-btn" onclick="startGame('count_visual')" style="border-top:4px solid #FF8C42"><span class="g-icon">🍎</span><span class="g-name">ספור וצבע</span><span class="g-desc">ספירה ויזואלית</span></button>
       <button class="game-btn" onclick="startNumbers()" style="grid-column:span 2;border-top:4px solid #9B5DE5;background:linear-gradient(135deg,#F0EAFF,#E0D0FF)"><span class="g-icon">🔢</span><span class="g-name">מספרים 10-30</span><span class="g-desc">לומדים + שאלות + קול</span></button>
       <button class="game-btn" onclick="startAnimals()" style="grid-column:span 2;border-top:4px solid #06D6A0;background:linear-gradient(135deg,#E8FBF4,#C8F5E8)"><span class="g-icon">🦁</span><span class="g-name">עולם החיות</span><span class="g-desc">יונקים, זוחלים, ציפורים ועוד</span></button>
+      <button class="game-btn" onclick="startWordSlots()" style="grid-column:span 2;border-top:4px solid #FFD700;background:linear-gradient(135deg,#1a0a2e,#2d1a5e);color:white"><span class="g-icon">🥁</span><span class="g-name" style="color:#FFD700">תופי מילים</span><span class="g-desc" style="color:rgba(255,255,255,.7)">גלול ומצא את האותיות</span></button>
     </div>
   </div>
 
@@ -270,6 +271,66 @@ body::after{content:'';position:fixed;bottom:-80px;left:-80px;width:300px;height
       <a href="tel:+972545574029" style="color:var(--text-soft);text-decoration:none;unicode-bidi:embed;direction:ltr;display:inline-block">📱 +972-54-5574029</a>
     </div>
   </div>
+</div>
+
+<!-- WORD SLOTS SCREEN -->
+<div class="game-screen" id="wordSlotsScreen">
+<style>
+#wordSlotsScreen{background:linear-gradient(160deg,#1a0a2e,#0d1a3e);overflow-y:auto}
+.ws-topbar{display:flex;align-items:center;justify-content:space-between;padding:14px 16px 10px;background:rgba(0,0,0,.3);backdrop-filter:blur(10px);position:sticky;top:0;z-index:10}
+.ws-back{background:rgba(255,255,255,.15);border:none;border-radius:14px;padding:8px 16px;font-family:'Assistant',sans-serif;font-weight:700;font-size:14px;color:#fff;cursor:pointer}
+.ws-title{font-family:'Fredoka One',cursive;font-size:20px;color:#FFD700}
+.ws-score-box{background:rgba(255,255,255,.1);border-radius:14px;padding:5px 14px;font-family:'Fredoka One',cursive;font-size:15px;color:#fff}
+.ws-score-box span{color:#FFD700}
+.ws-inner{max-width:480px;margin:0 auto;padding:12px;display:flex;flex-direction:column;gap:12px}
+.ws-wcard{background:linear-gradient(135deg,#2d1a5e,#1a0a3e);border:2px solid #7c4dff;border-radius:22px;padding:20px;text-align:center;box-shadow:0 0 28px rgba(124,77,255,.3)}
+.ws-emoji{font-size:72px;display:block;margin-bottom:8px;animation:wsfl 3s ease-in-out infinite}
+@keyframes wsfl{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}
+.ws-word{font-family:'Fredoka One',cursive;font-size:38px;color:#fff;letter-spacing:3px}
+.ws-hint{font-size:13px;color:rgba(255,255,255,.5);font-weight:700;margin-top:4px}
+.ws-dbox{background:#09051a;border:3px solid #4a2a8a;border-radius:20px;padding:12px 10px 14px}
+.ws-label{text-align:center;font-family:'Fredoka One',cursive;font-size:13px;color:rgba(255,215,0,.7);margin-bottom:10px}
+.ws-pdots{display:flex;justify-content:center;gap:6px;margin-bottom:10px}
+.ws-pd{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.15);transition:all .3s}
+.ws-pd.ok{background:#00e676;box-shadow:0 0 8px #00e676}
+.ws-drow{display:flex;justify-content:center;gap:6px;direction:ltr;flex-wrap:nowrap}
+.ws-drum{height:100px;background:linear-gradient(180deg,#0d0820,#1a0a3e,#0d0820);border:2.5px solid #4a2a8a;border-radius:14px;overflow:hidden;position:relative;touch-action:none;cursor:grab;flex-shrink:0}
+.ws-drum.ok{border-color:#FFD700;box-shadow:0 0 16px rgba(255,215,0,.5);pointer-events:none}
+.ws-drum.err{border-color:#ff4081;animation:wsshake .3s}
+@keyframes wsshake{0%,100%{transform:translateX(0)}25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.ws-drum::before{content:'';position:absolute;top:0;left:0;right:0;height:28px;background:linear-gradient(180deg,#0d0820,transparent);z-index:3;pointer-events:none}
+.ws-drum::after{content:'';position:absolute;bottom:0;left:0;right:0;height:28px;background:linear-gradient(0deg,#0d0820,transparent);z-index:3;pointer-events:none}
+.ws-dcenter{position:absolute;top:50%;left:0;right:0;height:2px;background:rgba(255,215,0,.35);transform:translateY(-50%);z-index:2;pointer-events:none}
+.ws-reel{position:absolute;width:100%;display:flex;flex-direction:column;align-items:center;top:0}
+.ws-item{width:100%;height:100px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;color:rgba(255,255,255,.2);flex-shrink:0}
+.ws-item.hl{color:#FFD700;text-shadow:0 0 14px rgba(255,215,0,.6)}
+.ws-fb{min-height:44px;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:19px;margin-top:8px;text-align:center;color:#fff}
+.ws-fb.win{color:#00e676}
+.ws-fb.lose{color:#ff4081}
+.ws-chkbtn{width:100%;padding:14px;background:linear-gradient(135deg,#00c853,#009624);border:none;border-radius:16px;font-family:'Fredoka One',cursive;font-size:19px;color:#fff;cursor:pointer;margin-top:6px}
+.ws-nxtbtn{display:none;width:100%;padding:13px;background:linear-gradient(135deg,#FFD700,#FFA500);border:none;border-radius:16px;font-family:'Fredoka One',cursive;font-size:18px;color:#1a0a2e;cursor:pointer;margin-top:6px}
+.ws-nxtbtn.show{display:block}
+</style>
+<div class="ws-topbar">
+  <button class="ws-back" onclick="closeWordSlots()">← חזור</button>
+  <div class="ws-title">🥁 תופי מילים</div>
+  <div class="ws-score-box">⭐ <span id="wsSc">0</span></div>
+</div>
+<div class="ws-inner">
+  <div class="ws-wcard">
+    <span class="ws-emoji" id="wsEm">🍌</span>
+    <div class="ws-word" id="wsWord">בננה</div>
+    <div class="ws-hint" id="wsHint">פרי צהוב</div>
+  </div>
+  <div class="ws-dbox">
+    <div class="ws-label">👆 גלול כל תוף למצוא האות הנכונה 👇</div>
+    <div class="ws-pdots" id="wsPd"></div>
+    <div class="ws-drow" id="wsDr"></div>
+    <div class="ws-fb" id="wsFb"></div>
+    <button class="ws-chkbtn" id="wsChkBtn" onclick="wsCheck()">✅ בדוק!</button>
+    <button class="ws-nxtbtn" id="wsNxtBtn" onclick="wsNext()">המילה הבאה ←</button>
+  </div>
+</div>
 </div>
 
 <!-- NUMBERS 10-30 SCREEN -->
@@ -2458,6 +2519,192 @@ function engShowEnd(){
   if(pct>=80){confetti();setTimeout(confetti,700);}
   sayIt(title,'en-US');
 }
+
+/* ════════════════════════════════════════════
+   WORD SLOTS MODULE
+════════════════════════════════════════════ */
+const WS_WORDS=[
+  // פירות
+  {w:'בננה',e:'🍌',h:'פרי צהוב וארוך'},
+  {w:'תפוח',e:'🍎',h:'פרי אדום ומתוק'},
+  {w:'תות',e:'🍓',h:'פרי אדום וקטן'},
+  {w:'אבטיח',e:'🍉',h:'פרי גדול וירוק מבחוץ'},
+  {w:'ענבים',e:'🍇',h:'פירות סגולים קטנים'},
+  {w:'לימון',e:'🍋',h:'פרי צהוב וחמוץ'},
+  {w:'מנגו',e:'🥭',h:'פרי טרופי ומתוק'},
+  // חיות
+  {w:'ארנב',e:'🐰',h:'קופץ עם אוזניים ארוכות'},
+  {w:'כלבה',e:'🐶',h:'חיה שנובחת'},
+  {w:'חתול',e:'🐱',h:'מיאו מיאו'},
+  {w:'פיל',e:'🐘',h:'החיה הגדולה עם חדק'},
+  {w:'ג׳ירפה',e:'🦒',h:'צוואר ארוך מאוד'},
+  {w:'קוף',e:'🐒',h:'מטפס על עצים'},
+  {w:'אריה',e:'🦁',h:'מלך החיות'},
+  {w:'פרפר',e:'🦋',h:'עף ויפה'},
+  {w:'תנין',e:'🐊',h:'זוחל עם שיניים גדולות'},
+  {w:'גמל',e:'🐪',h:'חיה עם גבנון'},
+  {w:'סוס',e:'🐴',h:'דוהר מהר'},
+  {w:'כבשה',e:'🐑',h:'נותנת צמר לבן'},
+  {w:'פרה',e:'🐄',h:'נותנת חלב'},
+  {w:'תרנגול',e:'🐔',h:'קורא קוקוריקו'},
+  {w:'ברווז',e:'🦆',h:'שוחה במים'},
+  {w:'דולפין',e:'🐬',h:'שוחה בים ומשחק'},
+  {w:'צב',e:'🐢',h:'הולך לאט עם שריון'},
+  // כלי רכב
+  {w:'מכונה',e:'🚗',h:'נוסעת על הכביש'},
+  {w:'אופניים',e:'🚲',h:'שתי גלגלים ורוכבים'},
+  {w:'טרקטור',e:'🚜',h:'עובד בשדה'},
+  {w:'ספינה',e:'⛵',h:'שטה על הים'},
+  {w:'רכבת',e:'🚂',h:'נוסעת על מסילה'},
+  {w:'מטוס',e:'✈️',h:'עף בשמיים'},
+  // אוכל
+  {w:'גלידה',e:'🍦',h:'קרה ומתוקה'},
+  {w:'פיצה',e:'🍕',h:'אוכל עגול עם גבינה'},
+  {w:'עוגה',e:'🎂',h:'מתוקה ליום הולדת'},
+  {w:'לחם',e:'🍞',h:'אופים בתנור'},
+  // טבע
+  {w:'כוכב',e:'⭐',h:'זורח בלילה'},
+  {w:'ירח',e:'🌙',h:'מאיר בלילה'},
+  {w:'שמש',e:'☀️',h:'מחממת ביום'},
+  {w:'עץ',e:'🌳',h:'גדול עם עלים'},
+  {w:'פרח',e:'🌸',h:'יפה וריחני'},
+];
+
+const WS_HEB=[...'אבגדהוזחטיכלמנסעפצקרשת'];
+let wsWords=[],wsWi=0,wsScore=0,wsSlots=[];
+
+function startWordSlots(){
+  wsWords=wsShuf([...WS_WORDS]);
+  wsWi=0; wsScore=0;
+  document.getElementById('wordSlotsScreen').classList.add('active');
+  wsLoad();
+}
+function closeWordSlots(){
+  document.getElementById('wordSlotsScreen').classList.remove('active');
+}
+function wsLoad(){
+  const word=wsWords[wsWi];
+  document.getElementById('wsEm').textContent=word.e;
+  document.getElementById('wsWord').textContent=word.w;
+  document.getElementById('wsHint').textContent=word.h;
+  document.getElementById('wsSc').textContent=wsScore;
+  document.getElementById('wsFb').textContent='';
+  document.getElementById('wsFb').className='ws-fb';
+  document.getElementById('wsNxtBtn').className='ws-nxtbtn';
+  document.getElementById('wsChkBtn').disabled=false;
+
+  const chars=[...word.w];
+  wsSlots=[];
+  chars.forEach(ch=>{
+    const pool=wsShuf(WS_HEB.filter(c=>c!==ch));
+    const opts=wsShuf([ch,pool[0],pool[1],pool[2]]);
+    const wrongIdxs=opts.map((_,j)=>j).filter(j=>opts[j]!==ch);
+    const startIdx=wrongIdxs[Math.floor(Math.random()*wrongIdxs.length)];
+    wsSlots.push({letter:ch,opts,curIdx:startIdx,locked:false});
+  });
+
+  // Progress dots
+  const pd=document.getElementById('wsPd');
+  pd.innerHTML='';
+  for(let i=wsSlots.length-1;i>=0;i--){
+    const dot=document.createElement('div');
+    dot.className='ws-pd'; dot.id='wsPd'+i;
+    pd.appendChild(dot);
+  }
+
+  // Drums
+  const dr=document.getElementById('wsDr');
+  dr.innerHTML='';
+  const n=wsSlots.length,gap=6;
+  const maxW=Math.min(window.innerWidth-40,440);
+  const dw=Math.max(44,Math.floor((maxW-gap*(n-1))/n));
+  const fs=dw>=60?'46px':dw>=50?'38px':dw>=40?'30px':'26px';
+
+  for(let i=wsSlots.length-1;i>=0;i--){
+    const el=document.createElement('div');
+    el.className='ws-drum'; el.id='wsDrum'+i;
+    el.style.width=dw+'px';
+    el.innerHTML='<div class="ws-dcenter"></div><div class="ws-reel" id="wsReel'+i+'" style="font-size:'+fs+'"></div>';
+    dr.appendChild(el);
+    wsRender(i);
+    wsTouch(el,i);
+  }
+}
+
+function wsRender(i){
+  const s=wsSlots[i];
+  const n=s.opts.length;
+  const reel=document.getElementById('wsReel'+i);
+  const prev=(s.curIdx-1+n)%n;
+  const next=(s.curIdx+1)%n;
+  reel.innerHTML=
+    '<div class="ws-item">'+s.opts[prev]+'</div>'+
+    '<div class="ws-item hl">'+s.opts[s.curIdx]+'</div>'+
+    '<div class="ws-item">'+s.opts[next]+'</div>';
+  reel.style.transform='translateY(-100px)';
+}
+
+function wsTouch(el,i){
+  let y0=0,acc=0,on=false;
+  const step=dir=>{
+    if(wsSlots[i].locked)return;
+    const n=wsSlots[i].opts.length;
+    wsSlots[i].curIdx=(wsSlots[i].curIdx+dir+n)%n;
+    wsRender(i);
+    try{navigator.vibrate&&navigator.vibrate(10);}catch(e){}
+  };
+  el.addEventListener('touchstart',e=>{if(wsSlots[i].locked)return;e.preventDefault();y0=e.touches[0].clientY;acc=0;on=true;},{passive:false});
+  el.addEventListener('touchmove',e=>{
+    if(!on||wsSlots[i].locked)return;e.preventDefault();
+    const dy=e.touches[0].clientY-y0;y0=e.touches[0].clientY;acc+=dy;
+    while(acc>=35){step(-1);acc-=35;}
+    while(acc<=-35){step(1);acc+=35;}
+  },{passive:false});
+  el.addEventListener('touchend',e=>{e.preventDefault();on=false;acc=0;},{passive:false});
+  el.addEventListener('touchcancel',()=>{on=false;acc=0;},{passive:false});
+  let ma=false,my=0,ma2=0;
+  el.addEventListener('mousedown',e=>{if(wsSlots[i].locked)return;ma=true;my=e.clientY;ma2=0;});
+  document.addEventListener('mousemove',e=>{if(!ma||wsSlots[i].locked)return;ma2+=e.clientY-my;my=e.clientY;while(ma2>=35){step(-1);ma2-=35;}while(ma2<=-35){step(1);ma2+=35;}});
+  document.addEventListener('mouseup',()=>{ma=false;ma2=0;});
+}
+
+function wsCheck(){
+  document.getElementById('wsChkBtn').disabled=true;
+  let anyWrong=false;
+  wsSlots.forEach((s,i)=>{
+    if(s.locked)return;
+    if(s.opts[s.curIdx]===s.letter){
+      s.locked=true;
+      document.getElementById('wsDrum'+i).className='ws-drum ok';
+      document.getElementById('wsPd'+i).className='ws-pd ok';
+    } else {
+      anyWrong=true;
+      const el=document.getElementById('wsDrum'+i);
+      el.className='ws-drum err';
+      setTimeout(()=>{if(!s.locked)el.className='ws-drum';},500);
+    }
+  });
+  const fb=document.getElementById('wsFb');
+  if(wsSlots.every(s=>s.locked)){
+    wsScore++;
+    document.getElementById('wsSc').textContent=wsScore;
+    const name=getChildName();
+    const praise=['כל הכבוד','יופי','מדהים','מצוין','וואו'][Math.floor(Math.random()*5)];
+    fb.textContent='🎉 '+praise+' '+name+'!';
+    fb.className='ws-fb win';
+    sayIt(praise+' '+name+'! כתבת נכון!');
+    confetti(); setTimeout(confetti,500);
+    document.getElementById('wsNxtBtn').className='ws-nxtbtn show';
+  } else {
+    const name=getChildName();
+    fb.textContent='💪 כמעט '+name+'! תגלול עוד!';
+    fb.className='ws-fb lose';
+    sayIt('כמעט '+name+'! תגלול עוד קצת!');
+    setTimeout(()=>{fb.textContent='';fb.className='ws-fb';document.getElementById('wsChkBtn').disabled=false;},1500);
+  }
+}
+function wsNext(){wsWi=(wsWi+1)%wsWords.length;wsLoad();}
+function wsShuf(a){for(let i=a.length-1;i>0;i--){const j=0|Math.random()*(i+1);[a[i],a[j]]=[a[j],a[i]];}return a;}
 
 // init
 refreshAllNames();
