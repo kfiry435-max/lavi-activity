@@ -2319,8 +2319,10 @@ const ENGLISH_COLORS = [
 ];
 
 const ENGLISH_NUMBERS = [
-  {n:1,word:'One'},{n:2,word:'Two'},{n:3,word:'Three'},{n:4,word:'Four'},{n:5,word:'Five'},
-  {n:6,word:'Six'},{n:7,word:'Seven'},{n:8,word:'Eight'},{n:9,word:'Nine'},{n:10,word:'Ten'}
+  {n:1,word:'One',emoji:'1️⃣'},{n:2,word:'Two',emoji:'2️⃣'},{n:3,word:'Three',emoji:'3️⃣'},
+  {n:4,word:'Four',emoji:'4️⃣'},{n:5,word:'Five',emoji:'5️⃣'},{n:6,word:'Six',emoji:'6️⃣'},
+  {n:7,word:'Seven',emoji:'7️⃣'},{n:8,word:'Eight',emoji:'8️⃣'},{n:9,word:'Nine',emoji:'9️⃣'},
+  {n:10,word:'Ten',emoji:'🔟'}
 ];
 
 const ENGLISH_BODY = [
@@ -2485,7 +2487,17 @@ function engRenderQ(){
   opts.forEach(opt=>{
     const b=document.createElement('button');
     b.className='num-ans';
-    b.textContent=opt.word;
+    // Build emoji for this option
+    let emoji='';
+    if(_engLearnType==='colors') emoji=opt.emoji||'';
+    else if(_engLearnType==='numbers') emoji='';
+    else emoji=opt.emoji||'';
+    // Show word + emoji below
+    if(emoji){
+      b.innerHTML=`<span style="display:block;font-size:22px;font-weight:700">${opt.word}</span><span style="display:block;font-size:32px;margin-top:4px">${emoji}</span>`;
+    } else {
+      b.textContent=opt.word;
+    }
     b.onclick=()=>engCheckAns(opt.word===correct.word, b, correct.word);
     grid.appendChild(b);
   });
